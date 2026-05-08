@@ -1,0 +1,297 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://trinapower.com/schemas/design-token.schema.json",
+  "title": "Design Token",
+  "description": "Framework-agnostic design token specification. Layer 2 of the bicorne-design three-layer architecture.",
+  "type": "object",
+  "required": ["meta", "colors", "typography", "spacing", "borderRadius"],
+  "additionalProperties": false,
+  "properties": {
+    "meta": {
+      "type": "object",
+      "required": ["name", "version", "theme"],
+      "additionalProperties": false,
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Token set identifier, e.g. 'linear-dark', 'stripe-light'"
+        },
+        "version": {
+          "type": "string",
+          "pattern": "^\\d+\\.\\d+\\.\\d+$",
+          "description": "Semantic version"
+        },
+        "source": {
+          "type": "string",
+          "description": "Origin DESIGN.md path, e.g. 'references/brand-library/linear.app/DESIGN.md'"
+        },
+        "theme": {
+          "type": "string",
+          "enum": ["dark", "light"],
+          "description": "Theme mode"
+        },
+        "description": {
+          "type": "string",
+          "description": "Human-readable summary of the token set"
+        }
+      }
+    },
+    "colors": {
+      "type": "object",
+      "required": ["brand", "surface", "ink", "border"],
+      "additionalProperties": false,
+      "properties": {
+        "brand": {
+          "type": "object",
+          "description": "Brand color scale (10-step, generated from primary via @ant-design/colors algorithm)",
+          "required": ["50", "100", "200", "300", "400", "500", "600", "700", "800", "900"],
+          "patternProperties": {
+            "^(50|100|200|300|400|500|600|700|800|900)$": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        },
+        "surface": {
+          "type": "object",
+          "description": "Background surface hierarchy",
+          "required": ["base"],
+          "properties": {
+            "base": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Page base background"
+            },
+            "1": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "First lift level (cards, panels)"
+            },
+            "2": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Second lift level (featured cards, hover)"
+            },
+            "3": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Third lift level (sub-nav, dropdowns)"
+            },
+            "4": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Fourth lift level"
+            }
+          },
+          "additionalProperties": false
+        },
+        "ink": {
+          "type": "object",
+          "description": "Text color hierarchy",
+          "required": ["default"],
+          "properties": {
+            "default": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Primary text"
+            },
+            "muted": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Secondary text"
+            },
+            "subtle": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Tertiary text"
+            },
+            "tertiary": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Quaternary text"
+            }
+          },
+          "additionalProperties": false
+        },
+        "border": {
+          "type": "object",
+          "description": "Border color hierarchy",
+          "required": ["default"],
+          "properties": {
+            "default": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Standard border"
+            },
+            "strong": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Emphasized border"
+            },
+            "subtle": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$",
+              "description": "Subtle border"
+            }
+          },
+          "additionalProperties": false
+        },
+        "semantic": {
+          "type": "object",
+          "description": "Semantic colors for status signaling",
+          "properties": {
+            "success": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "danger": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "warning": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            },
+            "info": {
+              "type": "string",
+              "pattern": "^#[0-9A-Fa-f]{6}$"
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "typography": {
+      "type": "object",
+      "required": ["fontFamilies", "scales"],
+      "additionalProperties": false,
+      "properties": {
+        "fontFamilies": {
+          "type": "object",
+          "description": "Font family definitions",
+          "patternProperties": {
+            "^[a-z][a-z0-9-]*$": {
+              "type": "object",
+              "required": ["name", "stack"],
+              "properties": {
+                "name": {
+                  "type": "string",
+                  "description": "Display name"
+                },
+                "stack": {
+                  "type": "string",
+                  "description": "CSS font-stack value"
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        },
+        "scales": {
+          "type": "object",
+          "description": "Type scale definitions",
+          "patternProperties": {
+            "^[a-z][a-z0-9-]*$": {
+              "type": "object",
+              "required": ["fontSize", "fontWeight", "lineHeight"],
+              "properties": {
+                "fontFamily": {
+                  "type": "string",
+                  "description": "Reference to fontFamilies key"
+                },
+                "fontSize": {
+                  "type": "string",
+                  "pattern": "^\\d+(\\.\\d+)?(px|rem|em)$"
+                },
+                "fontWeight": {
+                  "type": "integer",
+                  "minimum": 100,
+                  "maximum": 900
+                },
+                "lineHeight": {
+                  "type": "number",
+                  "minimum": 0.8
+                },
+                "letterSpacing": {
+                  "type": "string",
+                  "pattern": "^-?\\d+(\\.\\d+)?px$",
+                  "description": "Negative values for tight tracking"
+                },
+                "textTransform": {
+                  "type": "string",
+                  "enum": ["none", "uppercase", "lowercase", "capitalize"]
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      }
+    },
+    "spacing": {
+      "type": "object",
+      "description": "Spacing scale (pixel values)",
+      "patternProperties": {
+        "^[0-9]+$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "borderRadius": {
+      "type": "object",
+      "description": "Border radius scale (pixel values)",
+      "patternProperties": {
+        "^[a-z0-9][a-z0-9-]*$": {
+          "type": "integer",
+          "minimum": 0
+        }
+      },
+      "additionalProperties": false
+    },
+    "shadows": {
+      "type": "object",
+      "description": "Shadow definitions",
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": {
+          "type": "object",
+          "required": ["value"],
+          "properties": {
+            "value": {
+              "type": "string",
+              "description": "CSS box-shadow value"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "transitions": {
+      "type": "object",
+      "description": "Transition definitions",
+      "patternProperties": {
+        "^[a-z][a-z0-9-]*$": {
+          "type": "object",
+          "required": ["duration", "easing"],
+          "properties": {
+            "duration": {
+              "type": "string",
+              "pattern": "^\\d+ms$"
+            },
+            "easing": {
+              "type": "string",
+              "description": "CSS easing function"
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    }
+  }
+}
