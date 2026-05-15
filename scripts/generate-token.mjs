@@ -5,91 +5,218 @@ import { fileURLToPath } from 'url'
 const __dirname = dirname(fileURLToPath(import.meta.url))
 const ROOT = resolve(__dirname, '..')
 
-function generatePalette(baseColor, theme = 'dark') {
-  const [h, s, l] = hexToHsl(baseColor)
-  const palette = {}
-  const steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+// ===== @ant-design/colors 色板生成算法 =====
+// 完整复刻 @ant-design/colors 7.x generate 函数
+// 基于 @ant-design/fast-color 的 HSV 色彩空间转换
+//
+// 与旧 HSL 算法的关键差异：
+// 1. 使用 HSV 而非 HSL 色彩空间
+// 2. 色相根据冷暖区间旋转（暖色向暖偏，冷色向冷偏）
+// 3. 饱和度/明度使用固定阶梯而非线性插值
+// 4. 暗色主题通过 bg.mix(pattern, amount) 混色实现，而非 HSL 重映射
 
-  steps.forEach((step, index) => {
-    if (index === 5) {
-      palette[step] = baseColor
-      return
-    }
+const hueStep = 2           // 色相阶梯
+const saturationStep = 0.16 // 饱和度阶梯，浅色部分
+const saturationStep2 = 0.05 // 饱和度阶梯，深色部分
+const brightnessStep1 = 0.05 // 亮度阶梯，浅色部分
+const brightnessStep2 = 0.15 // 亮度阶梯，深色部分
+const lightColorCount = 5   // 浅色数量，主色上
+const darkColorCount = 4    // 深色数量，主色下
 
-    let targetL, targetS
-    if (index < 5) {
-      const t = 1 - index / 5
-      if (theme === 'dark') {
-        targetL = l + (95 - l) * t * 0.9
-      } else {
-        targetL = l + (97 - l) * t
-      }
-    } else {
-      const t = (index - 5) / 4
-      if (theme === 'dark') {
-        targetL = l - (l - 5) * t * 0.8
-      } else {
-        targetL = l - (l - 3) * t
-      }
-    }
-    targetS = s * (0.3 + 0.7 * (1 - Math.abs(index - 5) / 5))
-    palette[step] = hslToHex(h, Math.min(100, targetS), Math.min(97, Math.max(3, targetL)))
-  })
+// 暗色主题颜色映射关系表
+const darkColorMap = [
+  { index: 7, amount: 15 },
+  { index: 6, amount: 25 },
+  { index: 5, amount: 30 },
+  { index: 5, amount: 45 },
+  { index: 5, amount: 65 },
+  { index: 5, amount: 85 },
+  { index: 4, amount: 90 },
+  { index: 3, amount: 95 },
+  { index: 2, amount: 97 },
+  { index: 1, amount: 98 },
+]
 
-  return palette
+// --- HSV 色相计算（匹配 @ant-design/colors getHue） ---
+function antdGetHue(hsv, i, light) {
+  let hue
+  if (Math.round(hsv.h) >= 60 && Math.round(hsv.h) <= 240) {
+    hue = light ? Math.round(hsv.h) - hueStep * i : Math.round(hsv.h) + hueStep * i
+  } else {
+    hue = light ? Math.round(hsv.h) + hueStep * i : Math.round(hsv.h) - hueStep * i
+  }
+  if (hue < 0) {
+    hue += 360
+  } else if (hue >= 360) {
+    hue -= 360
+  }
+  return hue
 }
 
-function hexToHsl(hex) {
-  const r = parseInt(hex.slice(1, 3), 16) / 255
-  const g = parseInt(hex.slice(3, 5), 16) / 255
-  const b = parseInt(hex.slice(5, 7), 16) / 255
+// --- HSV 饱和度计算（匹配 @ant-design/colors getSaturation） ---
+function antdGetSaturation(hsv, i, light) {
+  // 灰色不调整饱和度
+  if (hsv.h === 0 && hsv.s === 0) {
+    return hsv.s
+  }
+  let saturation
+  if (light) {
+    saturation = hsv.s - saturationStep * i
+  } else if (i === darkColorCount) {
+    saturation = hsv.s + saturationStep
+  } else {
+    saturation = hsv.s + saturationStep2 * i
+  }
+  if (saturation > 1) {
+    saturation = 1
+  }
+  // 第一格的 s 限制在 0.06-0.1 之间
+  if (light && i === lightColorCount && saturation > 0.1) {
+    saturation = 0.1
+  }
+  if (saturation < 0.06) {
+    saturation = 0.06
+  }
+  return Math.round(saturation * 100) / 100
+}
 
+// --- HSV 明度计算（匹配 @ant-design/colors getValue） ---
+function antdGetValue(hsv, i, light) {
+  let value
+  if (light) {
+    value = hsv.v + brightnessStep1 * i
+  } else {
+    value = hsv.v - brightnessStep2 * i
+  }
+  value = Math.max(0, Math.min(1, value))
+  return Math.round(value * 100) / 100
+}
+
+// --- RGB → HSV（匹配 @ant-design/fast-color 的 getHue/getHSVSaturation/getValue） ---
+function rgbToHsv(r, g, b) {
   const max = Math.max(r, g, b)
   const min = Math.min(r, g, b)
-  let h = 0, s = 0
-  const l = (max + min) / 2
-
-  if (max !== min) {
-    const d = max - min
-    s = l > 0.5 ? d / (2 - max - min) : d / (max + min)
-    switch (max) {
-      case r: h = ((g - b) / d + (g < b ? 6 : 0)) / 6; break
-      case g: h = ((b - r) / d + 2) / 6; break
-      case b: h = ((r - g) / d + 4) / 6; break
-    }
+  const delta = max - min
+  let h
+  if (delta === 0) {
+    h = 0
+  } else {
+    h = Math.round(
+      60 * (r === max ? (g - b) / delta + (g < b ? 6 : 0)
+           : g === max ? (b - r) / delta + 2
+           : (r - g) / delta + 4)
+    )
   }
-
-  return [h * 360, s * 100, l * 100]
+  const s = max === 0 ? 0 : delta / max
+  const v = max / 255
+  return { h, s, v } // h: 0-360, s: 0-1, v: 0-1
 }
 
-function hslToHex(h, s, l) {
-  h /= 360; s /= 100; l /= 100
-  let r, g, b
-
-  if (s === 0) {
-    r = g = b = l
-  } else {
-    const hue2rgb = (p, q, t) => {
-      if (t < 0) t += 1
-      if (t > 1) t -= 1
-      if (t < 1/6) return p + (q - p) * 6 * t
-      if (t < 1/2) return q
-      if (t < 2/3) return p + (q - p) * (2/3 - t) * 6
-      return p
-    }
-    const q = l < 0.5 ? l * (1 + s) : l + s - l * s
-    const p = 2 * l - q
-    r = hue2rgb(p, q, h + 1/3)
-    g = hue2rgb(p, q, h)
-    b = hue2rgb(p, q, h - 1/3)
+// --- HSV → RGB（匹配 @ant-design/fast-color 的 fromHsv） ---
+function hsvToRgb(h, s, v) {
+  h = ((h % 360) + 360) % 360
+  if (s <= 0) {
+    const vv = Math.round(v * 255)
+    return [vv, vv, vv]
   }
+  const hh = h / 60
+  const i = Math.floor(hh)
+  const ff = hh - i
+  const p = Math.round(v * (1.0 - s) * 255)
+  const q = Math.round(v * (1.0 - s * ff) * 255)
+  const t = Math.round(v * (1.0 - s * (1.0 - ff)) * 255)
+  const vv = Math.round(v * 255)
+  switch (i) {
+    case 0:  return [vv, t, p]
+    case 1:  return [q, vv, p]
+    case 2:  return [p, vv, t]
+    case 3:  return [p, q, vv]
+    case 4:  return [t, p, vv]
+    case 5:
+    default: return [vv, p, q]
+  }
+}
 
-  const toHex = x => {
-    const hex = Math.round(x * 255).toString(16)
+// --- 混色（匹配 @ant-design/fast-color 的 mix） ---
+// result = bg * (1 - p) + fg * p, where p = amount / 100
+function mixColors(bgR, bgG, bgB, fgR, fgG, fgB, amount) {
+  const p = amount / 100
+  return [
+    Math.round((fgR - bgR) * p + bgR),
+    Math.round((fgG - bgG) * p + bgG),
+    Math.round((fgB - bgB) * p + bgB),
+  ]
+}
+
+// --- Hex → RGB ---
+function hexToRgb(hex) {
+  return [
+    parseInt(hex.slice(1, 3), 16),
+    parseInt(hex.slice(3, 5), 16),
+    parseInt(hex.slice(5, 7), 16),
+  ]
+}
+
+// --- RGB → Hex ---
+function rgbToHex(r, g, b) {
+  const toHex = (x) => {
+    const hex = Math.max(0, Math.min(255, Math.round(x))).toString(16)
     return hex.length === 1 ? '0' + hex : hex
   }
-
   return `#${toHex(r)}${toHex(g)}${toHex(b)}`
+}
+
+// ===== 色板生成主函数 =====
+function generatePalette(baseColor, theme = 'light', backgroundColor = null) {
+  const [r, g, b] = hexToRgb(baseColor)
+  const hsv = rgbToHsv(r, g, b)
+
+  const patterns = []
+
+  // 生成 5 个浅色（index 0-4 → brand.50 ~ brand.400）
+  for (let i = lightColorCount; i > 0; i -= 1) {
+    const [pr, pg, pb] = hsvToRgb(
+      antdGetHue(hsv, i, true),
+      antdGetSaturation(hsv, i, true),
+      antdGetValue(hsv, i, true),
+    )
+    patterns.push(rgbToHex(pr, pg, pb))
+  }
+
+  // 主色（index 5 → brand.500）
+  patterns.push(baseColor.toLowerCase())
+
+  // 生成 4 个深色（index 6-9 → brand.600 ~ brand.900）
+  for (let i = 1; i <= darkColorCount; i += 1) {
+    const [pr, pg, pb] = hsvToRgb(
+      antdGetHue(hsv, i),
+      antdGetSaturation(hsv, i),
+      antdGetValue(hsv, i),
+    )
+    patterns.push(rgbToHex(pr, pg, pb))
+  }
+
+  const steps = [50, 100, 200, 300, 400, 500, 600, 700, 800, 900]
+
+  // 暗色主题：用背景色与亮色色板混色
+  if (theme === 'dark') {
+    const bgHex = backgroundColor || '#141414'
+    const [bgR, bgG, bgB] = hexToRgb(bgHex)
+    const palette = {}
+    darkColorMap.forEach(({ index, amount }, i) => {
+      const [fgR, fgG, fgB] = hexToRgb(patterns[index])
+      const [mr, mg, mb] = mixColors(bgR, bgG, bgB, fgR, fgG, fgB, amount)
+      palette[steps[i]] = rgbToHex(mr, mg, mb)
+    })
+    return palette
+  }
+
+  // 亮色主题：直接使用 patterns
+  const palette = {}
+  patterns.forEach((color, i) => {
+    palette[steps[i]] = color
+  })
+  return palette
 }
 
 function getLuminance(hex) {
@@ -234,11 +361,13 @@ function mapToToken(design, brandName, theme, sourcePath) {
     process.exit(1)
   }
 
-  const brand = generatePalette(primary, theme)
-
+  // 先确定 surface.base（暗色主题色板生成需要背景色）
   const surface = { ...template.colors.surface }
   if (design.colors.canvas) surface.base = design.colors.canvas
   else if (design.colors.background) surface.base = design.colors.background
+
+  // 暗色主题传递 backgroundColor 给 generatePalette，复刻 @ant-design/colors 的暗色混色算法
+  const brand = generatePalette(primary, theme, theme === 'dark' ? surface.base : null)
   if (design.colors['surface-raised']) surface['1'] = design.colors['surface-raised']
   if (design.colors['surface-overlay']) surface['2'] = design.colors['surface-overlay']
   if (design.colors['soft-cloud']) surface['1'] = design.colors['soft-cloud']

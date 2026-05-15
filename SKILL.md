@@ -1,6 +1,6 @@
 ---
 name: bicorne-design
-description: 统一设计系统 Skill：JSON Schema 驱动的三层解耦架构。Layer 1 品牌参考 → Layer 2 框架无关 token.json → Layer 3 宿主项目框架消费。融合 admin-design-spec 的五阶段方法论 + huashu-design 的知识层 + awesome-design-md 的品牌库。
+description: 当需要创建设计系统、生成设计令牌（design token）、或进行 UI 设计时使用。典型触发场景：搭建中后台页面、制作营销落地页、为界面建立统一设计系统、设计评审、风格探索、UI 优化。提供品牌库风格参考与选择、框架无关的 JSON Schema 设计令牌生成、五阶段设计方法论、反糊化与反 AI slop 质量协议。
 license: MIT
 compatibility: any-framework
 metadata:
@@ -85,7 +85,7 @@ Layer 2: 设计规范层 (Specification)
          ▼  (各 skill 按各自框架消费)
 
 Layer 3: 设计执行层 (Execution)
-─ 宿主项目自己的框架 skill（impeccable / vue-best-practices / ...）
+─ 宿主项目自己的框架 skill（impeccable / ...）
 ─ 不是 HTML 原型，是生产级代码
 ```
 
