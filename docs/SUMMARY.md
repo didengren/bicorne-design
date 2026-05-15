@@ -168,4 +168,4 @@
 | Phase 4-3 | 真实设计产出反糊化/反 slop 验证 | ❌ 未做 |
 | Phase 5-3 | 全量 review（所有文件一致性检查） | ❌ 未做 |
 | Phase 5-4 | README.md（新用户 5 分钟上手文档） | ❌ 未做 |
-| — | `validate-token.mjs` 升级为 ajv 校验 | ⚠️ 部分完成（当前为轻量自定义实现） |
+| — | `validate-token.mjs` 升级为 ajv 校验 | ✅ 完成（AJV + 跨引用校验 + 推荐警告） |

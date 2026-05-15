@@ -23,5 +23,8 @@
     "anti-blur",
     "anti-slop",
     "bicorne-design"
-  ]
+  ],
+  "dependencies": {
+    "ajv": "^8.20.0"
+  }
 }
