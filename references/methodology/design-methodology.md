@@ -36,6 +36,13 @@ PHASE 1: 需求界定 → PHASE 2: 上下文收集 → PHASE 3: 变体产出 →
    - 时间约束
    - 工具：约束清单、设计规格文档、品牌规范
 
+4. **平台约束**
+   - 确定目标平台（桌面 Web / 移动端 Web / 原生 App / 数据大屏），选择对应模板
+   - 桌面 Web：鼠标交互，精确悬停，多列布局，选择 `templates/dark-theme.template.json` 或 `light-theme.template.json`
+   - 移动端 Web/App：触摸目标 ≥ 44px，无 Hover-only 交互，安全区域适配，选择 `templates/mobile-dark.template.json` 或 `mobile-light.template.json`
+   - 数据大屏：远距离观看（3-5m），远距离可读的主要内容字号 ≥ 24px，高对比度，遥控/触控操作，选择 `templates/dashboard-dark.template.json`
+   - 跨平台产品：同一品牌共享 colors + fontFamilies，仅 scales/spacing 按平台模板调整
+
 ### 反模式
 
 需求不明确就开始「找灵感」，导致设计方向与业务目标脱节。
@@ -83,6 +90,12 @@ PHASE 1: 需求界定 → PHASE 2: 上下文收集 → PHASE 3: 变体产出 →
    - 异步数据加载方式
    - 防止设计在技术实现阶段被大幅降级
 
+6. **平台上下文**
+   - 确认目标平台的设计规范（iOS HIG / Material Design / 大屏分辨率标准）
+   - 确认输入方式（鼠标 / 触摸 / 遥控 / 语音）
+   - 确认观看距离和屏幕尺寸（大屏场景必需）
+   - 确认性能预算（大屏设备 GPU 性能差异大，移动端内存受限）
+
 ### 反模式
 
 跳过上下文直接进入视觉设计，导致交付物与既有系统产生风格割裂。
@@ -105,7 +118,7 @@ PHASE 1: 需求界定 → PHASE 2: 上下文收集 → PHASE 3: 变体产出 →
 
 1. **DESIGN.md → token.json 映射**
    - 按 `references/token-mapping/mapping-rules.md` 逐字段映射
-   - 使用 `templates/dark-theme.template.json` 或 `light-theme.template.json` 作为骨架
+   - 使用对应平台模板作为骨架（桌面：`dark-theme.template.json` / `light-theme.template.json`；移动端：`mobile-dark.template.json` / `mobile-light.template.json`；大屏：`dashboard-dark.template.json`）。详见 mapping-rules.md 第九节
    - 缺失字段按映射规则第八节处理
    - 工具：mapping-rules.md、field-compatibility.md
 
@@ -116,6 +129,10 @@ PHASE 1: 需求界定 → PHASE 2: 上下文收集 → PHASE 3: 变体产出 →
      - ③ 品牌表达（最强视觉识别）
    - 三选一或混合需有明确理由
    - 工具：方向矩阵、设计评审框架
+
+   方向三角在多平台场景下的侧重调整：
+   - 移动端：效率优先 → 减少操作步骤；信息清晰 → 触摸友好；品牌表达 → 原生平台感
+   - 大屏：效率优先 → 关键指标一目了然；信息清晰 → 层级分明远距离可读；品牌表达 → 沉浸式数据叙事
 
 3. **AI 辅助变体生成**
    - 可使用 AI 工具快速生成视觉变体
@@ -197,20 +214,25 @@ token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策�
 
 2. **性能检查**
    - 图片优化（WebP/AVIF、懒加载）
-   - 动画帧率 ≥ 60fps
+   - 动画帧率 ≥ 60fps（桌面 Web 目标；大屏最低 30fps，见平台特定检查）
    - 首屏加载时间
    - 工具：Chrome DevTools Performance
 
 3. **响应式验证**
-   - 480px / 768px / 1024px / 1280px / 1536px 五断点
-   - 重点关注数据表格在 1024px 以下的信息降级策略
+   - 断点与 bicorne-ui BREAKPOINTS 对齐：xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
+   - 重点关注数据表格在 md(768px) 以下的信息降级策略
    - 触摸目标 ≥ 44×44px
 
 4. **交互状态全覆盖**
    - 验证所有状态：默认态 / Hover / Focus / Active / Disabled / Loading / Error / Empty State
    - 中后台 Loading 与 Error 状态尤其容易被遗漏
 
-5. **最终审美校验**
+5. **平台特定检查**
+   - 移动端：触摸目标合规复查，安全区域适配，无 Hover-only 交互，手势冲突检测
+   - 原生 App：平台 HIG 合规（iOS HIG / Material Design），导航模式匹配平台惯例
+   - 大屏：3m 观看距离可读性，遥控器焦点导航，动画帧率目标 60fps / 最低 30fps
+
+6. **最终审美校验**
    - 与审美锚点对照
    - 三问协议最终确认
    - 张力检查

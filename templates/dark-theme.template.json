@@ -83,8 +83,8 @@
     "brand": { "value": "0 4px 12px rgba(94,106,210,0.25)" }
   },
   "transitions": {
-    "default": { "duration": "200ms", "easing": "cubic-bezier(0.4,0,0.2,1)" },
-    "fast": { "duration": "100ms", "easing": "cubic-bezier(0.4,0,0.2,1)" },
-    "slow": { "duration": "300ms", "easing": "cubic-bezier(0.4,0,0.2,1)" }
+    "default": { "duration": "200ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
+    "fast": { "duration": "100ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
+    "slow": { "duration": "300ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" }
   }
 }

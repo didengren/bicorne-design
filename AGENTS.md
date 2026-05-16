@@ -23,7 +23,7 @@
 
 ```
 Layer 1: 设计参考层 (References)
-─ awesome-design-md 的 71 个 DESIGN.md
+─ awesome-design-md 的 60 个 DESIGN.md
 ─ 产出: 选定品牌的原始设计数据
 
          │ DESIGN.md YAML
@@ -52,7 +52,7 @@ Layer 3: 设计执行层 (Execution)
 
 直接引用，不做"识别"机制。SKILL.md 写明"做风格选择时读这些文件"即可。
 
-精选分类（从 70 个品牌中按实用性筛选）：
+精选分类（从 60 个品牌中按实用性筛选）：
 
 | 分类 | 品牌 | 典型场景 |
 |------|------|---------|
@@ -113,7 +113,7 @@ token.json 是三层架构的核心接口，定义在 `schema/design-token.schem
   "spacing":      { "1":4, "2":8, "3":12, "4":16, "5":20, "6":24, "8":32, "10":40, "12":48, "16":64 },
   "borderRadius": { "sm":4, "md":8, "lg":12, "xl":16, "2xl":24, "full":9999 },
   "shadows":      { "sm":{ "value":"0 1px 2px rgba(0,0,0,0.3)" }, "brand":{ "value":"0 4px 12px rgba(94,106,210,0.25)" }},
-  "transitions":  { "default":{ "duration":"200ms", "easing":"cubic-bezier(0.4,0,0.2,1)" }}
+  "transitions":  { "default":{ "duration":"200ms", "easing":"cubic-bezier(0.215,0.61,0.355,1)" }}
 }
 ```
 
@@ -134,12 +134,14 @@ token.json 是三层架构的核心接口，定义在 `schema/design-token.schem
 
 ### 4.3 各 Skill 消费 token.json 的方式
 
-| Skill | 消费方式 |
-|-------|---------|
-| impeccable (React) | → Tailwind config `theme.extend` 或 CSS-in-JS theme object |
-| vue-best-practices (Vue) | → `@trinapower/tailwind-preset-desktop` 配置 |
-| 未来 Flutter skill | → `ThemeData` |
-| 未来 iOS skill | → `UIColor` extension |
+| Skill | 消费方式 | 状态 |
+|-------|---------|------|
+| impeccable (React) | → Tailwind config `theme.extend` 或 CSS-in-JS theme object | 已有 |
+| vue-best-practices (Vue) | → `@trinapower/tailwind-preset-desktop` 配置 | 已有 |
+| React Native (vercel-react-native-skills) | → NativeWind / StyleSheet + token.json | token.json 可消费，执行 skill 已有 |
+| Flutter skill | → `ThemeData` | token.json 可消费，执行 skill 待建设 |
+| iOS skill | → `UIColor` extension + `UIFont` metrics | token.json 可消费，执行 skill 待建设 |
+| Android skill | → `Color` resource + `dimens.xml` | token.json 可消费，执行 skill 待建设 |
 
 **关键**：token.json 是接口协议，不是实现。各 skill 按自己框架翻译即可。
 
@@ -221,7 +223,10 @@ design-system-skill/
 │           └── stripe-light.token.json
 ├── templates/
 │   ├── dark-theme.template.json        # 暗色主题骨架
-│   └── light-theme.template.json       # 亮色主题骨架
+│   ├── light-theme.template.json       # 亮色主题骨架
+│   ├── mobile-dark.template.json       # 移动端暗色主题骨架
+│   ├── mobile-light.template.json      # 移动端亮色主题骨架
+│   └── dashboard-dark.template.json    # 大屏暗色主题骨架
 └── package.json
 ```
 
@@ -243,3 +248,23 @@ design-system-skill/
 | 其他 skill 消费 | 无法消费（绑定 Tailwind） | 任何 skill 读取 token.json 即可 |
 | huashu-design | 完整保留 | 只留知识层，丢弃执行层 |
 | 品牌引用 | 复制 DESIGN.md 到项目根目录 | 直接在 references/brand-library/ 引用 |
+
+### V2.1 平台扩展（2026-05-15）
+
+| 维度 | V2（旧） | V2.1（本次） |
+|------|---------|-------------|
+| 平台范围 | 隐含桌面 Web | 显式支持桌面 Web / 移动端 Web / 原生 App / 数据大屏 |
+| Schema | 无平台字段 | `meta.platform` + `viewport`（均为 optional） |
+| 模板 | dark + light（桌面） | + mobile-dark / mobile-light / dashboard-dark |
+| 品牌选择 | 无平台维度 | INDEX.md 决策树增加移动端/大屏分支 |
+| 方法论 | 无平台约束 | Phase 1/2/5 增加平台上下文和检查项 |
+| 动画 | 仅桌面策略 | 增加移动端/大屏/原生 App 策略（原则不变） |
+| 映射 | 仅桌面映射 | 增加平台差异映射（模板驱动，非乘数） |
+
+**设计决策**：
+1. 不新增 `platform` 顶层 Schema 对象——touchTarget/safeArea/interaction 是约束规则，不是设计令牌，属于方法论和模板
+2. 字号映射用模板绝对值而非乘数——乘数在边界值处不可靠（14px × 0.85 = 11.9px 太小）
+3. 大屏仅暗色模板——数据大屏几乎都是暗色主题，亮色需求出现时再添加
+4. 原生 App 执行 skill 标注"待建设"——token.json 已可消费，但对应执行 skill 尚未开发
+5. validate-token.mjs 已升级 ajv——Schema 即校验规则，改 Schema 后校验自动生效，无需手动同步白名单
+6. viewport 断点与 bicorne-ui BREAKPOINTS 完全一致——所有平台共享同一套 CSS 断点值，差异仅在主要设计区间（移动端 xs–md、桌面 md–xxl、大屏 xl–xxxl），不按平台定义不同断点值

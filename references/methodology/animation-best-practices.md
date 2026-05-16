@@ -57,9 +57,9 @@
 
 | 名称 | CSS 值 | 适用场景 | 物理直觉 |
 |------|--------|---------|---------|
-| ease-out | `cubic-bezier(0, 0, 0.2, 1)` | 进入动画（**默认**） | 迅速启动，缓慢刹车 |
-| ease-in | `cubic-bezier(0.4, 0, 1, 1)` | 退出动画 | 缓慢启动，迅速离开 |
-| ease-in-out | `cubic-bezier(0.4, 0, 0.2, 1)` | 重定位/展开类动画 | 对称加减速 |
+| ease-out | `cubic-bezier(0.215, 0.61, 0.355, 1)` | 进入动画（**默认**） | 迅速启动，缓慢刹车 |
+| ease-in | `cubic-bezier(0.55, 0.055, 0.675, 0.19)` | 退出动画 | 缓慢启动，迅速离开 |
+| ease-in-out | `cubic-bezier(0.645, 0.045, 0.355, 1)` | 重定位/展开类动画 | 对称加减速 |
 
 ### 高级缓动
 
@@ -438,3 +438,40 @@ function interpolate(t, inputRange, outputRange, easing = Easing.linear) {
 3. **避免同时动画超过 5 个元素** — 移动端尤其注意
 4. **使用 requestAnimationFrame** — 不使用 setTimeout/setInterval
 5. **避免常驻合成层** — `will-change` 和 `transform: translateZ(0)` 均不可写入常驻样式表，否则导致内存占用持续增长
+
+---
+
+## 九、平台动画策略
+
+> Ant Design 三原则（自然>高效>克制）是平台无关的。`prefers-reduced-motion` 无障碍要求同样适用于所有平台。以下策略是平台特定的实现指导，不改变原则本身。
+
+### 9.1 移动端
+
+| 维度 | 策略 | 理由 |
+|------|------|------|
+| 触摸反馈 | 用 scale(0.97) 按压反馈替代桌面端 hover 上移 | 移动端无 hover，需要替代的触觉反馈 |
+| 同时动画 | 上限 3 个元素（桌面端 5 个） | 移动端 GPU 性能受限 |
+| 时长 | 仍遵循 100-300ms（UI）/ 400ms+（叙事） | Ant Design 高效原则不变 |
+| 缓动 | 仍以 ease-out 为 UI 默认 | Ant Design 自然原则不变 |
+| reduced-motion | 尊重 `prefers-reduced-motion: reduce`，禁用非必要动画 | 所有平台通用无障碍要求（见本节首段说明） |
+
+### 9.2 大屏
+
+| 维度 | 策略 | 理由 |
+|------|------|------|
+| 偏移量 | 放大 2-3 倍（桌面 20-40px → 大屏 40-120px） | 远距离观看需要更大的运动幅度才能感知 |
+| 帧率 | 目标 60fps，最低 30fps | 大屏设备 GPU 性能差异大 |
+| 焦点导航 | 焦点移动需有明确视觉引导（高亮边框 + 微位移） | 遥控器操作需要清晰的焦点指示 |
+| 数据刷新 | 用 Counter/CountUp 平滑过渡，避免硬切 | 硬切在远距离观看时更刺眼 |
+
+### 9.3 原生 App 动画映射（供 Layer 3 消费的参考）
+
+> 此表供 Layer 3 执行层参考，不属于 Layer 2 规范约束。同一 keyframe 语义在不同原生框架的实现方式。
+
+| Web Keyframe | iOS | Android | Flutter |
+|-------------|-----|---------|---------|
+| Fade | UIView.animate opacity | ObjectAnimator alpha | FadeTransition |
+| Slide (scaleY/X) | UIView.animate transform(scaleY/X) + anchorPoint | View.animate().scaleY()/scaleX() + pivotX/pivotY | Transform.scale + Alignment |
+| Move (translate) | UIView.animate center | ObjectAnimator translationX/Y | SlideTransition |
+| Zoom | UIView.animate transform.scale | ObjectAnimator scaleX/Y | ScaleTransition |
+| Feedback (ripple) | UIButton touch feedback | RippleDrawable | InkWell |

@@ -153,8 +153,8 @@
 | 数据表格密度规范（紧凑/标准/宽松三档） | SKILL.md | 未提取 | 独立为 `references/methodology/table-density.md` |
 | 表单设计规范（输入框尺寸/错误状态/帮助文案层级） | SKILL.md | 未提取 | 独立为 `references/methodology/form-design.md` |
 | 空状态设计规范（Empty State 四要素：图标/标题/说明/CTA） | SKILL.md | 未提取 | 中后台高频场景，应提取为独立文档 |
-| 加载状态规范（Skeleton vs Spinner 使用判断规则） | SKILL.md | 未提取 | 中后台高频场景，应提取 |
-| 响应式降级策略（数据表格 < 1024px 的具体降级方案） | SKILL.md | 仅 Phase 5 有断点数字，无策略 | 可扩充质量检查内容 |
+| 加载状态规范（Skeleton vs Spinner 使用判断规则） | SKILL.md | 未提取 | 高频场景，应提取 |
+| 响应式降级策略（数据表格 < 768px 的具体降级方案） | SKILL.md | design-methodology.md 有方向性提及（md 以下重点关注），SKILL.md Phase 5 有断点数字，但均无具体降级方案 | 可扩充质量检查内容 |
 | 设计冻结线协议（什么情况下锁定设计不允许返工） | SKILL.md | Phase 1 提及但不完整 | 可补充为独立的协议文档 |
 
 ---

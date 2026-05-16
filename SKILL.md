@@ -1,6 +1,6 @@
 ---
 name: bicorne-design
-description: 当需要创建设计系统、生成设计令牌（design token）、或进行 UI 设计时使用。典型触发场景：搭建中后台页面、制作营销落地页、为界面建立统一设计系统、设计评审、风格探索、UI 优化。提供品牌库风格参考与选择、框架无关的 JSON Schema 设计令牌生成、五阶段设计方法论、反糊化与反 AI slop 质量协议。
+description: 当需要创建设计系统、生成设计令牌（design token）、或进行 UI 设计时使用。典型触发场景：搭建中后台页面、制作营销落地页、移动端 Web/App 界面、数据展示大屏、为界面建立统一设计系统、设计评审、风格探索、UI 优化。提供品牌库风格参考与选择、框架无关的 JSON Schema 设计令牌生成、五阶段设计方法论、反糊化与反 AI slop 质量协议。
 license: MIT
 compatibility: any-framework
 metadata:
@@ -104,6 +104,11 @@ Layer 3: 设计执行层 (Execution)
 1. 业务目标对齐 — 与 PRD 关联，量化设计成功指标
 2. 设计范围锁定 — 明确 In-scope 与 Out-of-scope，使用「冻结线」标记
 3. 约束条件清单 — 技术约束、品牌约束、时间约束
+4. 平台约束
+   - 确定目标平台（桌面 Web / 移动端 Web / 原生 App / 数据大屏）
+   - 桌面 Web：鼠标交互，精确悬停，多列布局
+   - 移动端 Web/App：触摸目标 ≥ 44px，无 Hover-only 交互，安全区域适配
+   - 数据大屏：远距离观看（3-5m），远距离可读的主要内容字号 ≥ 24px，高对比度，遥控/触控操作
 
 **反模式**: 需求不明确就开始「找灵感」，导致设计方向与业务目标脱节
 **异常处理**: 如果需求不明确，必须暂停设计并与产品经理沟通
@@ -125,6 +130,8 @@ Layer 3: 设计执行层 (Execution)
 - 金融 / 信任感 → fintech 分类
 - 营销落地页 → ecommerce 分类
 - 创意工具 → design-collab 分类
+- 移动端 App → 社交/内容 → Spotify, Pinterest, Meta / 金融/支付 → Revolut, Wise, Coinbase / 出行/地图 → Uber, Tesla / 电商/零售 → Nike, Airbnb, Starbucks
+- 数据展示大屏 → 运维监控 → HashiCorp, Sentry, ClickHouse / 数据分析 → MongoDB, PostHog, Supabase / 指挥中心 → NVIDIA, SpaceX, IBM / 展览展示 → Ferrari, Lamborghini, BMW
 
 ### PHASE 3: 规范映射 + 变体产出
 
@@ -134,7 +141,7 @@ Layer 3: 设计执行层 (Execution)
 
 关键步骤：
 1. 按 `references/token-mapping/mapping-rules.md` 将 DESIGN.md 映射为 token.json
-2. 使用 `templates/dark-theme.template.json` 或 `light-theme.template.json` 作为骨架
+2. 使用对应平台模板作为骨架（桌面：`dark-theme.template.json` / `light-theme.template.json`；移动端：`mobile-dark.template.json` / `mobile-light.template.json`；大屏：`dashboard-dark.template.json`）。详见 mapping-rules.md 第九节
 3. 产出 3 个方向变体：
    - ① 效率优先（最短操作路径）
    - ② 信息清晰（最高可读性）
@@ -164,8 +171,12 @@ Layer 3: 设计执行层 (Execution)
 关键步骤：
 1. 无障碍检查 — 颜色对比度 ≥ 4.5:1，焦点状态，ARIA 标签
 2. 性能检查 — 图片优化、动画帧率、首屏加载
-3. 响应式验证 — 480/768/1024/1280/1536px 五断点
+3. 响应式验证 — 断点与 bicorne-ui BREAKPOINTS 对齐：xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
 4. 交互状态全覆盖 — 默认/Hover/Focus/Active/Disabled/Loading/Error/Empty
+5. 平台特定检查
+   - 移动端：触摸目标合规复查，安全区域适配，无 Hover-only 交互
+   - 原生 App：平台 HIG 合规（iOS HIG / Material Design）
+   - 大屏：3m 观看距离可读性，遥控器焦点导航
 
 ---
 
@@ -178,6 +189,9 @@ Layer 3: 设计执行层 (Execution)
 | 现有系统优化 | 方法优先 | 反糊化 + 三问协议 | 宿主项目框架 skill |
 | 设计风格探索 | 参考优先 | brand-library 浏览 | 只出 token.json，不涉及执行 |
 | 设计评审 | 方法优先 | 5 维度评审 + 三问协议 | 不涉及执行 skill |
+| 移动端 Web | 触摸优先 | 五阶段 + mobile token.json | React: impeccable / Vue: vue-best-practices |
+| 原生 App | 平台规范优先 | 五阶段 + mobile token.json + 平台 HIG | React Native: vercel-react-native-skills / Flutter skill / iOS skill / Android skill（Flutter/iOS/Android 执行 skill 待建设） |
+| 数据展示大屏 | 信息密度优先 | 五阶段 + dashboard token.json | 宿主项目框架 skill |
 
 ---
 
@@ -225,13 +239,14 @@ export default {
 }
 ```
 
-### 未来框架
+### 跨平台消费路线
 
-| Skill | 消费方式 |
-|-------|---------|
-| Flutter skill | → `ThemeData` |
-| iOS skill | → `UIColor` extension |
-| Android skill | → `Color` resource |
+| Skill | 消费方式 | 状态 |
+|-------|---------|------|
+| React Native (vercel-react-native-skills) | → NativeWind / StyleSheet + token.json | token.json 可消费，执行 skill 已有 |
+| Flutter skill | → `ThemeData` | token.json 可消费，执行 skill 待建设 |
+| iOS skill | → `UIColor` extension + `UIFont` metrics | token.json 可消费，执行 skill 待建设 |
+| Android skill | → `Color` resource + `dimens.xml` | token.json 可消费，执行 skill 待建设 |
 
 ---
 
@@ -262,7 +277,10 @@ bicorne-design/
 │       └── examples/                     ← 示例 token.json
 ├── templates/
 │   ├── dark-theme.template.json          ← 暗色主题骨架
-│   └── light-theme.template.json         ← 亮色主题骨架
+│   ├── light-theme.template.json         ← 亮色主题骨架
+│   ├── mobile-dark.template.json         ← 移动端暗色主题骨架
+│   ├── mobile-light.template.json        ← 移动端亮色主题骨架
+│   └── dashboard-dark.template.json      ← 大屏暗色主题骨架
 ├── scripts/
 │   ├── generate-token.mjs               ← token 生成脚本
 │   └── validate-token.mjs               ← token 验证脚本
