@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Superhuman
+colors:
+  primary: "#cbb7fb"
+  canvas: "#ffffff"
+  ink: "#292827"
+  ink-muted: "#6b6968"
+  hairline: rgba(0,0,0,0.08)
+
+---
+
 # Design System Inspired by Superhuman
 
 ## 1. Visual Theme & Atmosphere

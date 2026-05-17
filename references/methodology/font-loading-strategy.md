@@ -1,6 +1,6 @@
 # 字体加载策略
 
-> 从 huashu-design 散落的字体相关知识点系统化提取，框架无关。
+> Web Font 加载全链路决策指南：font-display 策略 → Fallback 栈 → 预加载 → 中文子集化 → 幻灯片/动画特殊处理。
 > 适用于 Web 页面、HTML 幻灯片、动画 Demo 等任何需要加载 Web Font 的场景。
 
 ---

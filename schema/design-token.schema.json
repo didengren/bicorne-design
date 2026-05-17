@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://trinapower.com/schemas/design-token.schema.json",
+  "$id": "design-token.schema.json",
   "title": "Design Token",
   "description": "Framework-agnostic design token specification. Layer 2 of the bicorne-design three-layer architecture.",
   "type": "object",

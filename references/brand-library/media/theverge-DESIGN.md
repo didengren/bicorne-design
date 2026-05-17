@@ -1,3 +1,15 @@
+---
+version: alpha
+name: The Verge
+colors:
+  primary: "#3cffd0"
+  canvas: "#131313"
+  ink: "#ffffff"
+  ink-muted: "#949494"
+  hairline: rgba(255,255,255,0.1)
+
+---
+
 # Design System Inspired by The Verge
 
 ## 1. Visual Theme & Atmosphere

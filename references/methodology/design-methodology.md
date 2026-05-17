@@ -1,6 +1,6 @@
 # 五阶段设计方法论
 
-> 融合 admin-design-spec 的五阶段方法论 + huashu-design 的 Junior Designer 工作流。
+> 从需求界定到质量打磨的完整设计流程；附录 AI Agent 交互协议，规范 agent 在各阶段的决策边界。
 
 ---
 
@@ -167,14 +167,18 @@ token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策�
 
 1. **框架 skill 消费 token.json**
    - React (impeccable): → Tailwind config `theme.extend` 或 CSS-in-JS theme object
-   - Vue (vue-best-practices): → `@trinapower/tailwind-preset-desktop` 配置
+   - Vue (vue-best-practices): → tailwind.config.js 配置
    - 其他框架按各自方式消费
 
-2. **反 slop 清单检查**
+2. **页面框架结构**
+   - 页面框架的结构定义、类型分类、导航结构，详见 `references/methodology/page-framework.md`
+   - 页面框架的响应式降级策略，详见 `references/methodology/responsive-degradation.md`
+
+3. **反 slop 清单检查**
    - 逐项检查 `references/methodology/anti-slop-checklist.md`
    - 确保 AI 产出不出现典型 slop 特征
 
-3. **反糊化三问协议**
+4. **反糊化三问协议**
    - 对每个 AI 产出的视觉决策，回答三个问题：
      - ① 为什么选这个颜色？
      - ② 为什么用这个间距？
@@ -182,9 +186,10 @@ token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策�
    - 如果无法回答，则该决策需重新审视或替换
    - 详见 `references/methodology/anti-blur-protocol.md`
 
-4. **组件状态全覆盖**
+5. **组件状态全覆盖**
    - 默认态 / Hover / Focus / Active / Disabled / Loading / Error / Empty State
-   - 中后台 Loading 与 Error 状态尤其容易被遗漏
+   - Loading 与 Error 状态尤其容易被遗漏
+   - Empty State 四要素与 Loading State 的 Skeleton/Spinner 判断规则，详见 `references/methodology/ui-states.md`
 
 ### 反模式
 
@@ -222,10 +227,12 @@ token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策�
    - 断点与 bicorne-ui BREAKPOINTS 对齐：xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
    - 重点关注数据表格在 md(768px) 以下的信息降级策略
    - 触摸目标 ≥ 44×44px
+   - 具体降级方案（表格/表单/导航/多列布局），详见 `references/methodology/responsive-degradation.md`
 
 4. **交互状态全覆盖**
    - 验证所有状态：默认态 / Hover / Focus / Active / Disabled / Loading / Error / Empty State
-   - 中后台 Loading 与 Error 状态尤其容易被遗漏
+   - Loading 与 Error 状态尤其容易被遗漏
+   - Empty State 四要素与 Loading State 的 Skeleton/Spinner 判断规则，详见 `references/methodology/ui-states.md`
 
 5. **平台特定检查**
    - 移动端：触摸目标合规复查，安全区域适配，无 Hover-only 交互，手势冲突检测
@@ -247,25 +254,25 @@ token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策�
 
 ---
 
-## Junior Designer 工作流（合并自 huashu-design）
+## AI Agent 交互协议
 
-当 AI agent 扮演设计师角色时，遵循以下工作流：
+本协议贯穿上述五阶段全流程，定义 agent 在什么场景下必须停下来等待用户确认（Junior 行为），什么场景下可以自主决策推进（Senior 行为）。
 
 ### 核心心态
 
-你是一个 Junior Designer，不是 Senior。区别在于：
+Agent 默认以 Junior 模式运作：先展示假设，让用户确认或纠正。区别在于：
 
 - **Junior 展示假设**：先展示你的理解和假设，让用户确认或纠正
 - **Senior 做出判断**：直接做出判断，用户只需接受或拒绝
 
-### 工作流程
+### 工作流程（与五阶段映射）
 
-1. **理解需求** → 用自己的话复述需求，确认理解
-2. **展示假设** → 列出你的设计假设（风格、布局、交互）
-3. **等待确认** → 用户确认或纠正你的假设
-4. **执行设计** → 基于确认的假设执行
-5. **展示结果** → 展示设计结果，附上设计决策说明
-6. **收集反馈** → 收集用户反馈，迭代优化
+1. **理解需求** → 用自己的话复述需求，确认理解（对应 PHASE 1）
+2. **展示假设** → 列出你的设计假设（风格、布局、交互）（对应 PHASE 2）
+3. **等待确认** → 用户确认或纠正你的假设（PHASE 2 → PHASE 3 的门控）
+4. **执行设计** → 基于确认的假设执行（对应 PHASE 3–4）
+5. **展示结果** → 展示设计结果，附上设计决策说明（对应 PHASE 4 交付）
+6. **收集反馈** → 收集用户反馈，迭代优化（对应 PHASE 5）
 
 ### 问题模板
 
@@ -312,6 +319,7 @@ Junior Designer 模式的核心是「展示假设，等待确认」。但不是�
 
 ```
 设计决策来了 →
+├─ 涉及事实性断言？（产品/技术/版本/规格）→ #0 事实验证：先 WebSearch，再继续
 ├─ 改了之后能回滚吗？
 │   ├─ 不能（方向/色调/布局）→ Junior：停下来问
 │   └─ 能（细节/间距/字号）→ Senior：自主决策
@@ -324,6 +332,8 @@ Junior Designer 模式的核心是「展示假设，等待确认」。但不是�
 ```
 
 #### 异常场景处理
+
+当本协议的异常处理与五阶段各 Phase 的异常处理重叠时，以各 Phase 的异常处理为准（更具体），本协议作为补充。
 
 | 场景 | 处理方式 |
 |------|---------|

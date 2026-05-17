@@ -24,7 +24,8 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 
 1. 从 DESIGN.md 提取 primary 色值
 2. 使用 @ant-design/colors 算法生成 brand.50 ~ brand.900 共 10 级
-3. primary 值映射到 brand.500
+3. 亮色主题：primary 值直接作为算法输入，brand.500 = primary
+4. 暗色主题：算法使用 `darkColorMap` 对 primary 与背景色混色，brand.500 ≠ primary（是暗色适配后的中间色阶）；原始 primary 值保留到 `semantic.info`
 
 **提取优先级**（按顺序尝试，取第一个存在的）：
 
@@ -109,7 +110,8 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 | `body-lg` / `body-large` / `heading-5` | `body-lg` |
 | `body` / `body-md` / `body-md-bold` / `body-md-medium` / `body-strong` / `body-tracked` / `link` / `link-emph` / `link-md` | `body-md` |
 | `body-sm` / `body-small` / `body-sm-medium` / `body-sm-strong` | `body-sm` |
-| `caption` / `caption-md` / `caption-sm` / `caption-bold` / `caption-strong` / `caption-tight` / `caption-uppercase` / `label-md` / `label-sm` / `eyebrow` / `micro` / `micro-label` / `micro-uppercase` / `uppercase-tag` / `utility-xs` | `caption` |
+| `caption` / `caption-md` / `caption-sm` / `caption-bold` / `caption-strong` / `caption-tight` / `caption-uppercase` / `label-md` / `label-sm` | `caption` |
+| `eyebrow` | `eyebrow` |
 | `button` / `button-md` / `button-sm` / `button-lg` / `nav-link` | `button` |
 | `mono` / `code` / `code-md` / `code-sm` / `mono-label` | `mono` |
 

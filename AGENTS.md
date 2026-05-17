@@ -56,11 +56,16 @@ Layer 3: 设计执行层 (Execution)
 
 | 分类 | 品牌 | 典型场景 |
 |------|------|---------|
-| AI & LLM | claude, cursor, cohere, mistral.ai, replicate | 中后台、开发者工具 |
-| 开发工具 | linear.app, vercel, raycast, warp, sentry | 中后台、CLI |
-| 金融科技 | stripe, coinbase, revolut, wise | 信任感、专业感 |
+| AI & LLM | claude, cursor, cohere, mistral.ai, replicate, elevenlabs, x.ai, ollama, nvidia, runwayml, together.ai, lovable | 中后台、开发者工具 |
+| 开发工具 | linear.app, vercel, raycast, warp, sentry, supabase, posthog, hashicorp, mintlify, mongodb, clickhouse, expo, resend, superhuman | 中后台、CLI |
+| 金融科技 | stripe, coinbase, revolut, wise, binance, mastercard | 信任感、专业感 |
 | 电商零售 | nike, shopify, airbnb | 营销落地页 |
-| 设计协作 | figma, framer, miro, notion | 创意工具 |
+| 设计协作 | figma, framer, miro, notion, webflow, sanity | 创意工具 |
+| 消费/生活方式 | spotify, apple, tesla, starbucks, playstation, spacex | 移动端 App、品牌展示 |
+| 社交/通讯 | pinterest, uber, meta | 移动端 App、社交 |
+| 企业 SaaS | intercom, airtable, zapier, ibm, cal | 中后台、企业应用 |
+| 汽车 | bmw, ferrari, lamborghini | 品牌展示、数据大屏 |
+| 媒体 | theverge, wired | 编辑式布局、内容密集 |
 
 ### 3.2 admin-design-spec → schema/ + references/methodology/
 
@@ -71,6 +76,12 @@ Layer 3: 设计执行层 (Execution)
 | 反糊化协议 | `references/methodology/anti-blur-protocol.md` | **高** — 保留完整 |
 | Tailwind 类名规则 | **丢弃** | 被 JSON Schema 取代 |
 | 变体评审框架 | `references/methodology/review-scoring.md` | **中** — 保留 |
+| 空状态 + 加载状态设计规范 | `references/methodology/ui-states.md` | **高** — 中后台高频遗漏场景，从 admin-design-spec SKILL.md 组件章节提取 |
+| 响应式降级策略 | `references/methodology/responsive-degradation.md` | **高** — 数据表格/表单/导航/多列布局的断点降级方案，从 admin-design-spec SKILL.md 提取 |
+| 页面框架规范 | `references/methodology/page-framework.md` | **高** — 8 种页面框架类型（F1-F8）+ 结构层与风格层职责划分，行业共识结构规范 |
+| 幻灯片设计规范 | `references/methodology/slide-design.md` | **中** — 交付格式决策树 + 排版体系 + 7 种页面布局模式 |
+| 产品展示规范 | `references/methodology/product-presentation.md` | **中** — 设备 Mockup 合成规则 + Hero 图构图模式 + 展示格式决策 |
+| 字体加载策略 | `references/methodology/font-loading-strategy.md` | **中** — FOIT/FOUT 策略 + Fallback 字体栈 + 中文子集化 + Self-host vs CDN 决策 |
 
 ### 3.3 huashu-design → 保留知识层，丢弃执行层
 
@@ -85,7 +96,7 @@ Layer 3: 设计执行层 (Execution)
 | 动画最佳实践 | animation-best-practices.md, animations.md | `references/methodology/animation-best-practices.md` | 中 |
 | React + Babel CDN 设置 | react-setup.md | **丢弃** | 无 |
 | HTML 原型组件 | animations.jsx, design_canvas.jsx 等 | **丢弃** | 执行层不属于融合 skill |
-| 幻灯片/视频导出 | slide-decks.md, video-export.md | **丢弃** | 除非专门做演示 |
+| 幻灯片/视频导出 | slide-decks.md, video-export.md | 提取知识层 → `product-presentation.md` 展示格式决策 | 中 — 丢弃渲染脚本/导出管线，保留格式决策参考 |
 | 音效库/BGM | assets/sfx/, assets/bgm-*.mp3 | **丢弃** | 低 |
 
 ---
@@ -166,11 +177,16 @@ PHASE 3: 规范映射 + 变体产出
 
 PHASE 4: 生产实现（在宿主项目中）
   方法: 宿主项目的框架 skill 消费 token.json → 生产级代码
+  方法: 页面框架结构 → page-framework.md（8 种框架类型 F1-F8）
+  方法: 响应式降级 → responsive-degradation.md（表格/表单/导航/多列布局降级方案）
+  方法: 组件状态覆盖 → ui-states.md（空状态四要素 + Skeleton/Spinner 判断规则）
   方法: 反 slop 清单 → 反糊化三问协议
   产出: 生产级组件 + 页面
 
 PHASE 5: 质量打磨
   方法: audit（无障碍/性能/响应式）+ polish（最终打磨）
+  方法: 响应式降级验证 → responsive-degradation.md（断点降级方案 + 检查清单）
+  方法: 交互状态全覆盖 → ui-states.md（空状态四要素 + Skeleton/Spinner 判断规则 + 检查清单）
   产出: 上线就绪的代码
 ```
 
@@ -187,6 +203,9 @@ PHASE 5: 质量打磨
 | 现有系统优化 | 方法优先 | 反糊化 + 三问协议 | 宿主项目框架 skill |
 | 设计风格探索 | 参考优先 | brand-library 浏览 | 只出 token.json，不涉及执行 |
 | 设计评审 | 方法优先 | 5 维度评审 + 三问协议 | 不涉及执行 skill |
+| 移动端 Web | 触摸优先 | 五阶段 + mobile token.json | React: impeccable / Vue: vue-best-practices |
+| 原生 App | 平台规范优先 | 五阶段 + mobile token.json + 平台 HIG | React Native: vercel-react-native-skills / Flutter skill / iOS skill / Android skill（Flutter/iOS/Android 执行 skill 待建设） |
+| 数据展示大屏 | 信息密度优先 | 五阶段 + dashboard token.json | 宿主项目框架 skill |
 
 ---
 
@@ -204,14 +223,25 @@ design-system-skill/
 │   │   ├── developer-tools/            # linear.app, vercel, raycast...
 │   │   ├── fintech/                    # stripe, coinbase, revolut...
 │   │   ├── ecommerce/                  # nike, shopify, airbnb...
-│   │   └── design-collab/              # figma, framer, notion...
+│   │   ├── design-collab/              # figma, framer, notion...
+│   │   ├── consumer-lifestyle/         # spotify, apple, tesla...
+│   │   ├── social-communication/       # pinterest, uber, meta...
+│   │   ├── enterprise-saas/            # intercom, airtable, zapier...
+│   │   ├── automotive/                 # bmw, ferrari, lamborghini...
+│   │   └── media/                      # theverge, wired...
 │   ├── methodology/                    # 设计方法论
 │   │   ├── design-methodology.md       # 五阶段（合并 huashu-design 工作流）
 │   │   ├── anti-blur-protocol.md       # 反糊化协议（admin-design-spec）
 │   │   ├── anti-slop-checklist.md      # 反 AI slop 清单（huashu-design）
 │   │   ├── review-scoring.md           # 变体评审框架
 │   │   ├── asset-protocol.md           # 核心资产协议（huashu-design）
-│   │   └── animation-best-practices.md # 动画设计知识（huashu-design）
+│   │   ├── animation-best-practices.md # 动画设计知识（huashu-design）
+│   │   ├── ui-states.md               # 空状态 + 加载状态设计规范
+│   │   ├── responsive-degradation.md  # 响应式降级策略
+│   │   ├── page-framework.md          # 页面框架规范
+│   │   ├── slide-design.md            # 幻灯片设计规范
+│   │   ├── product-presentation.md    # 产品展示规范
+│   │   └── font-loading-strategy.md   # 字体加载策略
 │   ├── design-philosophy/              # 设计哲学
 │   │   ├── design-styles.md            # 20 种设计哲学
 │   │   └── critique-guide.md           # 专家 5 维度评审
@@ -227,6 +257,9 @@ design-system-skill/
 │   ├── mobile-dark.template.json       # 移动端暗色主题骨架
 │   ├── mobile-light.template.json      # 移动端亮色主题骨架
 │   └── dashboard-dark.template.json    # 大屏暗色主题骨架
+├── scripts/
+│   ├── generate-token.mjs             # token 生成脚本
+│   └── validate-token.mjs             # token 验证脚本
 └── package.json
 ```
 

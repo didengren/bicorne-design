@@ -104,10 +104,78 @@ function collectWarnings(token) {
     warnings.push('Recommended: borderRadius is empty, at least one value is expected')
   }
 
+  if (token.meta?.platform && token.meta.platform !== 'desktop' && !token.viewport) {
+    warnings.push(`Recommended: viewport is missing for platform="${token.meta.platform}"`)
+  }
+
+  const validSpacingKeys = new Set(['1','2','3','4','5','6','8','10','12','16','24'])
+  if (token.spacing) {
+    for (const key of Object.keys(token.spacing)) {
+      if (!validSpacingKeys.has(key)) {
+        warnings.push(`Unexpected spacing key: "${key}" (expected one of: ${[...validSpacingKeys].join(', ')})`)
+      }
+    }
+  }
+
+  const validBorderRadiusKeys = new Set(['none','xs','sm','md','lg','xl','2xl','full'])
+  if (token.borderRadius) {
+    for (const key of Object.keys(token.borderRadius)) {
+      if (!validBorderRadiusKeys.has(key)) {
+        warnings.push(`Unexpected borderRadius key: "${key}" (expected one of: ${[...validBorderRadiusKeys].join(', ')})`)
+      }
+    }
+  }
+
+  const displayScales = new Set(['display-xl','display-lg','display-md'])
+  if (token.typography?.scales) {
+    for (const [name, scale] of Object.entries(token.typography.scales)) {
+      if (typeof scale.lineHeight === 'number' && scale.lineHeight < 1.0 && !displayScales.has(name)) {
+        warnings.push(`Recommended: typography.scales.${name}.lineHeight = ${scale.lineHeight} is below 1.0, which may be unreadable for non-display text`)
+      }
+    }
+  }
+
+  if (token.colors?.ink) {
+    if (!token.colors.ink.muted) warnings.push('Recommended: colors.ink.muted is missing')
+    if (!token.colors.ink.subtle) warnings.push('Recommended: colors.ink.subtle is missing')
+    if (!token.colors.ink.tertiary) warnings.push('Recommended: colors.ink.tertiary is missing')
+  }
+
+  if (token.colors?.border) {
+    if (!token.colors.border.strong) warnings.push('Recommended: colors.border.strong is missing')
+    if (!token.colors.border.subtle) warnings.push('Recommended: colors.border.subtle is missing')
+  }
+
+  if (token.shadows && Object.keys(token.shadows).length === 0) {
+    warnings.push('Recommended: shadows is empty, dark themes should define shadow levels')
+  }
+
+  if (token.transitions && Object.keys(token.transitions).length === 0) {
+    warnings.push('Recommended: transitions is empty, define at least a default transition')
+  }
+
+  const requiredScales = ['body-md', 'body-sm', 'caption', 'button']
+  if (token.typography?.scales) {
+    for (const required of requiredScales) {
+      if (!token.typography.scales[required]) {
+        warnings.push(`Recommended: typography.scales.${required} is missing`)
+      }
+    }
+  }
+
   return warnings
 }
 
-// ===== 主校验函数 =====
+// ===== 主校验函数（对象版本，供其他模块导入） =====
+export function validateTokenObject(token, schema) {
+  const schemaErrors = validateWithAjv(token, schema)
+  const crossRefErrors = validateCrossReferences(token)
+  const warnings = collectWarnings(token)
+  const errors = [...schemaErrors, ...crossRefErrors]
+  return { errors, warnings }
+}
+
+// ===== 主校验函数（文件版本，CLI 使用） =====
 function validateToken(tokenPath, schemaPath) {
   const token = JSON.parse(readFileSync(resolve(tokenPath), 'utf-8'))
   const schema = JSON.parse(readFileSync(resolve(schemaPath), 'utf-8'))
@@ -173,4 +241,8 @@ Examples:
   }
 }
 
-main()
+const __filename = fileURLToPath(import.meta.url)
+const isMain = process.argv[1] && resolve(process.argv[1]) === __filename
+if (isMain) {
+  main()
+}

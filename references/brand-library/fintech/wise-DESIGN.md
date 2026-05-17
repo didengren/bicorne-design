@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Wise
+colors:
+  primary: "#9fe870"
+  canvas: "#ffffff"
+  ink: "#0e0f0c"
+  ink-muted: "#868685"
+  hairline: rgba(14,15,12,0.12)
+
+---
+
 # Design System Inspired by Wise
 
 ## 1. Visual Theme & Atmosphere

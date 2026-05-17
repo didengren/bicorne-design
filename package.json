@@ -1,19 +1,22 @@
 {
   "name": "bicorne-design",
-  "version": "1.0.0",
+  "version": "0.1.0",
   "description": "Unified design system skill: JSON Schema-driven three-layer decoupled architecture. Brand references → framework-agnostic token.json → host project framework consumption.",
   "type": "module",
   "scripts": {
     "generate-token": "node scripts/generate-token.mjs",
     "validate-token": "node scripts/validate-token.mjs",
     "generate:linear": "node scripts/generate-token.mjs references/brand-library/developer-tools/linear.app-DESIGN.md --name linear --theme dark --output references/token-mapping/examples/linear-dark.token.json",
-    "generate:stripe": "node scripts/generate-token.mjs references/brand-library/fintech/stripe-DESIGN.md --name stripe --theme light --output references/token-mapping/examples/stripe-light.token.json"
+    "generate:stripe": "node scripts/generate-token.mjs references/brand-library/fintech/stripe-DESIGN.md --name stripe --theme light --output references/token-mapping/examples/stripe-light.token.json",
+    "generate:linear-mobile": "node scripts/generate-token.mjs references/brand-library/developer-tools/linear.app-DESIGN.md --name linear --theme dark --platform mobile --output references/token-mapping/examples/linear-mobile-dark.token.json",
+    "generate:stripe-mobile": "node scripts/generate-token.mjs references/brand-library/fintech/stripe-DESIGN.md --name stripe --theme light --platform mobile --output references/token-mapping/examples/stripe-mobile-light.token.json",
+    "generate:linear-dashboard": "node scripts/generate-token.mjs references/brand-library/developer-tools/linear.app-DESIGN.md --name linear --theme dark --platform dashboard --output references/token-mapping/examples/linear-dashboard-dark.token.json"
   },
   "repository": {
     "type": "git",
     "url": "git@codeup.aliyun.com:62650a04c2b7347ce520e7e4/gsdefe/skills/bicorne-design.git"
   },
-  "author": "TrinaPower Design Team",
+  "author": "Sam Xu <twonian@gmail.com>",
   "license": "MIT",
   "keywords": [
     "design-system",

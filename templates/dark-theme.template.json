@@ -1,8 +1,9 @@
 {
   "meta": {
     "name": "dark-theme-template",
-    "version": "1.0.0",
+    "version": "0.1.0",
     "theme": "dark",
+    "platform": "desktop",
     "description": "Default dark theme template with placeholder values"
   },
   "colors": {
@@ -70,12 +71,14 @@
       "body-md": { "fontFamily": "body", "fontSize": "16px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" },
       "body-sm": { "fontFamily": "body", "fontSize": "14px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" },
       "caption": { "fontFamily": "body", "fontSize": "12px", "fontWeight": 400, "lineHeight": 1.40, "letterSpacing": "0px" },
+      "eyebrow": { "fontFamily": "body", "fontSize": "13px", "fontWeight": 500, "lineHeight": 1.30, "letterSpacing": "0.4px" },
+      "micro": { "fontFamily": "body", "fontSize": "11px", "fontWeight": 500, "lineHeight": 1.30, "letterSpacing": "0.5px" },
       "button": { "fontFamily": "body", "fontSize": "14px", "fontWeight": 500, "lineHeight": 1.20, "letterSpacing": "0px" },
       "mono": { "fontFamily": "mono", "fontSize": "13px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" }
     }
   },
   "spacing": { "1": 4, "2": 8, "3": 12, "4": 16, "5": 20, "6": 24, "8": 32, "10": 40, "12": 48, "16": 64 },
-  "borderRadius": { "sm": 4, "md": 8, "lg": 12, "xl": 16, "2xl": 24, "full": 9999 },
+  "borderRadius": { "none": 0, "xs": 4, "sm": 6, "md": 8, "lg": 12, "xl": 16, "2xl": 24, "full": 9999 },
   "shadows": {
     "sm": { "value": "0 1px 2px rgba(0,0,0,0.3)" },
     "md": { "value": "0 4px 8px rgba(0,0,0,0.3)" },
@@ -86,5 +89,6 @@
     "default": { "duration": "200ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
     "fast": { "duration": "100ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
     "slow": { "duration": "300ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" }
-  }
+  },
+  "viewport": { "xs": 480, "sm": 640, "md": 768, "lg": 1024, "xl": 1280, "xxl": 1536, "xxxl": 1920 }
 }

@@ -1,17 +1,17 @@
 ---
 name: bicorne-design
-description: 当需要创建设计系统、生成设计令牌（design token）、或进行 UI 设计时使用。典型触发场景：搭建中后台页面、制作营销落地页、移动端 Web/App 界面、数据展示大屏、为界面建立统一设计系统、设计评审、风格探索、UI 优化。提供品牌库风格参考与选择、框架无关的 JSON Schema 设计令牌生成、五阶段设计方法论、反糊化与反 AI slop 质量协议。
+description: 创建设计系统、生成 design token、UI 设计时使用。触发：中后台页面、营销落地页、移动端界面、数据大屏、设计评审、风格探索、UI 优化。不触发：纯后端逻辑、数据库设计、API 开发、运维配置
 license: MIT
 compatibility: any-framework
 metadata:
-  version: 1.0.0
-  author: TrinaPower Design Team
+  version: 0.1.0
+  author: Sam Xu <twonian@gmail.com>
   keywords: design-system, design-token, brand-library, methodology, anti-blur, anti-slop
 ---
 
 # Bicorne Design — 统一设计系统 Skill
 
-> 三个独立 skill → 一个统一 skill，JSON Schema 驱动的三层解耦架构。
+> JSON Schema 驱动的三层解耦架构，框架无关。
 
 ---
 
@@ -64,6 +64,8 @@ AI 产出必须经人工审美校验，避免平均化审美带来的设计失�
 
 在不确定视觉方案时，先用结构化占位符表达意图，再逐步替换为真实内容。避免过早锁定视觉方案。
 
+**原则优先级**：#0 > 1 > 2 > 3 > 4 > 5。冲突时高优先级覆盖低优先级；视觉层级与系统思维冲突时系统一致性优先；意图先行与 Placeholder 优先冲突时先明确意图再占位。
+
 ---
 
 ## 三层架构
@@ -89,94 +91,43 @@ Layer 3: 设计执行层 (Execution)
 ─ 不是 HTML 原型，是生产级代码
 ```
 
-**核心转变**：Layer 2 的 JSON Schema 是接口协议，不是实现。任何 skill 读取 token.json 即可，不需要适配层。
+Layer 2 的 JSON Schema 是接口协议，不是实现。任何 skill 读取 token.json 即可，不需要适配层。
 
 ---
 
 ## 五阶段工作流
 
+> 各阶段完整步骤、反模式、异常处理详见 `references/methodology/design-methodology.md`
+
 ### PHASE 1: 需求界定
 
+**目标**: 明确「要解决什么问题」，而非「要画什么界面」
 **方法**: 五阶段方法论 + #0 事实验证
-**产出**: PRD + 场景切片 + 约束清单
-
-关键步骤：
-1. 业务目标对齐 — 与 PRD 关联，量化设计成功指标
-2. 设计范围锁定 — 明确 In-scope 与 Out-of-scope，使用「冻结线」标记
-3. 约束条件清单 — 技术约束、品牌约束、时间约束
-4. 平台约束
-   - 确定目标平台（桌面 Web / 移动端 Web / 原生 App / 数据大屏）
-   - 桌面 Web：鼠标交互，精确悬停，多列布局
-   - 移动端 Web/App：触摸目标 ≥ 44px，无 Hover-only 交互，安全区域适配
-   - 数据大屏：远距离观看（3-5m），远距离可读的主要内容字号 ≥ 24px，高对比度，遥控/触控操作
-
-**反模式**: 需求不明确就开始「找灵感」，导致设计方向与业务目标脱节
-**异常处理**: 如果需求不明确，必须暂停设计并与产品经理沟通
+**产出**: PRD + 场景切片 + 约束清单（含平台约束）
 
 ### PHASE 2: 上下文收集 + 风格选择
 
-**方法**: 读 brand-library/INDEX.md → 选 3-5 个参考品牌 → 读 DESIGN.md
-**方法**: 核心资产协议（找 Logo / 产品图 / UI 截图）
-**产出**: 选定品牌的 DESIGN.md + 资产归档
-
-关键步骤：
-1. 参考 3-5 个品牌 DESIGN.md，标注信息架构模式、交互反馈机制、视觉密度策略
-2. 梳理现有系统上下文（组件库状态、已有设计语言）
-3. 核心资产协议 — 获取 Logo / 产品图 / UI 截图
-4. 技术实现评估 — 确认组件复用率、动效帧率上限
-
-**品牌选择决策树**（详见 `references/brand-library/INDEX.md`）：
-- 中后台 / 开发者工具 → ai-llm / developer-tools 分类
-- 金融 / 信任感 → fintech 分类
-- 营销落地页 → ecommerce 分类
-- 创意工具 → design-collab 分类
-- 移动端 App → 社交/内容 → Spotify, Pinterest, Meta / 金融/支付 → Revolut, Wise, Coinbase / 出行/地图 → Uber, Tesla / 电商/零售 → Nike, Airbnb, Starbucks
-- 数据展示大屏 → 运维监控 → HashiCorp, Sentry, ClickHouse / 数据分析 → MongoDB, PostHog, Supabase / 指挥中心 → NVIDIA, SpaceX, IBM / 展览展示 → Ferrari, Lamborghini, BMW
+**目标**: 让设计决策有据可依，而非凭感觉发散
+**方法**: 读 `brand-library/INDEX.md` → 选 3-5 个参考品牌 → 读 DESIGN.md；核心资产协议 → `asset-protocol.md`
+**产出**: 参考设计分析报告 + 选定品牌 DESIGN.md + 资产归档 + 技术约束确认
 
 ### PHASE 3: 规范映射 + 变体产出
 
-**方法**: DESIGN.md → 按 mapping-rules.md → 生成 token.json
-**方法**: 方向三角（效率/清晰/表达）→ 3 个设计变体
-**产出**: token.json + 3 个变体 + 评审记录
+**目标**: 至少产出 3 个可陈述意图不同的设计方向
+**方法**: DESIGN.md → `mapping-rules.md` → 生成 token.json；方向三角（效率/清晰/表达）→ 3 个变体
+**产出**: token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策日志
 
-关键步骤：
-1. 按 `references/token-mapping/mapping-rules.md` 将 DESIGN.md 映射为 token.json
-2. 使用对应平台模板作为骨架（桌面：`dark-theme.template.json` / `light-theme.template.json`；移动端：`mobile-dark.template.json` / `mobile-light.template.json`；大屏：`dashboard-dark.template.json`）。详见 mapping-rules.md 第九节
-3. 产出 3 个方向变体：
-   - ① 效率优先（最短操作路径）
-   - ② 信息清晰（最高可读性）
-   - ③ 品牌表达（最强视觉识别）
-4. 用评审框架评分（总分 100，70 分以上方可进入下一阶段）
+### PHASE 4: 生产实现
 
-**反模式**: 只产出 1 个方向并过早锁定，导致错过更优解
-
-### PHASE 4: 生产实现（在宿主项目中）
-
-**方法**: 宿主项目的框架 skill 消费 token.json → 生产级代码
-**方法**: 反 slop 清单 → 反糊化三问协议
-**产出**: 生产级组件 + 页面
-
-关键步骤：
-1. 宿主项目框架 skill 读取 token.json，按框架方式消费
-2. 反 slop 清单逐项检查
-3. 反糊化三问协议验证每个设计决策
-
-**关键变化**：Phase 4 从"HTML 原型验证"改为"宿主项目生产实现"。不再做用完就扔的 HTML 草模。
+**目标**: 在宿主项目中直接产出生产级代码
+**方法**: 框架 skill 消费 token.json；页面框架 → `page-framework.md`；响应式 → `responsive-degradation.md`；状态覆盖 → `ui-states.md`；反 slop → `anti-slop-checklist.md`；反糊化 → `anti-blur-protocol.md`
+**产出**: 生产级组件 + 页面 + 状态覆盖清单
 
 ### PHASE 5: 质量打磨
 
-**方法**: audit（无障碍/性能/响应式）+ polish（最终打磨）
-**产出**: 上线就绪的代码
-
-关键步骤：
-1. 无障碍检查 — 颜色对比度 ≥ 4.5:1，焦点状态，ARIA 标签
-2. 性能检查 — 图片优化、动画帧率、首屏加载
-3. 响应式验证 — 断点与 bicorne-ui BREAKPOINTS 对齐：xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
-4. 交互状态全覆盖 — 默认/Hover/Focus/Active/Disabled/Loading/Error/Empty
-5. 平台特定检查
-   - 移动端：触摸目标合规复查，安全区域适配，无 Hover-only 交互
-   - 原生 App：平台 HIG 合规（iOS HIG / Material Design）
-   - 大屏：3m 观看距离可读性，遥控器焦点导航
+**目标**: 确保上线就绪
+**方法**: audit（无障碍/性能/响应式/交互状态）+ polish（审美校验）；平台特定检查详见 `design-methodology.md` Phase 5
+**产出**: 上线就绪的代码 + a11y 分数 + 响应式截图矩阵 + 状态覆盖清单
 
 ---
 
@@ -190,63 +141,23 @@ Layer 3: 设计执行层 (Execution)
 | 设计风格探索 | 参考优先 | brand-library 浏览 | 只出 token.json，不涉及执行 |
 | 设计评审 | 方法优先 | 5 维度评审 + 三问协议 | 不涉及执行 skill |
 | 移动端 Web | 触摸优先 | 五阶段 + mobile token.json | React: impeccable / Vue: vue-best-practices |
-| 原生 App | 平台规范优先 | 五阶段 + mobile token.json + 平台 HIG | React Native: vercel-react-native-skills / Flutter skill / iOS skill / Android skill（Flutter/iOS/Android 执行 skill 待建设） |
+| 原生 App | 平台规范优先 | 五阶段 + mobile token.json + 平台 HIG | React Native: vercel-react-native-skills / Flutter/iOS/Android（待建设） |
 | 数据展示大屏 | 信息密度优先 | 五阶段 + dashboard token.json | 宿主项目框架 skill |
 
 ---
 
-## Token 消费指南
+## Token 消费路线
 
-token.json 是框架无关的接口协议。各框架 skill 按自己方式消费：
-
-### React (impeccable)
-
-```js
-// 方式 1: Tailwind config
-// tailwind.config.js
-import token from './token.json'
-export default {
-  theme: {
-    extend: {
-      colors: { brand: token.colors.brand, surface: token.colors.surface },
-      spacing: token.spacing,
-      borderRadius: token.borderRadius,
-    }
-  }
-}
-
-// 方式 2: CSS-in-JS theme object
-const theme = {
-  colors: token.colors,
-  fonts: Object.fromEntries(
-    Object.entries(token.typography.fontFamilies).map(([k, v]) => [k, v.stack])
-  ),
-}
-```
-
-### Vue (vue-best-practices)
-
-```js
-// @trinapower/tailwind-preset-desktop 配置
-import token from './token.json'
-export default {
-  presets: [createDesktopPreset()],
-  theme: {
-    extend: {
-      colors: { brand: token.colors.brand },
-    }
-  }
-}
-```
-
-### 跨平台消费路线
+token.json 是框架无关的接口协议，各框架 skill 按自己方式消费：
 
 | Skill | 消费方式 | 状态 |
 |-------|---------|------|
-| React Native (vercel-react-native-skills) | → NativeWind / StyleSheet + token.json | token.json 可消费，执行 skill 已有 |
-| Flutter skill | → `ThemeData` | token.json 可消费，执行 skill 待建设 |
-| iOS skill | → `UIColor` extension + `UIFont` metrics | token.json 可消费，执行 skill 待建设 |
-| Android skill | → `Color` resource + `dimens.xml` | token.json 可消费，执行 skill 待建设 |
+| React (impeccable) | Tailwind config `theme.extend` / CSS-in-JS theme object | 已有 |
+| Vue (vue-best-practices) | tailwind.config.js 配置 | 已有 |
+| React Native (vercel-react-native-skills) | NativeWind / StyleSheet + token.json | 已有 |
+| Flutter skill | `ThemeData` | 待建设 |
+| iOS skill | `UIColor` extension + `UIFont` metrics | 待建设 |
+| Android skill | `Color` resource + `dimens.xml` | 待建设 |
 
 ---
 
@@ -267,7 +178,13 @@ bicorne-design/
 │   │   ├── anti-slop-checklist.md        ← 反 AI slop 清单
 │   │   ├── review-scoring.md             ← 变体评审框架
 │   │   ├── asset-protocol.md             ← 核心资产协议
-│   │   └── animation-best-practices.md   ← 动画设计知识
+│   │   ├── animation-best-practices.md   ← 动画设计知识
+│   │   ├── ui-states.md                  ← 空状态 + 加载状态设计规范
+│   │   ├── responsive-degradation.md     ← 响应式降级策略
+│   │   ├── page-framework.md             ← 页面框架规范
+│   │   ├── slide-design.md               ← 幻灯片设计规范
+│   │   ├── product-presentation.md       ← 产品展示规范
+│   │   └── font-loading-strategy.md      ← 字体加载策略
 │   ├── design-philosophy/                ← 设计哲学
 │   │   ├── design-styles.md              ← 20 种设计哲学
 │   │   └── critique-guide.md             ← 专家 5 维度评审
@@ -275,6 +192,11 @@ bicorne-design/
 │       ├── mapping-rules.md              ← DESIGN.md → token.json 字段映射
 │       ├── field-compatibility.md        ← 不同品牌字段名兼容表
 │       └── examples/                     ← 示例 token.json
+│           ├── linear-dark.token.json              ← Linear 桌面暗色主题
+│           ├── linear-dashboard-dark.token.json     ← Linear 大屏暗色主题
+│           ├── linear-mobile-dark.token.json        ← Linear 移动端暗色主题
+│           ├── stripe-light.token.json              ← Stripe 桌面亮色主题
+│           └── stripe-mobile-light.token.json       ← Stripe 移动端亮色主题
 ├── templates/
 │   ├── dark-theme.template.json          ← 暗色主题骨架
 │   ├── light-theme.template.json         ← 亮色主题骨架
@@ -299,6 +221,9 @@ bicorne-design/
 | 用户要求写代码 | 进入 PHASE 4 | 生产级组件 |
 | 代码写完需要打磨 | 进入 PHASE 5 | 上线就绪代码 |
 | 用户只想要 token.json | 只执行 PHASE 2-3 | token.json |
+| 已有 token.json | 跳至 PHASE 4 | — |
+| PHASE 4 发现 token 不够 | 回退 PHASE 3 补充 | 补充后的 token.json |
+| 只做设计评审 | 不进入任何 Phase | 评审报告 |
 
 ---
 

@@ -1,0 +1,94 @@
+{
+  "meta": {
+    "name": "stripe-mobile-light",
+    "version": "0.1.0",
+    "source": "references/brand-library/fintech/stripe-DESIGN.md",
+    "theme": "light",
+    "platform": "mobile"
+  },
+  "colors": {
+    "brand": {
+      "50": "#f4f0ff",
+      "100": "#e7deff",
+      "200": "#c6b5ff",
+      "300": "#a38cff",
+      "400": "#7d63ff",
+      "500": "#533afd",
+      "600": "#3827d6",
+      "700": "#2117b0",
+      "800": "#0f0b8a",
+      "900": "#070763"
+    },
+    "surface": {
+      "1": "#f5f5f5",
+      "2": "#fafafa",
+      "3": "#f0f0f0",
+      "4": "#e8e8e8",
+      "base": "#ffffff"
+    },
+    "ink": {
+      "default": "#061b31",
+      "muted": "#64748d",
+      "subtle": "#8c8c8c",
+      "tertiary": "#bfbfbf"
+    },
+    "border": {
+      "default": "#e5edf5",
+      "strong": "#bfbfbf",
+      "subtle": "#f0f0f0"
+    },
+    "semantic": {
+      "success": "#52c41a",
+      "danger": "#f5222d",
+      "warning": "#faad14",
+      "info": "#2468f2"
+    }
+  },
+  "typography": {
+    "fontFamilies": {
+      "display": {
+        "name": "sohne-var",
+        "stack": "'sohne-var', sans-serif"
+      },
+      "body": {
+        "name": "System Body",
+        "stack": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+      },
+      "mono": {
+        "name": "SourceCodePro",
+        "stack": "'SourceCodePro', sans-serif"
+      }
+    },
+    "scales": {
+      "display-xl": { "fontFamily": "display", "fontSize": "34px", "fontWeight": 600, "lineHeight": 1.05, "letterSpacing": "-3.0px" },
+      "display-lg": { "fontFamily": "display", "fontSize": "28px", "fontWeight": 600, "lineHeight": 1.10, "letterSpacing": "-1.8px" },
+      "display-md": { "fontFamily": "display", "fontSize": "24px", "fontWeight": 600, "lineHeight": 1.15, "letterSpacing": "-1.0px" },
+      "headline": { "fontFamily": "display", "fontSize": "22px", "fontWeight": 600, "lineHeight": 1.20, "letterSpacing": "-0.6px" },
+      "heading-xl": { "fontFamily": "display", "fontSize": "20px", "fontWeight": 600, "lineHeight": 1.30, "letterSpacing": "-0.5px" },
+      "heading-lg": { "fontFamily": "display", "fontSize": "17px", "fontWeight": 600, "lineHeight": 1.35, "letterSpacing": "-0.3px" },
+      "heading-md": { "fontFamily": "body", "fontSize": "15px", "fontWeight": 600, "lineHeight": 1.40, "letterSpacing": "0px" },
+      "body-lg": { "fontFamily": "body", "fontSize": "16px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "-0.1px" },
+      "body-md": { "fontFamily": "body", "fontSize": "15px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" },
+      "body-sm": { "fontFamily": "body", "fontSize": "13px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" },
+      "caption": { "fontFamily": "body", "fontSize": "11px", "fontWeight": 400, "lineHeight": 1.40, "letterSpacing": "0px" },
+      "eyebrow": { "fontFamily": "body", "fontSize": "12px", "fontWeight": 500, "lineHeight": 1.30, "letterSpacing": "0.4px" },
+      "micro": { "fontFamily": "body", "fontSize": "10px", "fontWeight": 500, "lineHeight": 1.30, "letterSpacing": "0.5px" },
+      "button": { "fontFamily": "body", "fontSize": "14px", "fontWeight": 500, "lineHeight": 1.20, "letterSpacing": "0px" },
+      "mono": { "fontFamily": "mono", "fontSize": "12px", "fontWeight": 400, "lineHeight": 1.50, "letterSpacing": "0px" }
+    }
+  },
+  "spacing": { "1": 4, "2": 8, "3": 12, "4": 16, "5": 20, "6": 24, "8": 32, "10": 40, "12": 48, "16": 64 },
+  "borderRadius": { "none": 0, "xs": 4, "sm": 6, "md": 8, "lg": 10, "xl": 14, "2xl": 18, "full": 9999 },
+  "shadows": {
+    "sm": { "value": "0 1px 2px rgba(0,0,0,0.03)" },
+    "md": { "value": "0 4px 6px -1px rgba(0,0,0,0.04), 0 2px 4px -1px rgba(0,0,0,0.02)" },
+    "lg": { "value": "0 10px 15px -3px rgba(0,0,0,0.05), 0 4px 6px -2px rgba(0,0,0,0.02)" },
+    "brand": { "value": "0 4px 14px rgba(36,104,242,0.15)" }
+  },
+  "transitions": {
+    "default": { "duration": "200ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
+    "fast": { "duration": "100ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" },
+    "slow": { "duration": "300ms", "easing": "cubic-bezier(0.215,0.61,0.355,1)" }
+  },
+  "viewport": { "xs": 480, "sm": 640, "md": 768, "lg": 1024, "xl": 1280, "xxl": 1536, "xxxl": 1920 }
+}

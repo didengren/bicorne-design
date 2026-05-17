@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Shopify
+colors:
+  primary: "#36F4A4"
+  canvas: "#000000"
+  ink: "#FFFFFF"
+  ink-muted: "#A1A1AA"
+  hairline: rgba(255,255,255,0.06)
+
+---
+
 # Design System Inspired by Shopify
 
 ## 1. Visual Theme & Atmosphere

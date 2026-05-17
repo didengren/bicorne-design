@@ -1,3 +1,15 @@
+---
+version: alpha
+name: RunwayML
+colors:
+  primary: "#000000"
+  canvas: "#000000"
+  ink: "#ffffff"
+  ink-muted: "#767d88"
+  hairline: "#27272a"
+
+---
+
 # Design System Inspired by Runway
 
 ## 1. Visual Theme & Atmosphere

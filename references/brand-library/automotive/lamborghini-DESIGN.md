@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Lamborghini
+colors:
+  primary: "#FFC000"
+  canvas: "#000000"
+  ink: "#FFFFFF"
+  ink-muted: "#7D7D7D"
+  hairline: rgba(255,255,255,0.1)
+
+---
+
 # Design System Inspired by Lamborghini
 
 ## 1. Visual Theme & Atmosphere
