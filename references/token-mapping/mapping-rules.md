@@ -24,7 +24,8 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 
 1. 从 DESIGN.md 提取 primary 色值
 2. 使用 @ant-design/colors 算法生成 brand.50 ~ brand.900 共 10 级
-3. primary 值映射到 brand.500
+3. 亮色主题：primary 值直接作为算法输入，brand.500 = primary
+4. 暗色主题：算法使用 `darkColorMap` 对 primary 与背景色混色，brand.500 ≠ primary（是暗色适配后的中间色阶）；原始 primary 值保留到 `semantic.info`
 
 **提取优先级**（按顺序尝试，取第一个存在的）：
 
@@ -109,7 +110,8 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 | `body-lg` / `body-large` / `heading-5` | `body-lg` |
 | `body` / `body-md` / `body-md-bold` / `body-md-medium` / `body-strong` / `body-tracked` / `link` / `link-emph` / `link-md` | `body-md` |
 | `body-sm` / `body-small` / `body-sm-medium` / `body-sm-strong` | `body-sm` |
-| `caption` / `caption-md` / `caption-sm` / `caption-bold` / `caption-strong` / `caption-tight` / `caption-uppercase` / `label-md` / `label-sm` / `eyebrow` / `micro` / `micro-label` / `micro-uppercase` / `uppercase-tag` / `utility-xs` | `caption` |
+| `caption` / `caption-md` / `caption-sm` / `caption-bold` / `caption-strong` / `caption-tight` / `caption-uppercase` / `label-md` / `label-sm` | `caption` |
+| `eyebrow` | `eyebrow` |
 | `button` / `button-md` / `button-sm` / `button-lg` / `nav-link` | `button` |
 | `mono` / `code` / `code-md` / `code-sm` / `mono-label` | `mono` |
 
@@ -173,7 +175,7 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 从 DESIGN.md 的 "Animation" / "Transition" 章节提取。
 
 **映射规则**：
-- `default`：200ms + 标准缓动
+- `default`：200ms + ease-out（`cubic-bezier(0.215,0.61,0.355,1)`）
 - `fast`：100ms
 - `slow`：300ms
 - 缓动曲线保留原始 CSS 值
@@ -191,3 +193,92 @@ DESIGN.md 通常只提供 1 个 primary 值。映射逻辑：
 5. **语义色**：从模板填充默认值
 6. **排版**：缺失的 scale 从模板填充
 7. **间距/圆角**：从模板填充默认值
+
+---
+
+## 九、平台差异映射
+
+同一品牌 DESIGN.md 在不同平台下的映射策略。
+
+### 核心原则：跨平台一致性
+
+同品牌跨平台共享：
+- `colors`（品牌色阶、表面色、文字色、边框色、语义色）— 完全相同
+- `typography.fontFamilies`（字体族定义）— 完全相同
+- `viewport`（响应式断点）— 与 bicorne-ui BREAKPOINTS 一致，所有平台共享
+
+同品牌跨平台差异：
+- `typography.scales`（字号比例）— 使用对应平台模板的默认值；桌面端用 DESIGN.md 值覆盖模板，移动端/大屏保留模板默认值（DESIGN.md 的字号是桌面场景的权威来源，不适用于其他平台）
+- `typography.scales.*.letterSpacing`（字距）— 移动端/大屏模板继承桌面暗色模板的绝对值；当字号缩放后字距比例明显偏紧时（如移动端 display-xl 34px 配 -3.0px，比例 -8.8% vs 桌面 -3.75%），可在执行层按比例缩放，token 层保持继承不变
+- `spacing`（间距）— 使用对应平台模板的默认值
+- `borderRadius`（圆角）— 使用对应平台模板的默认值
+- `shadows`（阴影）— 使用对应平台模板的默认值
+- `transitions`（过渡）— 所有平台共享（移动端/大屏的时长差异在执行层处理，不通过 token 区分）
+
+### 映射流程
+
+```
+DESIGN.md
+│
+├─ 提取 colors + fontFamilies → 所有平台共享
+│
+├─ 注入 viewport（bicorne-ui BREAKPOINTS 常量）→ 所有平台共享
+│
+└─ 提取 scales / spacing / borderRadius / shadows
+   │
+   ├─ 桌面 → dark-theme.template.json 或 light-theme.template.json 骨架 → DESIGN.md 值覆盖（桌面是 DESIGN.md 的目标场景）
+   ├─ 移动端 → mobile-dark.template.json 或 mobile-light.template.json 骨架 → 保留模板默认值（不使用 DESIGN.md 的桌面字号覆盖）
+   └─ 大屏 → dashboard-dark.template.json 骨架 → 保留模板默认值（不使用 DESIGN.md 的桌面字号覆盖）
+```
+
+### 圆角绝对值
+
+> 桌面暗色值取自 `dark-theme.template.json`，桌面亮色值取自 `light-theme.template.json`。移动端/大屏在对应主题基础上递增。
+
+| key | 桌面暗色 | 桌面亮色 | 移动端暗色 | 移动端亮色 | 大屏暗色 |
+|-----|--------|--------|---------|---------|--------|
+| sm  | 4      | 4      | 6       | 6       | 8      |
+| md  | 8      | 6      | 10      | 8       | 12     |
+| lg  | 12     | 8      | 14      | 10      | 16     |
+| xl  | 16     | 12     | 18      | 14      | 20     |
+| 2xl | 24     | 16     | 26      | 18      | 28     |
+| full | 9999  | 9999   | 9999    | 9999    | 9999   |
+
+### 间距绝对值
+
+| 平台 | 基数 | token key 集合 | 说明 |
+|------|------|--------------|------|
+| 桌面 | 4px | `"1":4 "2":8 "3":12 "4":16 "5":20 "6":24 "8":32 "10":40 "12":48 "16":64` | 现有默认 |
+| 移动端 | 4px | 同桌面（key 和值完全相同） | 触摸目标 ≥ 44px 通过组件实现，不通过 spacing token |
+| 大屏 | 8px | `"1":8 "2":16 "3":24 "4":32 "5":40 "6":48 "8":64 "10":80 "12":96 "16":128` | 远距离观看需要更大间距 |
+
+### 移动端低 DPI 字号执行层覆盖规则
+
+移动端模板中所有 < 16px 的字号在低 DPI（1x）屏幕上需在执行层覆盖为 ≥ 16px；高 DPI（2x+）使用模板值。
+
+| scale | 模板值 | 低 DPI 覆盖 | 豁免 | 理由 |
+|-------|--------|------------|------|------|
+| heading-md | 15px | ≥ 16px | 可豁免 | 字重 600 较高，可读性优于同字号常规字重 |
+| body-md | 15px | ≥ 16px | — | 正文不可低于 16px |
+| body-sm | 13px | ≥ 16px | — | 正文不可低于 16px |
+| caption | 11px | ≥ 16px | — | 辅助文字不可低于 16px |
+| mono | 12px | ≥ 16px | — | 代码文字不可低于 16px |
+| button | 14px | ≥ 16px | 可豁免 | 组件级字号控制，由执行层酌情处理 |
+
+> 此规则属于执行层约束，不改变 token 层的模板值。token 层保留高 DPI 场景的最优值，低 DPI 适配由消费端实现。
+
+### viewport 默认断点
+
+与 bicorne-ui BREAKPOINTS 完全一致，所有平台共享：
+
+```json
+{ "xs": 480, "sm": 640, "md": 768, "lg": 1024, "xl": 1280, "xxl": 1536, "xxxl": 1920 }
+```
+
+各平台的主要设计区间：
+
+| 平台 | 主要区间 | 说明 |
+|------|---------|------|
+| 移动端 | xs–md（480–768） | 手机竖屏/横屏 |
+| 桌面 | md–xxl（768–1536） | 笔记本/桌面显示器 |
+| 大屏 | xl–xxxl（1280–1920+） | 数据展示大屏/控制室 |

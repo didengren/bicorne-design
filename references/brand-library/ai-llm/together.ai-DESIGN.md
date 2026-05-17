@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Together AI
+colors:
+  primary: "#ef2cc1"
+  canvas: "#ffffff"
+  ink: "#000000"
+  ink-muted: rgba(0,0,0,0.66)
+  hairline: rgba(0,0,0,0.08)
+
+---
+
 # Design System Inspired by Together AI
 
 ## 1. Visual Theme & Atmosphere

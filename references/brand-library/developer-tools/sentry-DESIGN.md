@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Sentry
+colors:
+  primary: "#6a5fc1"
+  canvas: "#1f1633"
+  ink: "#ffffff"
+  ink-muted: "#e5e7eb"
+  hairline: rgba(255,255,255,0.1)
+
+---
+
 # Design System Inspired by Sentry
 
 ## 1. Visual Theme & Atmosphere

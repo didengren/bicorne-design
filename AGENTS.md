@@ -23,7 +23,7 @@
 
 ```
 Layer 1: 设计参考层 (References)
-─ awesome-design-md 的 71 个 DESIGN.md
+─ awesome-design-md 的 60 个 DESIGN.md
 ─ 产出: 选定品牌的原始设计数据
 
          │ DESIGN.md YAML
@@ -52,15 +52,20 @@ Layer 3: 设计执行层 (Execution)
 
 直接引用，不做"识别"机制。SKILL.md 写明"做风格选择时读这些文件"即可。
 
-精选分类（从 70 个品牌中按实用性筛选）：
+精选分类（从 60 个品牌中按实用性筛选）：
 
 | 分类 | 品牌 | 典型场景 |
 |------|------|---------|
-| AI & LLM | claude, cursor, cohere, mistral.ai, replicate | 中后台、开发者工具 |
-| 开发工具 | linear.app, vercel, raycast, warp, sentry | 中后台、CLI |
-| 金融科技 | stripe, coinbase, revolut, wise | 信任感、专业感 |
+| AI & LLM | claude, cursor, cohere, mistral.ai, replicate, elevenlabs, x.ai, ollama, nvidia, runwayml, together.ai, lovable | 中后台、开发者工具 |
+| 开发工具 | linear.app, vercel, raycast, warp, sentry, supabase, posthog, hashicorp, mintlify, mongodb, clickhouse, expo, resend, superhuman | 中后台、CLI |
+| 金融科技 | stripe, coinbase, revolut, wise, binance, mastercard | 信任感、专业感 |
 | 电商零售 | nike, shopify, airbnb | 营销落地页 |
-| 设计协作 | figma, framer, miro, notion | 创意工具 |
+| 设计协作 | figma, framer, miro, notion, webflow, sanity | 创意工具 |
+| 消费/生活方式 | spotify, apple, tesla, starbucks, playstation, spacex | 移动端 App、品牌展示 |
+| 社交/通讯 | pinterest, uber, meta | 移动端 App、社交 |
+| 企业 SaaS | intercom, airtable, zapier, ibm, cal | 中后台、企业应用 |
+| 汽车 | bmw, ferrari, lamborghini | 品牌展示、数据大屏 |
+| 媒体 | theverge, wired | 编辑式布局、内容密集 |
 
 ### 3.2 admin-design-spec → schema/ + references/methodology/
 
@@ -71,6 +76,12 @@ Layer 3: 设计执行层 (Execution)
 | 反糊化协议 | `references/methodology/anti-blur-protocol.md` | **高** — 保留完整 |
 | Tailwind 类名规则 | **丢弃** | 被 JSON Schema 取代 |
 | 变体评审框架 | `references/methodology/review-scoring.md` | **中** — 保留 |
+| 空状态 + 加载状态设计规范 | `references/methodology/ui-states.md` | **高** — 中后台高频遗漏场景，从 admin-design-spec SKILL.md 组件章节提取 |
+| 响应式降级策略 | `references/methodology/responsive-degradation.md` | **高** — 数据表格/表单/导航/多列布局的断点降级方案，从 admin-design-spec SKILL.md 提取 |
+| 页面框架规范 | `references/methodology/page-framework.md` | **高** — 8 种页面框架类型（F1-F8）+ 结构层与风格层职责划分，行业共识结构规范 |
+| 幻灯片设计规范 | `references/methodology/slide-design.md` | **中** — 交付格式决策树 + 排版体系 + 7 种页面布局模式 |
+| 产品展示规范 | `references/methodology/product-presentation.md` | **中** — 设备 Mockup 合成规则 + Hero 图构图模式 + 展示格式决策 |
+| 字体加载策略 | `references/methodology/font-loading-strategy.md` | **中** — FOIT/FOUT 策略 + Fallback 字体栈 + 中文子集化 + Self-host vs CDN 决策 |
 
 ### 3.3 huashu-design → 保留知识层，丢弃执行层
 
@@ -85,7 +96,7 @@ Layer 3: 设计执行层 (Execution)
 | 动画最佳实践 | animation-best-practices.md, animations.md | `references/methodology/animation-best-practices.md` | 中 |
 | React + Babel CDN 设置 | react-setup.md | **丢弃** | 无 |
 | HTML 原型组件 | animations.jsx, design_canvas.jsx 等 | **丢弃** | 执行层不属于融合 skill |
-| 幻灯片/视频导出 | slide-decks.md, video-export.md | **丢弃** | 除非专门做演示 |
+| 幻灯片/视频导出 | slide-decks.md, video-export.md | 提取知识层 → `product-presentation.md` 展示格式决策 | 中 — 丢弃渲染脚本/导出管线，保留格式决策参考 |
 | 音效库/BGM | assets/sfx/, assets/bgm-*.mp3 | **丢弃** | 低 |
 
 ---
@@ -113,7 +124,7 @@ token.json 是三层架构的核心接口，定义在 `schema/design-token.schem
   "spacing":      { "1":4, "2":8, "3":12, "4":16, "5":20, "6":24, "8":32, "10":40, "12":48, "16":64 },
   "borderRadius": { "sm":4, "md":8, "lg":12, "xl":16, "2xl":24, "full":9999 },
   "shadows":      { "sm":{ "value":"0 1px 2px rgba(0,0,0,0.3)" }, "brand":{ "value":"0 4px 12px rgba(94,106,210,0.25)" }},
-  "transitions":  { "default":{ "duration":"200ms", "easing":"cubic-bezier(0.4,0,0.2,1)" }}
+  "transitions":  { "default":{ "duration":"200ms", "easing":"cubic-bezier(0.215,0.61,0.355,1)" }}
 }
 ```
 
@@ -134,12 +145,14 @@ token.json 是三层架构的核心接口，定义在 `schema/design-token.schem
 
 ### 4.3 各 Skill 消费 token.json 的方式
 
-| Skill | 消费方式 |
-|-------|---------|
-| impeccable (React) | → Tailwind config `theme.extend` 或 CSS-in-JS theme object |
-| vue-best-practices (Vue) | → `@trinapower/tailwind-preset-desktop` 配置 |
-| 未来 Flutter skill | → `ThemeData` |
-| 未来 iOS skill | → `UIColor` extension |
+| Skill | 消费方式 | 状态 |
+|-------|---------|------|
+| impeccable (React) | → Tailwind config `theme.extend` 或 CSS-in-JS theme object | 已有 |
+| vue-best-practices (Vue) | → `@trinapower/tailwind-preset-desktop` 配置 | 已有 |
+| React Native (vercel-react-native-skills) | → NativeWind / StyleSheet + token.json | token.json 可消费，执行 skill 已有 |
+| Flutter skill | → `ThemeData` | token.json 可消费，执行 skill 待建设 |
+| iOS skill | → `UIColor` extension + `UIFont` metrics | token.json 可消费，执行 skill 待建设 |
+| Android skill | → `Color` resource + `dimens.xml` | token.json 可消费，执行 skill 待建设 |
 
 **关键**：token.json 是接口协议，不是实现。各 skill 按自己框架翻译即可。
 
@@ -164,11 +177,16 @@ PHASE 3: 规范映射 + 变体产出
 
 PHASE 4: 生产实现（在宿主项目中）
   方法: 宿主项目的框架 skill 消费 token.json → 生产级代码
+  方法: 页面框架结构 → page-framework.md（8 种框架类型 F1-F8）
+  方法: 响应式降级 → responsive-degradation.md（表格/表单/导航/多列布局降级方案）
+  方法: 组件状态覆盖 → ui-states.md（空状态四要素 + Skeleton/Spinner 判断规则）
   方法: 反 slop 清单 → 反糊化三问协议
   产出: 生产级组件 + 页面
 
 PHASE 5: 质量打磨
   方法: audit（无障碍/性能/响应式）+ polish（最终打磨）
+  方法: 响应式降级验证 → responsive-degradation.md（断点降级方案 + 检查清单）
+  方法: 交互状态全覆盖 → ui-states.md（空状态四要素 + Skeleton/Spinner 判断规则 + 检查清单）
   产出: 上线就绪的代码
 ```
 
@@ -185,6 +203,9 @@ PHASE 5: 质量打磨
 | 现有系统优化 | 方法优先 | 反糊化 + 三问协议 | 宿主项目框架 skill |
 | 设计风格探索 | 参考优先 | brand-library 浏览 | 只出 token.json，不涉及执行 |
 | 设计评审 | 方法优先 | 5 维度评审 + 三问协议 | 不涉及执行 skill |
+| 移动端 Web | 触摸优先 | 五阶段 + mobile token.json | React: impeccable / Vue: vue-best-practices |
+| 原生 App | 平台规范优先 | 五阶段 + mobile token.json + 平台 HIG | React Native: vercel-react-native-skills / Flutter skill / iOS skill / Android skill（Flutter/iOS/Android 执行 skill 待建设） |
+| 数据展示大屏 | 信息密度优先 | 五阶段 + dashboard token.json | 宿主项目框架 skill |
 
 ---
 
@@ -202,14 +223,25 @@ design-system-skill/
 │   │   ├── developer-tools/            # linear.app, vercel, raycast...
 │   │   ├── fintech/                    # stripe, coinbase, revolut...
 │   │   ├── ecommerce/                  # nike, shopify, airbnb...
-│   │   └── design-collab/              # figma, framer, notion...
+│   │   ├── design-collab/              # figma, framer, notion...
+│   │   ├── consumer-lifestyle/         # spotify, apple, tesla...
+│   │   ├── social-communication/       # pinterest, uber, meta...
+│   │   ├── enterprise-saas/            # intercom, airtable, zapier...
+│   │   ├── automotive/                 # bmw, ferrari, lamborghini...
+│   │   └── media/                      # theverge, wired...
 │   ├── methodology/                    # 设计方法论
 │   │   ├── design-methodology.md       # 五阶段（合并 huashu-design 工作流）
 │   │   ├── anti-blur-protocol.md       # 反糊化协议（admin-design-spec）
 │   │   ├── anti-slop-checklist.md      # 反 AI slop 清单（huashu-design）
 │   │   ├── review-scoring.md           # 变体评审框架
 │   │   ├── asset-protocol.md           # 核心资产协议（huashu-design）
-│   │   └── animation-best-practices.md # 动画设计知识（huashu-design）
+│   │   ├── animation-best-practices.md # 动画设计知识（huashu-design）
+│   │   ├── ui-states.md               # 空状态 + 加载状态设计规范
+│   │   ├── responsive-degradation.md  # 响应式降级策略
+│   │   ├── page-framework.md          # 页面框架规范
+│   │   ├── slide-design.md            # 幻灯片设计规范
+│   │   ├── product-presentation.md    # 产品展示规范
+│   │   └── font-loading-strategy.md   # 字体加载策略
 │   ├── design-philosophy/              # 设计哲学
 │   │   ├── design-styles.md            # 20 种设计哲学
 │   │   └── critique-guide.md           # 专家 5 维度评审
@@ -221,7 +253,13 @@ design-system-skill/
 │           └── stripe-light.token.json
 ├── templates/
 │   ├── dark-theme.template.json        # 暗色主题骨架
-│   └── light-theme.template.json       # 亮色主题骨架
+│   ├── light-theme.template.json       # 亮色主题骨架
+│   ├── mobile-dark.template.json       # 移动端暗色主题骨架
+│   ├── mobile-light.template.json      # 移动端亮色主题骨架
+│   └── dashboard-dark.template.json    # 大屏暗色主题骨架
+├── scripts/
+│   ├── generate-token.mjs             # token 生成脚本
+│   └── validate-token.mjs             # token 验证脚本
 └── package.json
 ```
 
@@ -243,3 +281,23 @@ design-system-skill/
 | 其他 skill 消费 | 无法消费（绑定 Tailwind） | 任何 skill 读取 token.json 即可 |
 | huashu-design | 完整保留 | 只留知识层，丢弃执行层 |
 | 品牌引用 | 复制 DESIGN.md 到项目根目录 | 直接在 references/brand-library/ 引用 |
+
+### V2.1 平台扩展（2026-05-15）
+
+| 维度 | V2（旧） | V2.1（本次） |
+|------|---------|-------------|
+| 平台范围 | 隐含桌面 Web | 显式支持桌面 Web / 移动端 Web / 原生 App / 数据大屏 |
+| Schema | 无平台字段 | `meta.platform` + `viewport`（均为 optional） |
+| 模板 | dark + light（桌面） | + mobile-dark / mobile-light / dashboard-dark |
+| 品牌选择 | 无平台维度 | INDEX.md 决策树增加移动端/大屏分支 |
+| 方法论 | 无平台约束 | Phase 1/2/5 增加平台上下文和检查项 |
+| 动画 | 仅桌面策略 | 增加移动端/大屏/原生 App 策略（原则不变） |
+| 映射 | 仅桌面映射 | 增加平台差异映射（模板驱动，非乘数） |
+
+**设计决策**：
+1. 不新增 `platform` 顶层 Schema 对象——touchTarget/safeArea/interaction 是约束规则，不是设计令牌，属于方法论和模板
+2. 字号映射用模板绝对值而非乘数——乘数在边界值处不可靠（14px × 0.85 = 11.9px 太小）
+3. 大屏仅暗色模板——数据大屏几乎都是暗色主题，亮色需求出现时再添加
+4. 原生 App 执行 skill 标注"待建设"——token.json 已可消费，但对应执行 skill 尚未开发
+5. validate-token.mjs 已升级 ajv——Schema 即校验规则，改 Schema 后校验自动生效，无需手动同步白名单
+6. viewport 断点与 bicorne-ui BREAKPOINTS 完全一致——所有平台共享同一套 CSS 断点值，差异仅在主要设计区间（移动端 xs–md、桌面 md–xxl、大屏 xl–xxxl），不按平台定义不同断点值

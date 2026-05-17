@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Lovable
+colors:
+  primary: "#1c1c1c"
+  canvas: "#f7f4ed"
+  ink: "#1c1c1c"
+  ink-muted: "#5f5f5d"
+  hairline: "#eceae4"
+
+---
+
 # Design System Inspired by Lovable
 
 ## 1. Visual Theme & Atmosphere

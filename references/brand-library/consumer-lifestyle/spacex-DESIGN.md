@@ -1,3 +1,15 @@
+---
+version: alpha
+name: SpaceX
+colors:
+  primary: "#f0f0fa"
+  canvas: "#000000"
+  ink: "#f0f0fa"
+  ink-muted: rgba(240,240,250,0.5)
+  hairline: rgba(255,255,255,0.2)
+
+---
+
 # Design System Inspired by SpaceX
 
 ## 1. Visual Theme & Atmosphere

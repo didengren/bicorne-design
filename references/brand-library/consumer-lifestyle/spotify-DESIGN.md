@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Spotify
+colors:
+  primary: "#1ed760"
+  canvas: "#121212"
+  ink: "#ffffff"
+  ink-muted: "#b3b3b3"
+  hairline: "#282828"
+
+---
+
 # Design System Inspired by Spotify
 
 ## 1. Visual Theme & Atmosphere

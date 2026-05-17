@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Uber
+colors:
+  primary: "#000000"
+  canvas: "#ffffff"
+  ink: "#000000"
+  ink-muted: "#4b4b4b"
+  hairline: "#e2e2e2"
+
+---
+
 # Design System Inspired by Uber
 
 ## 1. Visual Theme & Atmosphere

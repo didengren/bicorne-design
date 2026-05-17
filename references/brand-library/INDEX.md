@@ -190,6 +190,18 @@
 │   ├─ 工作流自动化 → Zapier
 │   └─ 低代码/表格 → Airtable
 │
+├─ 移动端 App
+│   ├─ 社交/内容 → Spotify, Pinterest, Meta
+│   ├─ 金融/支付 → Revolut, Wise, Coinbase
+│   ├─ 出行/地图 → Uber, Tesla
+│   └─ 电商/零售 → Nike, Airbnb, Starbucks
+│
+├─ 数据展示大屏
+│   ├─ 运维监控 → HashiCorp, Sentry, ClickHouse
+│   ├─ 数据分析 → MongoDB, PostHog, Supabase
+│   ├─ 指挥中心 → NVIDIA, SpaceX, IBM
+│   └─ 展览展示 → Ferrari, Lamborghini, BMW
+│
 └─ 设计探索
     ├─ 暗色美学 → Linear, Framer, Cursor, HashiCorp, Sanity, ClickHouse, Ferrari, Lamborghini
     ├─ 亮色奢华 → Stripe, Coinbase, Apple, Mastercard, Starbucks
@@ -208,6 +220,7 @@
 | 使用场景 | 长时间专注、代码/数据 | 快速浏览、营销展示 |
 | 品牌调性 | 工程美学、科技感 | 信任感、专业感、温暖 |
 | 内容类型 | 数据密集、代码为主 | 摄影为主、文案为主 |
+| 平台 | 大屏/监控室、OLED 移动端 | 移动端户外使用、触控一体机 |
 | 参考品牌 | Linear, Framer, Cursor, HashiCorp, Sanity, ClickHouse, Ferrari | Stripe, Coinbase, Airbnb, Apple, PostHog, Mastercard |
 
 ---

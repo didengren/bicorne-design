@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Starbucks
+colors:
+  primary: "#006241"
+  canvas: "#f2f0eb"
+  ink: rgba(0,0,0,0.87)
+  ink-muted: rgba(0,0,0,0.58)
+  hairline: rgba(0,0,0,0.12)
+
+---
+
 # Design System Inspired by Starbucks
 
 ## 1. Visual Theme & Atmosphere

@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Stripe
+colors:
+  primary: "#533afd"
+  canvas: "#ffffff"
+  ink: "#061b31"
+  ink-muted: "#64748d"
+  hairline: "#e5edf5"
+
+---
+
 # Design System Inspired by Stripe
 
 ## 1. Visual Theme & Atmosphere

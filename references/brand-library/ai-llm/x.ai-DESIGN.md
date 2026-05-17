@@ -1,3 +1,15 @@
+---
+version: alpha
+name: xAI
+colors:
+  primary: "#ffffff"
+  canvas: "#1f2228"
+  ink: "#ffffff"
+  ink-muted: rgba(255,255,255,0.7)
+  hairline: rgba(255,255,255,0.1)
+
+---
+
 # Design System Inspired by xAI
 
 ## 1. Visual Theme & Atmosphere

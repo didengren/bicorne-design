@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Supabase
+colors:
+  primary: "#3ecf8e"
+  canvas: "#171717"
+  ink: "#fafafa"
+  ink-muted: "#b4b4b4"
+  hairline: "#2e2e2e"
+
+---
+
 # Design System Inspired by Supabase
 
 ## 1. Visual Theme & Atmosphere

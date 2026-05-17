@@ -1,3 +1,15 @@
+---
+version: alpha
+name: WIRED
+colors:
+  primary: "#000000"
+  canvas: "#ffffff"
+  ink: "#1a1a1a"
+  ink-muted: "#757575"
+  hairline: "#e0e0e0"
+
+---
+
 # Design System Inspired by WIRED
 
 ## 1. Visual Theme & Atmosphere

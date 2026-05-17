@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Zapier
+colors:
+  primary: "#ff4f00"
+  canvas: "#fffefb"
+  ink: "#201515"
+  ink-muted: "#36342e"
+  hairline: "#e8e4da"
+
+---
+
 # Design System Inspired by Zapier
 
 ## 1. Visual Theme & Atmosphere

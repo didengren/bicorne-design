@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Mastercard
+colors:
+  primary: "#CF4500"
+  canvas: "#F3F0EE"
+  ink: "#141413"
+  ink-muted: "#696969"
+  hairline: "#D1CDC7"
+
+---
+
 # Design System Inspired by Mastercard
 
 ## 1. Visual Theme & Atmosphere

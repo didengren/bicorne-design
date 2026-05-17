@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Sanity
+colors:
+  primary: "#f36458"
+  canvas: "#0b0b0b"
+  ink: "#ffffff"
+  ink-muted: "#b9b9b9"
+  hairline: rgba(255,255,255,0.1)
+
+---
+
 # Design System Inspired by Sanity
 
 ## 1. Visual Theme & Atmosphere

@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Warp
+colors:
+  primary: "#353534"
+  canvas: "#1a1a19"
+  ink: "#faf9f6"
+  ink-muted: "#afaeac"
+  hairline: rgba(255,255,255,0.08)
+
+---
+
 # Design System Inspired by Warp
 
 ## 1. Visual Theme & Atmosphere

@@ -1,6 +1,6 @@
 # 专家 5 维度评审
 
-> 融合 huashu-design 的评审知识。5 个维度的设计评估体系。
+> 5 维度设计评审体系，用于 Phase 3 变体评分和 Phase 5 质量打磨。变体阶段评审用 `review-scoring.md`。
 
 ---
 

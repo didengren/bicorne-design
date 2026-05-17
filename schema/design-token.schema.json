@@ -1,6 +1,6 @@
 {
   "$schema": "http://json-schema.org/draft-07/schema#",
-  "$id": "https://trinapower.com/schemas/design-token.schema.json",
+  "$id": "design-token.schema.json",
   "title": "Design Token",
   "description": "Framework-agnostic design token specification. Layer 2 of the bicorne-design three-layer architecture.",
   "type": "object",
@@ -29,6 +29,12 @@
           "type": "string",
           "enum": ["dark", "light"],
           "description": "Theme mode"
+        },
+        "platform": {
+          "type": "string",
+          "enum": ["desktop", "mobile", "dashboard"],
+          "default": "desktop",
+          "description": "Target platform. Determines which template defaults apply. Native apps use 'mobile' — token values are identical; platform-specific differences (iOS HIG / Material Design) are handled at Layer 3 (execution). Dashboard only supports dark theme — no dashboard-light template exists."
         },
         "description": {
           "type": "string",
@@ -289,6 +295,17 @@
             }
           },
           "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "viewport": {
+      "type": "object",
+      "description": "Viewport breakpoint min-width values (px), aligned with bicorne-ui BREAKPOINTS",
+      "patternProperties": {
+        "^[a-z][a-z0-9]*$": {
+          "type": "integer",
+          "minimum": 0
         }
       },
       "additionalProperties": false

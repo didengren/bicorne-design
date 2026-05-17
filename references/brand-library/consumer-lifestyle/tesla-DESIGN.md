@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Tesla
+colors:
+  primary: "#3E6AE1"
+  canvas: "#FFFFFF"
+  ink: "#171A20"
+  ink-muted: "#393C41"
+  hairline: "#e5e5e5"
+
+---
+
 # Design System Inspired by Tesla
 
 ## 1. Visual Theme & Atmosphere

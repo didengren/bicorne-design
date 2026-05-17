@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Webflow
+colors:
+  primary: "#146ef5"
+  canvas: "#FFFFFF"
+  ink: "#080808"
+  ink-muted: "#5e5e5e"
+  hairline: "#e3e3e3"
+
+---
+
 # Design System Inspired by Webflow
 
 ## 1. Visual Theme & Atmosphere

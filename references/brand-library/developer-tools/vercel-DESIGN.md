@@ -1,3 +1,15 @@
+---
+version: alpha
+name: Vercel
+colors:
+  primary: "#171717"
+  canvas: "#ffffff"
+  ink: "#171717"
+  ink-muted: "#4d4d4d"
+  hairline: "#eaeaea"
+
+---
+
 # Design System Inspired by Vercel
 
 ## 1. Visual Theme & Atmosphere
