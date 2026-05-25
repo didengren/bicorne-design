@@ -1,133 +1,133 @@
-# 核心资产协议
+# Core Asset Protocol
 
-> 涉及具体品牌时强制执行。前置条件：已通过 [#0 事实验证](../../SKILL.md) 确认品牌/产品存在且状态已知。
-
----
-
-## 一、核心原则：资产 > 规范
-
-品牌被认出来靠的不是色值，而是 Logo、产品图、UI 截图。按识别度排序：
-
-| 资产类型 | 识别度 | 必需性 |
-|----------|--------|--------|
-| Logo | 最高 | 任何品牌都必须有 |
-| 产品图/渲染图 | 极高 | 实体产品必须有 |
-| UI 截图 | 极高 | 数字产品必须有 |
-| 色值 | 中 | 辅助 |
-| 字体 | 低 | 辅助 |
-
-**违反协议**：
-- 只抽色值 + 字体，不找 Logo / 产品图 / UI 截图
-- 用 CSS 剪影 / SVG 手画替代真实产品图
-- 找不到资产不告诉用户，静默硬做
+> Enforced when a specific brand is involved. Prerequisite: brand/product existence and status confirmed via [#0 Fact Verification](../../SKILL.md).
 
 ---
 
-## 二、五步硬流程
+## 1. Core Principle: Assets > Specifications
 
-### Step 1 · 问
+Brands are recognized not by color values, but by Logos, product images, and UI screenshots. Ranked by recognizability:
 
-不要只问「有 brand guidelines 吗？」，按清单逐项问：
+| Asset Type | Recognizability | Necessity |
+|------------|----------------|-----------|
+| Logo | Highest | Required for any brand |
+| Product images / renders | Very high | Required for physical products |
+| UI screenshots | Very high | Required for digital products |
+| Color values | Medium | Supplementary |
+| Fonts | Low | Supplementary |
+
+**Violations**:
+- Extracting only color values + fonts without finding Logo / product images / UI screenshots
+- Using CSS silhouettes / hand-drawn SVGs as substitutes for real product images
+- Not informing the user when assets cannot be found, silently proceeding anyway
+
+---
+
+## 2. Five-Step Hard Process
+
+### Step 1 · Ask
+
+Do not just ask "Do you have brand guidelines?" — ask item by item:
 
 ```
-关于 <brand>，你手上有以下哪些资料？
-1. Logo（SVG / 高清 PNG）—— 任何品牌必备
-2. 产品图 / 官方渲染图 —— 实体产品必备
-3. UI 截图 / 界面素材 —— 数字产品必备
-4. 色值清单 / 字体清单 / Brand guidelines / 官网链接
-有的直接发我，没有的我去搜。
+Regarding <brand>, which of the following materials do you have?
+1. Logo (SVG / high-res PNG) — required for any brand
+2. Product images / official renders — required for physical products
+3. UI screenshots / interface assets — required for digital products
+4. Color palette / font list / Brand guidelines / official website URL
+Send what you have; I'll search for the rest.
 ```
 
-### Step 2 · 搜
+### Step 2 · Search
 
-| 资产 | 搜索路径 |
-|------|---------|
-| Logo | `<brand>.com/brand` · `/press` · `/press-kit` · 官网 header inline SVG · Simplelogos |
-| 产品图 | `<brand>.com/<product>` hero + gallery · 官方新闻稿附图 |
-| UI 截图 | App Store / Google Play 产品页 · 官网 screenshots section |
-| 色值 | 官网 inline CSS / Tailwind config / brand guidelines |
-| 字体 | 官网 `<link>` 引用 · Google Fonts 追踪 |
+| Asset | Search Paths |
+|-------|-------------|
+| Logo | `<brand>.com/brand` · `/press` · `/press-kit` · official site header inline SVG · Simplelogos |
+| Product images | `<brand>.com/<product>` hero + gallery · official press release images |
+| UI screenshots | App Store / Google Play product pages · official site screenshots section |
+| Color values | Official site inline CSS / Tailwind config / brand guidelines |
+| Fonts | Official site `<link>` references · Google Fonts tracking |
 
-WebSearch 兜底：`<brand> logo svg` / `<brand> <product> renders` / `<brand> app screenshots`
+WebSearch fallback: `<brand> logo svg` / `<brand> <product> renders` / `<brand> app screenshots`
 
-### Step 3 · 下载
+### Step 3 · Download
 
-**Logo**（任何品牌必需）— 三条路径递减：
-1. 独立 SVG/PNG 文件（最理想）
-2. 官网 HTML 提取 inline SVG（80% 场景必用）
-3. 官方社交媒体 avatar（最后手段）
+**Logo** (required for any brand) — three paths in descending priority:
+1. Standalone SVG/PNG file (ideal)
+2. Inline SVG extracted from official site HTML (80% of scenarios)
+3. Official social media avatar (last resort)
 
-**产品图**（实体产品必需）— 优先级：
-1. 官方产品页 hero image
-2. 官方 press kit
-3. 官方 launch video 截帧
-4. AI 生成兜底（以真实产品图为参考，不用 CSS/SVG 手画代替）
+**Product images** (required for physical products) — priority:
+1. Official product page hero image
+2. Official press kit
+3. Official launch video frame capture
+4. AI-generated fallback (based on real product images as reference; do not substitute with CSS/SVG hand-drawn images)
 
-**UI 截图**（数字产品必需）：
-- App Store / Google Play 产品截图
-- 官网 screenshots section
-- 产品演示视频截帧
+**UI screenshots** (required for digital products):
+- App Store / Google Play product screenshots
+- Official site screenshots section
+- Product demo video frame captures
 
-**质量门槛「5-10-2-8」**（Logo 除外）：
+**Quality Gate "5-10-2-8"** (Logo excluded):
 
-| 维度 | 标准 | 反模式 |
-|------|------|--------|
-| 5 轮搜索 | 多渠道交叉搜 | 第一页结果直接用 |
-| 10 个候选 | 至少 10 个备选才开始筛 | 只抓 2 个没得选 |
-| 选 2 个好的 | 从 10 个精选 2 个 | 全都用 = 视觉过载 |
-| 每个 8/10+ | 不够 8 分宁可不用 | 凑数 7 分素材 |
+| Dimension | Standard | Anti-pattern |
+|-----------|----------|-------------|
+| 5 rounds of search | Cross-channel verification | Using first-page results directly |
+| 10 candidates | At least 10 options before filtering | Only grabbing 2 with no choice |
+| Pick 2 good ones | Select 2 from 10 | Using all = visual overload |
+| Each 8/10+ | Below 8, better not to use | Padding with 7-score assets |
 
-8/10 评分维度：分辨率 ≥2000px · 版权清晰（官方 > 公共领域 > 免费素材 > 疑似盗图 0 分）· 与品牌气质契合 · 光线/构图/风格一致 · 独立叙事能力
+8/10 scoring dimensions: resolution ≥2000px · clear licensing (official > public domain > free stock > suspected pirated = 0) · brand character alignment · lighting/composition/style consistency · standalone narrative ability
 
-Logo 例外：有就必须用，不适用「5-10-2-8」——Logo 是识别度根基，不是多选一问题。
+Logo exception: if available, must be used — "5-10-2-8" does not apply. Logo is the foundation of recognizability, not a multiple-choice question.
 
-### Step 4 · 验证
+### Step 4 · Verify
 
-| 资产 | 验证动作 |
-|------|---------|
-| Logo | 可打开 + 至少两个版本（深底/浅底）+ 透明背景 + 颜色与 DESIGN.md `colors.primary` 一致 + 比例正确 + 最新版本 |
-| 产品图 | 至少一张 2000px+ + 去背或干净背景 + 多角度 |
-| UI 截图 | 分辨率真实（1x/2x）+ 最新版本 + 无用户数据污染 |
+| Asset | Verification Actions |
+|-------|---------------------|
+| Logo | Openable + at least two versions (dark bg / light bg) + transparent background + color matches DESIGN.md `colors.primary` + correct proportions + latest version |
+| Product images | At least one 2000px+ + clean or removed background + multiple angles |
+| UI screenshots | Real resolution (1x/2x) + latest version + no user data contamination |
 
-⚠️ 警惕示范品牌污染：产品截图里常有用户 demo 的品牌色，那不是该产品的色。同一品牌的官网营销色和产品 UI 色可能不同，两套都是真的——根据交付场景选合适的切面。
+⚠️ Beware of demo brand contamination: product screenshots often contain user demo brand colors — those are not the product's own colors. The same brand may have different colors for website marketing vs. product UI — both are legitimate; choose the appropriate facet based on the delivery context.
 
-### Step 5 · 固化
+### Step 5 · Solidify
 
-资产信息写入 DESIGN.md（Layer 1），通过映射规则流入 token.json（Layer 2）。确保记录：
-- Logo 文件路径 + 使用场景 + 禁用变形规则
-- 产品图文件路径 + 分辨率 + 角度
-- UI 截图文件路径 + 对应功能
+Asset information is written into DESIGN.md (Layer 1) and flows into token.json (Layer 2) via mapping rules. Ensure the following are recorded:
+- Logo file path + usage scenarios + prohibited distortion rules
+- Product image file path + resolution + angle
+- UI screenshot file path + corresponding feature
 
-执行纪律：
-- 引用真实文件路径，不用 CSS 剪影 / SVG 手画代替
-- 设计变量从 token.json 注入，各框架按各自方式消费
-
----
-
-## 三、Logo 格式规范
-
-1. **SVG**（首选）— 矢量，任意缩放不失真
-2. **PNG**（备选）— 至少 2x 分辨率
-3. **JPG**（避免）— 仅在无其他格式时使用
+Execution discipline:
+- Reference real file paths; do not substitute with CSS silhouettes / hand-drawn SVGs
+- Design variables are injected from token.json; each framework consumes them in its own way
 
 ---
 
-## 四、截图规范
+## 3. Logo Format Specification
 
-| 类型 | 用途 | 获取方式 |
-|------|------|---------|
-| 产品 UI 截图 | 展示产品功能 | 官网产品页 / 手动截图 |
-| 浏览器窗口截图 | 落地页展示 | 手动截图 + 浏览器装饰 |
-| 移动端截图 | 响应式展示 | 模拟器截图 / 官网素材 |
-
-- 分辨率 ≥ 2x（Retina 适配）
-- 使用真实数据（可脱敏），禁止假数据
-- 浏览器窗口装饰符合实际平台风格
-- 图片格式优先 WebP，备选 PNG
+1. **SVG** (preferred) — vector, scales without quality loss
+2. **PNG** (fallback) — at least 2x resolution
+3. **JPG** (avoid) — only when no other format is available
 
 ---
 
-## 五、归档与命名
+## 4. Screenshot Specification
+
+| Type | Purpose | Acquisition |
+|------|---------|------------|
+| Product UI screenshot | Show product features | Official product page / manual screenshot |
+| Browser window screenshot | Landing page display | Manual screenshot + browser chrome |
+| Mobile screenshot | Responsive display | Emulator screenshot / official assets |
+
+- Resolution ≥ 2x (Retina-ready)
+- Use real data (may be desensitized); fake data is prohibited
+- Browser window chrome matches actual platform style
+- Image format: WebP preferred, PNG fallback
+
+---
+
+## 5. Archiving and Naming
 
 ```
 assets/
@@ -143,44 +143,44 @@ assets/
     └── [brand]-reference-2.png
 ```
 
-- 全小写，连字符分隔
-- 格式：`[brand]-[type]-[variant].[ext]`
-- 示例：`linear-logo-dark.svg`, `stripe-hero-2x.png`
+- All lowercase, hyphen-separated
+- Format: `[brand]-[type]-[variant].[ext]`
+- Examples: `linear-logo-dark.svg`, `stripe-hero-2x.png`
 
 ---
 
-## 六、使用规则
+## 6. Usage Rules
 
 ### Logo
 
-- 保持原始比例，禁止拉伸
-- 品牌色 Logo 用于亮色背景，反色 Logo 用于暗色背景
-- Logo 周围保留安全区域（至少 Logo 高度的 25%）
-- 禁止添加阴影、描边、渐变等效果
+- Maintain original proportions; stretching is prohibited
+- Brand-color Logo on light backgrounds, inverted Logo on dark backgrounds
+- Maintain safe area around Logo (at least 25% of Logo height)
+- Adding shadows, strokes, gradients, or other effects is prohibited
 
-### 截图
+### Screenshots
 
-- 展示真实功能，禁止「假截图」
-- 数据应可辨识（非模糊处理）
-- 加载策略：占位骨架 → 低质图 → 高清图
-- 标注文字不遮挡关键内容
+- Show real features; "fake screenshots" are prohibited
+- Data should be identifiable (not blurred out)
+- Loading strategy: skeleton placeholder → low-quality image → high-quality image
+- Annotation text must not obscure key content
 
-### 图标
+### Icons
 
-- 优先使用品牌官方图标库
-- 风格与品牌设计语言一致（线性/填充/双色）
-- 大小与文字视觉权重对等
-- 禁止混用不同风格的图标集
+- Prefer brand's official icon library
+- Style consistent with brand design language (line / filled / duotone)
+- Size visually balanced with text weight
+- Mixing icon sets of different styles is prohibited
 
 ---
 
-## 七、失败兜底
+## 7. Failure Fallbacks
 
-| 缺失 | 处理 |
-|------|------|
-| Logo 完全找不到 | **停下问用户**，不要硬做 |
-| 产品图找不到 | AI 生成（以官方参考图为基底）→ 向用户索取 → 诚实 placeholder |
-| UI 截图找不到 | 向用户索取截屏 → 官方演示视频截帧 |
-| 色值找不到 | 向用户推荐 3 个方向并标注 assumption |
+| Missing Asset | Handling |
+|--------------|---------|
+| Logo completely unfindable | **Stop and ask the user**; do not proceed anyway |
+| Product images unfindable | AI generation (based on official reference images) → request from user → honest placeholder |
+| UI screenshots unfindable | Request screenshot from user → official demo video frame capture |
+| Color values unfindable | Recommend 3 directions to the user and label as assumption |
 
-**禁止**：找不到资产就静默用 CSS 剪影 / 通用渐变硬做。
+**Prohibited**: Silently using CSS silhouettes / generic gradients as substitutes when assets cannot be found.

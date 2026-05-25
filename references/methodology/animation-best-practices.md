@@ -1,423 +1,423 @@
-# 动画最佳实践
+# Animation Best Practices
 
-> 以 Ant Design 动效三原则为锚点的 keyframe 分类体系。
-> 动画原则 + 缓动曲线 + Keyframe 分类 + 高阶交互模式 + Stage/Sprite 交付原则。
-
----
-
-## 一、动画原则
-
-### 核心：自然 > 高效 > 克制
-
-> 基于 Ant Design 动效设计三原则。原则优先级不可被其他来源覆盖。
-
-#### 1. 自然
-
-模拟物理世界运动规律，保证视觉连贯。
-
-- 进入用 ease-out（迅速启动，缓慢刹车）
-- 退出用 ease-in（缓慢启动，迅速离开）
-- 元素重定位用 ease-in-out（FLIP 过渡除外，见 6.6）
-
-#### 2. 高效
-
-尽量节省过渡时间，快速完成动画效果。出场比进场地更快。
-
-- UI 微交互时长 100-300ms 覆盖 90% 场景
-- 出场动画比入场更快、更简洁
-- 不用大张旗鼓地吸引注意力，简单清晰即可
-
-#### 3. 克制
-
-避免动效疲劳，做有意义的动效。
-
-- 每个动效必须有功能性目的，可用一句话陈述——无目的的动效应删除
-- 动效不应比内容更显眼
-- 好的动效是“感受得到但意识不到”的
-- 不为所有状态变化添加动效
-- 叙事动画（滚动揭示、数字递增等）可至 400-1200ms，但 UI 日常交互不使用此范围时长
-
-> **分层原则**：UI 组件遵循高效原则（100-300ms），叙事动画追求自然感（400ms+）。两者时长规范不同，参见第四节。
-
-### 补充：一致性
-
-同类交互使用同一套参数，保证体验统一。
-
-- 使用预设动画 Token
-- 同类组件共享动效规范
+> A keyframe classification system anchored on the Ant Design motion design three principles.
+> Animation principles + easing curves + Keyframe classification + advanced interaction patterns + Stage/Sprite delivery principles.
 
 ---
 
-## 二、核心缓动曲线
+## 1. Animation Principles
 
-### 基础缓动（UI 组件默认）
+### Core: Natural > Efficient > Restrained
 
-> 基于 Ant Design 动效三原则的默认缓动。覆盖日常 UI 交互的 90%+ 场景。
-> 注意：下表 ease-out / ease-in / ease-in-out 为 Ant Design 约定的自定义曲线，非 CSS 关键字。CSS `ease-out` 关键字 = `cubic-bezier(0, 0, 0.58, 1)`，与本文定义不同。
+> Based on the Ant Design motion design three principles. Principle priority cannot be overridden by other sources.
 
-| 名称 | CSS 值 | 适用场景 | 物理直觉 |
-|------|--------|---------|---------|
-| ease-out | `cubic-bezier(0.215, 0.61, 0.355, 1)` | 进入动画（**默认**） | 迅速启动，缓慢刹车 |
-| ease-in | `cubic-bezier(0.55, 0.055, 0.675, 0.19)` | 退出动画 | 缓慢启动，迅速离开 |
-| ease-in-out | `cubic-bezier(0.645, 0.045, 0.355, 1)` | 重定位/展开类动画 | 对称加减速 |
+#### 1. Natural
 
-### 高级缓动
+Simulate physical world motion patterns, ensuring visual continuity.
 
-> 基础缓动之外的专用曲线，按用途分两类。不可替代基础缓动作为 UI 组件默认值。
+- Enter with ease-out (fast start, slow brake)
+- Exit with ease-in (slow start, fast leave)
+- Reposition with ease-in-out (except FLIP transitions, see 6.6)
 
-**叙事类**（营销动画、滚动揭示等需要强物理重量感的场景）
+#### 2. Efficient
 
-| 名称 | CSS 值 | 适用场景 | 物理直觉 |
-|------|--------|---------|----------|
-| Expo Out | `cubic-bezier(0.16, 1, 0.3, 1)` | 叙事动画的进入效果 | 迅速启动，极慢刹车 |
+Minimize transition time, complete animations quickly. Exits are faster than entrances.
 
-**弹性反馈类**（交互中需要弹性/过冲质感的特定组件）
+- UI micro-interaction duration 100-300ms covers 90% of scenarios
+- Exit animations are faster and simpler than entrance animations
+- No need to attract attention grandly; simple and clear is sufficient
 
-| 名称 | CSS 值 | 适用场景 | 物理直觉 |
-|------|--------|---------|----------|
-| Overshoot | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Toggle/开关弹性切换 | 带弹性的过冲 |
-| Spring | `cubic-bezier(0.175, 0.885, 0.32, 1.1)` | 几何体归位、自然落位 | 物理弹簧 |
+#### 3. Restrained
 
-> **注意**：Overshoot 和 Spring 仅用于需要物理弹性质感的特定交互反馈（如 Toggle 切换），不用于常规 UI 出现/消失动画。
+Avoid animation fatigue; make purposeful animations only.
 
-### 缓动选择决策树
+- Every animation must have a functional purpose, statable in one sentence—purposeless animations should be removed
+- Animations should not be more prominent than content
+- Good animation is "felt but not noticed"
+- Not every state change needs an animation
+- Narrative animations (scroll reveal, counter, etc.) may extend to 400-1200ms, but daily UI interactions do not use this duration range
 
-```
-需要动画？
-├─ 元素出现 → ease-out（默认）
-│   ├─ 涉及尺寸展开（Slide 展开）→ ease-in-out
-│   └─ 叙事动画出现 → Expo Out
-├─ 元素消失 → ease-in（Slide 收拢同此，时长更短）
-├─ 元素重定位 → ease-in-out
-│   └─ FLIP 过渡 → ease-out（强调落位，见 6.6）
-├─ 弹性反馈（Toggle/开关）→ Overshoot
-└─ 物理归位 → Spring
-```
+> **Layering principle**: UI components follow the efficiency principle (100-300ms), narrative animations pursue natural feel (400ms+). The two have different duration specifications; see Section 4.
 
-> **时长指导**不在本决策树范围内——出场比入场更快、Slide 收拢比展开更快，参见第四节时长规范。
+### Supplement: Consistency
+
+Same-type interactions use the same set of parameters, ensuring unified experience.
+
+- Use preset animation tokens
+- Same-type components share motion specifications
 
 ---
 
-## 三、Motion Keyframe 分类体系
+## 2. Core Easing Curves
 
-> 基于 Ant Design 动效原则提炼的 keyframe 分类体系和语义规范。
-> 框架无关——任何实现层均可按此分类消费。
+### Basic Easing (UI Component Defaults)
 
-### 3.1 分类总览
+> Default easing based on the Ant Design motion three principles. Covers 90%+ of daily UI interaction scenarios.
+> Note: The ease-out / ease-in / ease-in-out in the table below are Ant Design-defined custom curves, not CSS keywords. The CSS `ease-out` keyword = `cubic-bezier(0, 0, 0.58, 1)`, which differs from the definitions in this document.
 
-| 家族 | 核心变换 | 语义 | 典型场景 |
-|------|---------|------|--------|
-| **Fade** | opacity | 淡入淡出，无运动方向 | 叠加层、提示信息、背景切换 |
-| **Slide** | scaleX/scaleY + opacity | 从边缘展开/收拢（抽屉/幕布） | 下拉菜单、手风琴面板、抽屉侧栏 |
-| **Move** | translateX/Y + opacity | 元素整体位移（滑动入场） | Toast 通知、对话框、面板切换 |
-| **Zoom** | scale + opacity | 缩放入场（强调出入场） | 模态框、图片预览、徽章弹出 |
-| **Feedback** | rotate / boxShadow / opacity | 交互反馈效果 | 加载状态、涟漪点击、反馈消失 |
+| Name | CSS Value | Applicable Scenarios | Physical Intuition |
+|------|-----------|---------------------|-------------------|
+| ease-out | `cubic-bezier(0.215, 0.61, 0.355, 1)` | Enter animation (**default**) | Fast start, slow brake |
+| ease-in | `cubic-bezier(0.55, 0.055, 0.675, 0.19)` | Exit animation | Slow start, fast leave |
+| ease-in-out | `cubic-bezier(0.645, 0.045, 0.355, 1)` | Reposition / expand-type animation | Symmetric acceleration-deceleration |
 
-### 3.2 Slide vs Move 的语义区分
+### Advanced Easing
 
-最常见的混淆点。两者都有方向变体，但物理语义完全不同：
+> Specialized curves beyond basic easing, categorized by use case into two types. Cannot replace basic easing as UI component defaults.
 
-| 维度 | Slide（scaleX/Y） | Move（translateX/Y） |
-|------|-------------------|--------------------|
-| 视觉效果 | 从边缘**展开/收拢**，像抽屉拉开 | 元素**整体滑入/滑出**，像推拉门 |
-| 空间行为 | 元素从缩放态展开至完整尺寸；scaleY/X 是视觉变换，**不改变布局尺寸**，实际收起效果需配合 overflow:hidden | 元素完整存在，只是位置偏移；translate 不影响布局流 |
-| transformOrigin | 关键参数，决定展开锚点 | 不涉及 |
-| 适用场景 | 下拉菜单、Accordion、Drawer | Toast、Dialog、面板切换 |
-| Keyframe 示例 | `scaleY(0)→scaleY(1)` | `translateY(100%)→translateY(0)` |
+**Narrative type** (marketing animations, scroll reveal, etc.—scenarios requiring strong physical weight)
 
-**命名语义**：
-- Slide 方向词表示**锚点位置**——slideUp = 锚定顶部，向下展开；slideDown = 锚定底部，向上展开
-- Move 方向词表示**进入来源**——moveUp = 从上方进入；moveDown = 从下方进入
-- 以上命名语义遵循展开类动画的物理直觉：方向词表示视觉锚点位置，使展开方向可从命名直接推导
+| Name | CSS Value | Applicable Scenarios | Physical Intuition |
+|------|-----------|---------------------|-------------------|
+| Expo Out | `cubic-bezier(0.16, 1, 0.3, 1)` | Narrative animation entrance | Fast start, extremely slow brake |
 
-### 3.3 方向变体与 transformOrigin
+**Elastic feedback type** (specific components requiring elastic/overshoot feel in interaction)
 
-Slide 和 Zoom 的方向变体通过 `transformOrigin` 控制展开/缩放锚点：
+| Name | CSS Value | Applicable Scenarios | Physical Intuition |
+|------|-----------|---------------------|-------------------|
+| Overshoot | `cubic-bezier(0.34, 1.56, 0.64, 1)` | Toggle/switch elastic toggle | Elastic overshoot |
+| Spring | `cubic-bezier(0.175, 0.885, 0.32, 1.1)` | Geometric body settling, natural placement | Physical spring |
 
-**Slide 方向变体**
+> **Note**: Overshoot and Spring are only for specific interaction feedback requiring physical elastic feel (e.g., Toggle switching), not for regular UI appear/disappear animations.
 
-| 变体 | transformOrigin | 锚点位置 | 展开方向 | 适用场景 |
-|------|----------------|---------|---------|----------|
-| slideUp | `50% 0%` | 顶部 | 向下展开 | 下拉菜单（从按钮下方展开） |
-| slideDown | `50% 100%` | 底部 | 向上展开 | 底部弹出面板 |
-| slideLeft | `0% 50%` | 左侧 | 向右展开 | 左侧抽屉/面板 |
-| slideRight | `100% 50%` | 右侧 | 向左展开 | 右侧抽屉/面板 |
-
-**Zoom 方向变体**
-
-> Zoom 方向词同样表示**缩放锚点位置**，与 Slide 命名语义一致。
-
-| 变体 | transformOrigin | 锚点位置 | 适用场景 |
-|------|----------------|---------|--------|
-| zoomUp | `50% 0%` | 顶部中心 | 从上方图标展开 |
-| zoomDown | `50% 100%` | 底部中心 | 从按钮展开详情 |
-| zoomLeft | `0% 50%` | 左侧中心 | 左侧关联展开 |
-| zoomRight | `100% 50%` | 右侧中心 | 右侧关联展开 |
-
-### 3.4 Zoom 的两档缩放
-
-> `zoomBig` 的"Big"指起始缩放值较大（0.8），故视觉变化更温和；`zoom` 起始值小（0.2），视觉冲击更强。
-
-| 变体 | 缩放范围 | 视觉强度 | 适用场景 |
-|------|---------|---------|----------|
-| **zoom** | scale(0.2) ↔ scale(1) | 强调入场，视觉冲击大 | 图片预览、全屏弹窗 |
-| **zoomBig** | scale(0.8) ↔ scale(1) | 温和缩放，日常使用 | 普通模态框、卡片弹出 |
-
-### 3.5 反馈效果 Keyframe
-
-| Keyframe | 变换 | 适用场景 |
-|----------|------|--------|
-| loadingCircle | rotate(0 → 360deg) | 加载旋转指示器 |
-| waveEffect | boxShadow 扩散（0 → 6px） | 点击涟漪（Ripple）效果 |
-| fadeEffect | opacity → 0 | 反馈元素消失（如 Toast 自动消失） |
-
-> **性能提示**：waveEffect 使用 boxShadow 动画会触发 paint，与第八节"只动画 transform 和 opacity"原则冲突。推荐改用伪元素 + `transform: scale()` 模拟涟漪扩散；boxShadow 方案仅适用于元素数量少的简单场景。
-
-### 3.6 Keyframe 选择决策树
+### Easing Selection Decision Tree
 
 ```
-需要动画？
-├─ 元素淡入淡出（无方向）→ Fade
-├─ 从边缘展开/收拢（尺寸缩放）→ Slide + 方向变体
-├─ 元素整体滑入/滑出（位置偏移）→ Move + 方向变体
-├─ 缩放强调入场/退场 → Zoom / ZoomBig + 方向变体
-└─ 交互反馈
-    ├─ 加载旋转 → loadingCircle
-    ├─ 点击涟漪 → waveEffect
-    └─ 消失反馈 → fadeEffect
+Need animation?
+├─ Element appears → ease-out (default)
+│   ├─ Involves size expansion (Slide expand) → ease-in-out
+│   └─ Narrative animation appears → Expo Out
+├─ Element disappears → ease-in (Slide collapse same, shorter duration)
+├─ Element repositions → ease-in-out
+│   └─ FLIP transition → ease-out (emphasize landing, see 6.6)
+├─ Elastic feedback (Toggle/switch) → Overshoot
+└─ Physical settling → Spring
+```
+
+> **Duration guidance** is not within the scope of this decision tree—exits are faster than entrances, Slide collapse is faster than expansion; see Section 4 for duration specifications.
+
+---
+
+## 3. Motion Keyframe Classification System
+
+> A keyframe classification system and semantic specification distilled from the Ant Design motion principles.
+> Framework-agnostic—any implementation layer can consume by this classification.
+
+### 3.1 Classification Overview
+
+| Family | Core Transform | Semantics | Typical Scenarios |
+|--------|---------------|-----------|-------------------|
+| **Fade** | opacity | Fade in/out, no motion direction | Overlays, tooltips, background switching |
+| **Slide** | scaleX/scaleY + opacity | Expand/collapse from edge (drawer/curtain) | Dropdown menus, accordion panels, drawer sidebars |
+| **Move** | translateX/Y + opacity | Element displacement (slide entrance) | Toast notifications, dialogs, panel switching |
+| **Zoom** | scale + opacity | Scale entrance (emphasize enter/exit) | Modals, image previews, badge pop-ups |
+| **Feedback** | rotate / boxShadow / opacity | Interaction feedback effects | Loading states, ripple clicks, feedback dismissal |
+
+### 3.2 Slide vs Move Semantic Distinction
+
+The most common confusion point. Both have directional variants, but their physical semantics are entirely different:
+
+| Dimension | Slide (scaleX/Y) | Move (translateX/Y) |
+|-----------|-------------------|---------------------|
+| Visual effect | **Expand/collapse** from edge, like pulling a drawer open | Element **slides in/out as a whole**, like a sliding door |
+| Spatial behavior | Element expands from scaled state to full size; scaleY/X is a visual transform, **does not change layout size**; actual collapse effect requires overflow:hidden | Element exists fully, only position is offset; translate does not affect layout flow |
+| transformOrigin | Key parameter, determines expansion anchor | Not involved |
+| Applicable scenarios | Dropdown menus, Accordion, Drawer | Toast, Dialog, panel switching |
+| Keyframe example | `scaleY(0)→scaleY(1)` | `translateY(100%)→translateY(0)` |
+
+**Naming semantics**:
+- Slide direction word indicates **anchor position**—slideUp = anchored at top, expands downward; slideDown = anchored at bottom, expands upward
+- Move direction word indicates **entry origin**—moveUp = enters from above; moveDown = enters from below
+- The above naming semantics follow the physical intuition of expand-type animations: the direction word indicates the visual anchor position, making the expansion direction directly derivable from the name
+
+### 3.3 Directional Variants and transformOrigin
+
+Slide and Zoom directional variants control expansion/scale anchors via `transformOrigin`:
+
+**Slide Directional Variants**
+
+| Variant | transformOrigin | Anchor Position | Expansion Direction | Applicable Scenarios |
+|---------|----------------|-----------------|--------------------|---------------------|
+| slideUp | `50% 0%` | Top | Expands downward | Dropdown menu (expands below button) |
+| slideDown | `50% 100%` | Bottom | Expands upward | Bottom pop-up panel |
+| slideLeft | `0% 50%` | Left | Expands rightward | Left drawer/panel |
+| slideRight | `100% 50%` | Right | Expands leftward | Right drawer/panel |
+
+**Zoom Directional Variants**
+
+> Zoom direction words also indicate **scale anchor position**, consistent with Slide naming semantics.
+
+| Variant | transformOrigin | Anchor Position | Applicable Scenarios |
+|---------|----------------|-----------------|---------------------|
+| zoomUp | `50% 0%` | Top center | Expand from icon above |
+| zoomDown | `50% 100%` | Bottom center | Expand details from button |
+| zoomLeft | `0% 50%` | Left center | Left-associated expansion |
+| zoomRight | `100% 50%` | Right center | Right-associated expansion |
+
+### 3.4 Zoom Two-Tier Scale
+
+> `zoomBig`'s "Big" refers to the larger starting scale value (0.8), hence the visual change is more gentle; `zoom` starts small (0.2), with stronger visual impact.
+
+| Variant | Scale Range | Visual Intensity | Applicable Scenarios |
+|---------|------------|-----------------|---------------------|
+| **zoom** | scale(0.2) ↔ scale(1) | Emphasized entrance, strong visual impact | Image preview, fullscreen pop-up |
+| **zoomBig** | scale(0.8) ↔ scale(1) | Gentle scale, everyday use | Regular modals, card pop-ups |
+
+### 3.5 Feedback Effect Keyframes
+
+| Keyframe | Transform | Applicable Scenarios |
+|----------|-----------|---------------------|
+| loadingCircle | rotate(0 → 360deg) | Loading spin indicator |
+| waveEffect | boxShadow spread (0 → 6px) | Click ripple effect |
+| fadeEffect | opacity → 0 | Feedback element dismissal (e.g., Toast auto-dismiss) |
+
+> **Performance note**: waveEffect using boxShadow animation triggers paint, conflicting with the Section 8 principle of "only animate transform and opacity". Recommended alternative: use pseudo-element + `transform: scale()` to simulate ripple spread; boxShadow approach only suitable for simple scenarios with few elements.
+
+### 3.6 Keyframe Selection Decision Tree
+
+```
+Need animation?
+├─ Element fade in/out (no direction) → Fade
+├─ Expand/collapse from edge (size scaling) → Slide + directional variant
+├─ Element slides in/out as whole (position offset) → Move + directional variant
+├─ Scale-emphasized entrance/exit → Zoom / ZoomBig + directional variant
+└─ Interaction feedback
+    ├─ Loading spin → loadingCircle
+    ├─ Click ripple → waveEffect
+    └─ Dismissal feedback → fadeEffect
 ```
 
 ---
 
-## 四、时长规范
+## 4. Duration Specifications
 
-### UI 微交互（100-300ms）
+### UI Micro-interactions (100-300ms)
 
-> Ant Design 高效原则：尽量节省过渡时间，快速完成。出场比进场地更快。
+> Ant Design efficiency principle: minimize transition time, complete quickly. Exits are faster than entrances.
 
-| 场景 | 时长 | 缓动 |
-|------|------|------|
-| Hover 反馈（简单色值/阴影变化） | 100-150ms | ease-out |
-| Hover 反馈（复合：位移+阴影） | 200ms | ease-out |
-| 按钮点击 | 100ms | ease-out |
-| 组件展开 | 200-250ms | ease-in-out |
-| 淡入 | 200ms | ease-out |
-| 淡出 | 140ms | ease-in |
-| 模态框出现 | 280ms | ease-out |
-| 模态框退出 | 180ms | ease-in |
-| Toggle 切换 | 200ms | Overshoot |
-| Toast 出现 | 300ms | ease-out |
-| Toast 消失 | 200ms | ease-in |
-| 侧边栏展开 | 300ms | ease-in-out |
-| 侧边栏收拢 | 200ms | ease-in |
-| 页面过渡进入 | 300ms | ease-in-out |
-| 页面过渡退出 | 200ms | ease-in |
-| 列表/卡片入场（UI 组件层 Staggered Entrance，参见 6.4） | 200-300ms | ease-out |
-| 列表项移除（被移除项 ease-in + 其余项上移 ease-in-out） | 300ms | ease-in + ease-in-out |
+| Scenario | Duration | Easing |
+|----------|----------|--------|
+| Hover feedback (simple color/shadow change) | 100-150ms | ease-out |
+| Hover feedback (composite: displacement + shadow) | 200ms | ease-out |
+| Button click | 100ms | ease-out |
+| Component expand | 200-250ms | ease-in-out |
+| Fade in | 200ms | ease-out |
+| Fade out | 140ms | ease-in |
+| Modal appear | 280ms | ease-out |
+| Modal exit | 180ms | ease-in |
+| Toggle switch | 200ms | Overshoot |
+| Toast appear | 300ms | ease-out |
+| Toast disappear | 200ms | ease-in |
+| Sidebar expand | 300ms | ease-in-out |
+| Sidebar collapse | 200ms | ease-in |
+| Page transition enter | 300ms | ease-in-out |
+| Page transition exit | 200ms | ease-in |
+| List/card entrance (UI component layer Staggered Entrance, see 6.4) | 200-300ms | ease-out |
+| List item removal (removed item ease-in + remaining items shift up ease-in-out) | 300ms | ease-in + ease-in-out |
 
-> **缓动分配逻辑**：元素出现默认 ease-out（Ant Design 原则）；涉及尺寸展开的 Slide 类动画用 ease-in-out（对称加减速更自然），收拢动画仍用 ease-in 且比展开更快；淡出/退出用 ease-in。出场动画比入场更快，时长约为入场的 60-70%。特殊场景参见对应小节（FLIP 见 6.6，弹性反馈见第二节高级缓动）。
+> **Easing allocation logic**: Element appearance defaults to ease-out (Ant Design principle); Slide-type animations involving size expansion use ease-in-out (symmetric acceleration-deceleration is more natural), collapse animations still use ease-in and are faster than expansion; fade-out/exit uses ease-in. Exit animations are faster than entrances, duration approximately 60-70% of entrance. Special scenarios see corresponding subsections (FLIP see 6.6, elastic feedback see Section 2 advanced easing).
 
-### 叙事动画（400ms+）
+### Narrative Animations (400ms+)
 
-> 用于营销页、演示动画、数据可视化等需要吸引注意力的场景。时长超出 UI 微交互上限。
+> For marketing pages, demo animations, data visualization, and other scenarios requiring attention. Duration exceeds UI micro-interaction upper limit.
 
-| 场景 | 时长 | 缓动 |
-|------|------|------|
-| 错落入场（Staggered Entrance） | 400-500ms | Expo Out |
+| Scenario | Duration | Easing |
+|----------|----------|--------|
+| Staggered Entrance | 400-500ms | Expo Out |
 | Scroll Reveal | 400-600ms | Expo Out |
 | Counter / CountUp | 600-1200ms | Expo Out |
 
-> 各模式的完整参数参见第六节对应小节。Typewriter/Chunk Reveal（6.3）为持续型流式输出，无固定总时长，不适用上表格式。
+> Complete parameters for each pattern see the corresponding subsections in Section 6. Typewriter/Chunk Reveal (6.3) is a continuous streaming output with no fixed total duration, not applicable to the above table format.
 
 ---
 
-## 五、交互动效速查
+## 5. Interaction Motion Quick Reference
 
-> 第四节的时长/缓动参数在此展开为具体的动效描述，便于直接实现。包含 UI 微交互与叙事动画两类，叙事条目以 **▾** 标记。
+> The duration/easing parameters from Section 4 are expanded here into specific motion descriptions for direct implementation. Includes both UI micro-interactions and narrative animations; narrative entries are marked with **▾**.
 
-| 场景 | 动效描述 | 参考时长 | 参考缓动 | 层级 |
-|------|---------|---------|---------|------|
-| 卡片 Hover | 上移 2-4px + 阴影加深（复合 Hover，简单 Hover 见第四节 100-150ms） | 200ms | ease-out | UI |
-| 数字变化 ▾ | 数值平滑递增到目标值（6.2 Counter），或每位数字独立滚动、间隔 50ms/位（逐位 stagger 模式） | 600-1200ms（视量级） | Expo Out | 叙事 |
-| 列表项删除 | 滑出屏幕（ease-in）+ 其他项目上移填补空位（ease-in-out） | 300ms | ease-in + ease-in-out | UI |
-| Toggle 切换 | 滑块移动 + 背景色变化 | 200ms | Overshoot | UI |
-| Toast 出现 | 从底部滑入 + 淡入 | 300ms | ease-out | UI |
-| Toast 消失 | 向上滑出 + 淡出 | 200ms | ease-in | UI |
-
----
-
-## 六、动效组件模式库
-
-> 高阶交互模式描述。
-> 每个模式包含：触发条件、动画行为、参数规范、适用场景。
-> 不含框架绑定代码，任何实现层均可消费。
-
-### 6.1 Scroll Reveal（滚动揭示）
-
-**触发条件**：元素进入视口（IntersectionObserver threshold 通常 0.1-0.3）
-
-**动画行为**：
-- 元素从隐藏状态（opacity: 0 + 偏移）过渡到可见状态
-- 多个元素按顺序依次入场（stagger），间隔 30-80ms
-- 偏移方向通常为从下向上（translateY: 20-40px → 0），也可水平
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| 偏移量 | 20-40px | 太大像"弹入"，太小感知弱 |
-| Stagger 间隔 | 50ms | 同组元素间延迟 |
-| 缓动 | Expo Out | 自然减速落位 |
-| 时长 | 400-600ms | 叙事动画的进入动画可偏长 |
-
-**适用场景**：营销页内容区、Landing Page 各 Section、长列表分批加载
-
-### 6.2 Counter / CountUp（数字递增）
-
-**触发条件**：数字元素进入视口，或数据更新事件
-
-**动画行为**：
-- 数值从起始值平滑递增到目标值
-- 使用缓出曲线，开始快、结尾慢（模拟"归位"感）
-- 千分位格式化在动画过程中实时更新
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| 时长 | 600-1200ms | 视数字量级调整 |
-| 缓动 | Expo Out | 快速启动，缓慢落位 |
-| 小数位 | 根据业务决定 | 货币 2 位，百分比 1 位 |
-| 逐位 stagger 间隔 | 50ms/位 | 每位数字独立动画，间隔依次延迟（逐位 stagger 模式专用） |
-
-**适用场景**：Dashboard 指标卡、KPI 大数字、数据可视化面板
-
-### 6.3 Typewriter / Chunk Reveal（文字流式揭示）
-
-**触发条件**：AI 生成内容到达、代码输出、叙事文字展示
-
-**动画行为**：
-- **不要用 setInterval 单字符蹦出**（像老电影字幕）
-- 使用 Chunk Reveal：按词/标点切分，一次出现 2-5 个字符
-- 间隔不规律（40-120ms），模拟真实流式输出
-- 每个新 chunk 配合微弱的光标闪烁
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| Chunk 粒度 | 按词 + 标点切分 | `text.split(/(\s+|,\s*|\.\s*|;\s*)/)` |
-| 间隔范围 | 40-120ms（随机） | 不规律才有真实感 |
-| 光标 | █ 闪烁，500ms 周期 | 打字结束后光标消失 |
-
-**适用场景**：AI 对话输出、终端模拟、代码演示、叙事动画
-
-### 6.4 Staggered Entrance（错落入场）
-
-**触发条件**：列表/网格/卡片组首次渲染，或新增项
-
-**动画行为**：
-- 每个元素延迟固定间隔依次入场
-- 典型组合：fadeIn + translateY(10px → 0)
-- 延迟间隔 30ms（列表行）/ 50ms（卡片网格）
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| Stagger 间隔 | 30ms（行）/ 50ms（卡片） | 列表更密，卡片更舒展 |
-| 偏移量 | 10-20px | 小偏移即可，太大像弹跳 |
-| 缓动 | ease-out（UI）/ Expo Out（叙事） | UI 组件入场用 ease-out，叙事场景用 Expo Out |
-| 时长 | 200-300ms（UI）/ 400-500ms（叙事） | UI 组件入场偏短，叙事场景 400ms 起步 |
-
-**适用场景**：表格行入场、卡片列表加载、导航项展开
-
-### 6.5 Segmented Reveal（分段揭示）
-
-**触发条件**：教学动画、概念解释、步骤引导
-
-**动画行为**：
-- 将内容分为多个 Phase，每个 Phase 有独立的时间段
-- Phase 之间通过时间区间实现自然衔接（非硬切）
-- 典型结构：问题展示 → 思路展开 → 结果演示
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| 单段时长 | 3000-5000ms | 人类注意力的舒适区间 |
-| 段间重叠 | 500-1000ms | 前段淡出与后段淡入的重叠期 |
-| 最长单段 | 10000ms | 超过 10 秒注意力下降 |
-| 缓动 | ease-out（入场）/ ease-in（退场） | 段间过渡遵循出现/消失规则 |
-
-**适用场景**：产品功能演示、教学动画、数据报告逐步展示
-
-### 6.6 FLIP / Shared Element Transition（共享元素过渡）
-
-**触发条件**：元素从一种形态变为另一种（如按钮 → 输入框）
-
-**动画行为**：
-- **不是**两个元素交叉淡入淡出
-- **同一个元素**在两种状态间平滑过渡
-- 位置、尺寸、圆角同时变化，保持视觉连续性
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| 时长 | 300ms | 不宜过快，需看清变化 |
-| 缓动 | ease-out | 强调「落位」而非「位移」——元素从旧形态变形到新形态时，减速落位比对称加减速更自然
-
-**适用场景**：列表项展开详情、按钮变形为面板、卡片缩放预览
-
-### 6.7 Particle Effect（粒子效果）
-
-**触发条件**：庆祝/达成时刻、品牌视觉强化、背景氛围
-
-**动画行为**：
-- 大量小元素从中心/随机位置向外扩散
-- 每个粒子有独立的速度、方向、大小和透明度衰减
-- 粒子间无交互，纯视觉效果
-
-**参数**：
-
-| 参数 | 推荐值 | 说明 |
-|------|--------|------|
-| 粒子数量 | 20-50（轻量）/ 100+（华丽） | 移动端减半 |
-| 生命周期 | 600-1500ms | 粒子从出现到消失 |
-| 缓动 | ease-out | 粒子减速消散 |
-| 性能 | 仅使用 transform + opacity | 避免 layout/paint 触发 |
-
-**适用场景**：完成庆祝（confetti）、品牌 Logo 动画、背景粒子流
+| Scenario | Motion Description | Reference Duration | Reference Easing | Tier |
+|----------|-------------------|--------------------|-----------------|------|
+| Card Hover | Shift up 2-4px + shadow deepening (composite Hover; simple Hover see Section 4 100-150ms) | 200ms | ease-out | UI |
+| Number change ▾ | Value smoothly increments to target (6.2 Counter), or each digit scrolls independently with 50ms/digit stagger (per-digit stagger mode) | 600-1200ms (varies by magnitude) | Expo Out | Narrative |
+| List item deletion | Slide off screen (ease-in) + other items shift up to fill gap (ease-in-out) | 300ms | ease-in + ease-in-out | UI |
+| Toggle switch | Knob movement + background color change | 200ms | Overshoot | UI |
+| Toast appear | Slide in from bottom + fade in | 300ms | ease-out | UI |
+| Toast disappear | Slide out upward + fade out | 200ms | ease-in | UI |
 
 ---
 
-## 七、Stage + Sprite 动画交付原则
+## 6. Motion Component Pattern Library
 
-### 概念
+> Advanced interaction pattern descriptions.
+> Each pattern includes: trigger condition, animation behavior, parameter specification, applicable scenarios.
+> No framework-bound code; any implementation layer can consume.
 
-- **Stage**: 页面级动画容器，控制全局进度（0→1）
-- **Sprite**: 元素级动画单元，基于 Stage 进度计算自身状态
+### 6.1 Scroll Reveal
 
-### 交付规则
+**Trigger condition**: Element enters viewport (IntersectionObserver threshold typically 0.1-0.3)
 
-1. 每个 Sprite 必须声明自己的 `enter` 和 `exit` 进度区间
-2. Sprite 之间通过进度区间实现错落入场
-3. 禁止 Sprite 之间硬编码时序依赖
-4. 缓动函数在 Sprite 内部应用，不依赖 Stage
+**Animation behavior**:
+- Element transitions from hidden state (opacity: 0 + offset) to visible state
+- Multiple elements enter sequentially (stagger), interval 30-80ms
+- Offset direction typically bottom-to-top (translateY: 20-40px → 0), can also be horizontal
 
-### 示例
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Offset | 20-40px | Too large feels like "bounce in", too small is barely perceptible |
+| Stagger interval | 50ms | Delay between elements in the same group |
+| Easing | Expo Out | Natural deceleration settling |
+| Duration | 400-600ms | Narrative animation entrance can be longer |
+
+**Applicable scenarios**: Marketing page content areas, Landing Page sections, long list batch loading
+
+### 6.2 Counter / CountUp
+
+**Trigger condition**: Number element enters viewport, or data update event
+
+**Animation behavior**:
+- Value smoothly increments from start to target
+- Uses ease-out curve, fast start, slow end (simulates "settling" feel)
+- Thousand-separator formatting updates in real-time during animation
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Duration | 600-1200ms | Adjust based on number magnitude |
+| Easing | Expo Out | Fast start, slow settling |
+| Decimal places | Determined by business | Currency 2 places, percentage 1 place |
+| Per-digit stagger interval | 50ms/digit | Each digit animates independently with sequential delay (per-digit stagger mode only) |
+
+**Applicable scenarios**: Dashboard metric cards, KPI big numbers, data visualization panels
+
+### 6.3 Typewriter / Chunk Reveal
+
+**Trigger condition**: AI-generated content arrival, code output, narrative text display
+
+**Animation behavior**:
+- **Do not use setInterval single-character pop** (like old movie subtitles)
+- Use Chunk Reveal: split by word/punctuation, reveal 2-5 characters at a time
+- Irregular intervals (40-120ms), simulating real streaming output
+- Each new chunk accompanied by subtle cursor blink
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Chunk granularity | Split by word + punctuation | `text.split(/(\s+|,\s*|\.\s*|;\s*)/)` |
+| Interval range | 40-120ms (random) | Irregularity creates realism |
+| Cursor | █ blink, 500ms period | Cursor disappears after typing ends |
+
+**Applicable scenarios**: AI chat output, terminal simulation, code demo, narrative animation
+
+### 6.4 Staggered Entrance
+
+**Trigger condition**: List/grid/card group first render, or new items added
+
+**Animation behavior**:
+- Each element enters with a fixed stagger interval
+- Typical combination: fadeIn + translateY(10px → 0)
+- Stagger interval 30ms (list rows) / 50ms (card grid)
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Stagger interval | 30ms (rows) / 50ms (cards) | Lists are denser, cards more relaxed |
+| Offset | 10-20px | Small offset is sufficient; too large feels like bounce |
+| Easing | ease-out (UI) / Expo Out (narrative) | UI component entrance uses ease-out, narrative scenarios use Expo Out |
+| Duration | 200-300ms (UI) / 400-500ms (narrative) | UI component entrance is shorter, narrative scenarios start at 400ms |
+
+**Applicable scenarios**: Table row entrance, card list loading, navigation item expansion
+
+### 6.5 Segmented Reveal
+
+**Trigger condition**: Tutorial animation, concept explanation, step-by-step guidance
+
+**Animation behavior**:
+- Content divided into multiple Phases, each with its own time segment
+- Phases connect naturally through overlapping time intervals (not hard cuts)
+- Typical structure: problem display → approach expansion → result demonstration
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Single segment duration | 3000-5000ms | Comfortable range for human attention |
+| Inter-segment overlap | 500-1000ms | Overlap period between previous fade-out and next fade-in |
+| Maximum single segment | 10000ms | Attention declines beyond 10 seconds |
+| Easing | ease-out (entrance) / ease-in (exit) | Inter-segment transitions follow appear/disappear rules |
+
+**Applicable scenarios**: Product feature demos, tutorial animations, data report progressive display
+
+### 6.6 FLIP / Shared Element Transition
+
+**Trigger condition**: Element transforms from one form to another (e.g., button → input field)
+
+**Animation behavior**:
+- **Not** two elements cross-fading
+- **The same element** smoothly transitions between two states
+- Position, size, border-radius change simultaneously, maintaining visual continuity
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Duration | 300ms | Not too fast; the change must be perceivable |
+| Easing | ease-out | Emphasizes "landing" rather than "displacement"—when an element morphs from old to new form, decelerating to settle is more natural than symmetric acceleration-deceleration |
+
+**Applicable scenarios**: List item expand to detail, button morph to panel, card zoom preview
+
+### 6.7 Particle Effect
+
+**Trigger condition**: Celebration/achievement moment, brand visual reinforcement, background atmosphere
+
+**Animation behavior**:
+- Large number of small elements diffuse outward from center/random positions
+- Each particle has independent speed, direction, size, and opacity decay
+- No inter-particle interaction; purely visual effect
+
+**Parameters**:
+
+| Parameter | Recommended Value | Notes |
+|-----------|------------------|-------|
+| Particle count | 20-50 (lightweight) / 100+ (gorgeous) | Halve on mobile |
+| Lifecycle | 600-1500ms | Particle from appearance to disappearance |
+| Easing | ease-out | Particles decelerate and dissipate |
+| Performance | Only use transform + opacity | Avoid triggering layout/paint |
+
+**Applicable scenarios**: Completion celebration (confetti), brand Logo animation, background particle flow
+
+---
+
+## 7. Stage + Sprite Animation Delivery Principles
+
+### Concepts
+
+- **Stage**: Page-level animation container, controls global progress (0→1)
+- **Sprite**: Element-level animation unit, calculates its own state based on Stage progress
+
+### Delivery Rules
+
+1. Each Sprite must declare its own `enter` and `exit` progress intervals
+2. Sprites achieve staggered entrance through progress intervals
+3. Hard-coded timing dependencies between Sprites are prohibited
+4. Easing functions are applied within Sprites, not dependent on Stage
+
+### Example
 
 ```
 Stage: 0 ───────────────────────────────→ 1
 
-Sprite 1 (标题):   [0.0 ── 0.3] enter    [0.8 ── 1.0] exit
-Sprite 2 (副标题):      [0.1 ── 0.4] enter    [0.75 ── 0.95] exit
-Sprite 3 (CTA):             [0.2 ── 0.5] enter    [0.7 ── 0.9] exit
-Sprite 4 (图片):                [0.15 ── 0.6] enter    [0.65 ── 0.85] exit
+Sprite 1 (title):      [0.0 ── 0.3] enter    [0.8 ── 1.0] exit
+Sprite 2 (subtitle):       [0.1 ── 0.4] enter    [0.75 ── 0.95] exit
+Sprite 3 (CTA):                [0.2 ── 0.5] enter    [0.7 ── 0.9] exit
+Sprite 4 (image):                   [0.15 ── 0.6] enter    [0.65 ── 0.85] exit
 ```
 
-### 插值函数
+### Interpolation Function
 
 ```js
 function interpolate(t, inputRange, outputRange, easing = Easing.linear) {
@@ -431,42 +431,42 @@ function interpolate(t, inputRange, outputRange, easing = Easing.linear) {
 
 ---
 
-## 八、动画性能规则
+## 8. Animation Performance Rules
 
-1. **只动画 transform 和 opacity** — 这两个属性不触发 layout/paint
-2. **will-change 谨慎使用** — 只在动画开始前添加，结束后移除；替代旧版 `translateZ(0)` 强制合成层 hack，语义更明确
-3. **避免同时动画超过 5 个元素** — 移动端尤其注意
-4. **使用 requestAnimationFrame** — 不使用 setTimeout/setInterval
-5. **避免常驻合成层** — `will-change` 和 `transform: translateZ(0)` 均不可写入常驻样式表，否则导致内存占用持续增长
+1. **Only animate transform and opacity** — these two properties do not trigger layout/paint
+2. **Use will-change sparingly** — add only before animation starts, remove after it ends; replaces the legacy `translateZ(0)` forced compositing layer hack with clearer semantics
+3. **Avoid animating more than 5 elements simultaneously** — especially on mobile
+4. **Use requestAnimationFrame** — do not use setTimeout/setInterval
+5. **Avoid persistent compositing layers** — `will-change` and `transform: translateZ(0)` must not be written into persistent stylesheets, otherwise causing continuous memory growth
 
 ---
 
-## 九、平台动画策略
+## 9. Platform Animation Strategy
 
-> Ant Design 三原则（自然>高效>克制）是平台无关的。`prefers-reduced-motion` 无障碍要求同样适用于所有平台。以下策略是平台特定的实现指导，不改变原则本身。
+> The Ant Design three principles (Natural > Efficient > Restrained) are platform-agnostic. The `prefers-reduced-motion` accessibility requirement also applies to all platforms. The following strategies are platform-specific implementation guidance and do not change the principles themselves.
 
-### 9.1 移动端
+### 9.1 Mobile
 
-| 维度 | 策略 | 理由 |
-|------|------|------|
-| 触摸反馈 | 用 scale(0.97) 按压反馈替代桌面端 hover 上移 | 移动端无 hover，需要替代的触觉反馈 |
-| 同时动画 | 上限 3 个元素（桌面端 5 个） | 移动端 GPU 性能受限 |
-| 时长 | 仍遵循 100-300ms（UI）/ 400ms+（叙事） | Ant Design 高效原则不变 |
-| 缓动 | 仍以 ease-out 为 UI 默认 | Ant Design 自然原则不变 |
-| reduced-motion | 尊重 `prefers-reduced-motion: reduce`，禁用非必要动画 | 所有平台通用无障碍要求（见本节首段说明） |
+| Dimension | Strategy | Rationale |
+|-----------|----------|-----------|
+| Touch feedback | Use scale(0.97) press feedback instead of desktop hover shift-up | Mobile has no hover; alternative tactile feedback is needed |
+| Simultaneous animations | Upper limit 3 elements (desktop 5) | Mobile GPU performance is limited |
+| Duration | Still follows 100-300ms (UI) / 400ms+ (narrative) | Ant Design efficiency principle unchanged |
+| Easing | Still defaults to ease-out for UI | Ant Design natural principle unchanged |
+| reduced-motion | Respect `prefers-reduced-motion: reduce`, disable non-essential animations | Universal accessibility requirement across all platforms (see this section's opening note) |
 
-### 9.2 大屏
+### 9.2 Large Screen
 
-| 维度 | 策略 | 理由 |
-|------|------|------|
-| 偏移量 | 放大 2-3 倍（桌面 20-40px → 大屏 40-120px） | 远距离观看需要更大的运动幅度才能感知 |
-| 帧率 | 目标 60fps，最低 30fps | 大屏设备 GPU 性能差异大 |
-| 焦点导航 | 焦点移动需有明确视觉引导（高亮边框 + 微位移） | 遥控器操作需要清晰的焦点指示 |
-| 数据刷新 | 用 Counter/CountUp 平滑过渡，避免硬切 | 硬切在远距离观看时更刺眼 |
+| Dimension | Strategy | Rationale |
+|-----------|----------|-----------|
+| Offset | Scale up 2-3x (desktop 20-40px → large screen 40-120px) | Greater motion amplitude needed for perception at viewing distance |
+| Frame rate | Target 60fps, minimum 30fps | Large screen device GPU performance varies widely |
+| Focus navigation | Focus movement requires clear visual guidance (highlighted border + micro-displacement) | Remote control operation needs clear focus indication |
+| Data refresh | Use Counter/CountUp for smooth transitions, avoid hard cuts | Hard cuts are more jarring when viewed from a distance |
 
-### 9.3 原生 App 动画映射（供 Layer 3 消费的参考）
+### 9.3 Native App Animation Mapping (Reference for Layer 3 Consumption)
 
-> 此表供 Layer 3 执行层参考，不属于 Layer 2 规范约束。同一 keyframe 语义在不同原生框架的实现方式。
+> This table is for Layer 3 execution layer reference and is not part of Layer 2 specification constraints. How the same keyframe semantics map to different native frameworks.
 
 | Web Keyframe | iOS | Android | Flutter |
 |-------------|-----|---------|---------|

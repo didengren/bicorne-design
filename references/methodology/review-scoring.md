@@ -1,105 +1,105 @@
-# 变体评审框架
+# Variant Review Framework
 
-> 变体阶段评审（5 项 100 分制，≥70 分进入下一阶段）。最终产出评审用 critique-guide.md。
-
----
-
-## 评分标准
-
-**总分 100 分，70 分以上方可进入下一阶段。**
-
-| 评分项 | 满分 | 说明 |
-|--------|------|------|
-| 目标对齐度 | 25 分 | 设计是否解决了既定业务目标 |
-| 技术可行性 | 20 分 | 实现成本在项目周期内是否可接受 |
-| 认知负荷 | 25 分 | 用户需要投入多少认知资源完成任务 |
-| 美学一致性 | 20 分 | 与系统设计语言的契合程度 |
-| 反糊化通过 | 10 分 | 能否陈述每个关键设计决策的意图 |
+> Variant-stage review (5 criteria, 100-point scale, ≥70 to advance). For final output review, use critique-guide.md.
 
 ---
 
-## 各项评分细则
+## Scoring Criteria
 
-### 目标对齐度（25 分）
+**Total 100 points. 70+ required to advance to the next phase.**
 
-| 分数 | 标准 |
-|------|------|
-| 21-25 | 设计精准解决业务目标，每个元素都有明确的目的性 |
-| 16-20 | 设计基本解决业务目标，少量元素目的性不够明确 |
-| 11-15 | 设计部分解决业务目标，存在与目标无关的元素 |
-| 0-10 | 设计与业务目标脱节，大量元素无明确目的 |
-
-### 技术可行性（20 分）
-
-| 分数 | 标准 |
-|------|------|
-| 17-20 | 实现成本在周期内完全可接受，无技术风险 |
-| 13-16 | 实现成本基本可接受，少量技术风险可控 |
-| 7-12 | 实现成本较高，存在技术风险需要评估 |
-| 0-6 | 实现成本过高，存在重大技术风险 |
-
-### 认知负荷（25 分）
-
-| 分数 | 标准 |
-|------|------|
-| 21-25 | 用户可直觉操作，无需学习成本 |
-| 16-20 | 用户需少量学习，操作路径清晰 |
-| 11-15 | 用户需一定学习，操作路径基本清晰 |
-| 0-10 | 用户学习成本高，操作路径混乱 |
-
-### 美学一致性（20 分）
-
-| 分数 | 标准 |
-|------|------|
-| 17-20 | 与系统设计语言完全契合，风格统一 |
-| 13-16 | 与系统设计语言基本契合，少量风格偏差 |
-| 7-12 | 与系统设计语言部分契合，风格偏差明显 |
-| 0-6 | 与系统设计语言不契合，风格割裂 |
-
-### 反糊化通过（10 分）
-
-| 分数 | 标准 |
-|------|------|
-| 9-10 | 每个关键设计决策都可陈述意图，有审美锚点参照 |
-| 6-8 | 大部分设计决策可陈述意图，少量模糊 |
-| 3-5 | 部分设计决策可陈述意图，较多模糊 |
-| 0-2 | 大量设计决策无法陈述意图，存在糊化风险 |
+| Criterion | Max | Description |
+|-----------|-----|-------------|
+| Goal Alignment | 25 | Does the design solve the stated business goal |
+| Technical Feasibility | 20 | Is the implementation cost acceptable within the project timeline |
+| Cognitive Load | 25 | How much cognitive effort users must invest to complete tasks |
+| Aesthetic Consistency | 20 | Degree of alignment with the system design language |
+| Anti-Blur Pass | 10 | Can the intent behind each key design decision be stated |
 
 ---
 
-## 评审流程
+## Scoring Rubric
 
-1. 每个变体独立评分，评审者不得参考其他变体分数
-2. 5 个评分项分别打分，汇总总分
-3. 总分 ≥ 70 分的变体进入候选池
-4. 从候选池中选择最高分变体，或混合多个变体的优势
-5. 取舍决策必须记录在决策日志中
+### Goal Alignment (25 pts)
+
+| Score | Standard |
+|-------|----------|
+| 21-25 | Design precisely solves the business goal; every element has clear purpose |
+| 16-20 | Design largely solves the business goal; a few elements lack clear purpose |
+| 11-15 | Design partially solves the business goal; elements unrelated to the goal exist |
+| 0-10 | Design is disconnected from the business goal; many elements lack clear purpose |
+
+### Technical Feasibility (20 pts)
+
+| Score | Standard |
+|-------|----------|
+| 17-20 | Implementation cost fully acceptable within timeline; no technical risk |
+| 13-16 | Implementation cost mostly acceptable; minor technical risks are controllable |
+| 7-12 | Implementation cost is high; technical risks require evaluation |
+| 0-6 | Implementation cost is prohibitive; major technical risks exist |
+
+### Cognitive Load (25 pts)
+
+| Score | Standard |
+|-------|----------|
+| 21-25 | Users can operate intuitively; zero learning cost |
+| 16-20 | Users need minimal learning; operation paths are clear |
+| 11-15 | Users need moderate learning; operation paths are mostly clear |
+| 0-10 | Users face high learning cost; operation paths are confusing |
+
+### Aesthetic Consistency (20 pts)
+
+| Score | Standard |
+|-------|----------|
+| 17-20 | Fully aligned with the system design language; style is unified |
+| 13-16 | Mostly aligned; minor style deviations |
+| 7-12 | Partially aligned; noticeable style deviations |
+| 0-6 | Misaligned with the system design language; style is disjointed |
+
+### Anti-Blur Pass (10 pts)
+
+| Score | Standard |
+|-------|----------|
+| 9-10 | Intent can be stated for every key design decision; aesthetic anchors referenced |
+| 6-8 | Intent can be stated for most decisions; a few are vague |
+| 3-5 | Intent can be stated for some decisions; many are vague |
+| 0-2 | Intent cannot be stated for most decisions; blur risk present |
 
 ---
 
-## 决策日志格式
+## Review Process
+
+1. Score each variant independently; reviewers must not reference other variants' scores
+2. Score all 5 criteria individually, then sum the total
+3. Variants scoring ≥70 enter the candidate pool
+4. Select the highest-scoring variant from the candidate pool, or combine strengths from multiple variants
+5. Trade-off decisions must be recorded in the decision log
+
+---
+
+## Decision Log Format
 
 ```
-## 变体评审记录
+## Variant Review Record
 
-**日期**: YYYY-MM-DD
-**评审者**: [姓名]
+**Date**: YYYY-MM-DD
+**Reviewer**: [Name]
 
-### 变体 A: [名称]
-- 目标对齐度: [分数] — [说明]
-- 技术可行性: [分数] — [说明]
-- 认知负荷: [分数] — [说明]
-- 美学一致性: [分数] — [说明]
-- 反糊化通过: [分数] — [说明]
-- **总分**: [分数]
+### Variant A: [Name]
+- Goal Alignment: [Score] — [Explanation]
+- Technical Feasibility: [Score] — [Explanation]
+- Cognitive Load: [Score] — [Explanation]
+- Aesthetic Consistency: [Score] — [Explanation]
+- Anti-Blur Pass: [Score] — [Explanation]
+- **Total**: [Score]
 
-### 变体 B: [名称]
-[同上]
+### Variant B: [Name]
+[Same as above]
 
-### 变体 C: [名称]
-[同上]
+### Variant C: [Name]
+[Same as above]
 
-### 选型决策
-选择变体 [X]，因为 [具体理由]。
-从变体 [Y] 中借鉴 [具体元素]，因为 [具体理由]。
+### Selection Decision
+Selected Variant [X], because [specific reason].
+Borrowed [specific element] from Variant [Y], because [specific reason].
 ```
