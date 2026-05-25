@@ -1,6 +1,6 @@
 {
   "name": "bicorne-design",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "Unified design system skill: JSON Schema-driven three-layer decoupled architecture. Brand references → framework-agnostic token.json → host project framework consumption.",
   "type": "module",
   "scripts": {
