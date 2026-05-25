@@ -1,0 +1,229 @@
+{
+  "meta": {
+    "name": "clickhouse-dark",
+    "version": "0.1.0",
+    "source": "references/brand-library/developer-tools/clickhouse-DESIGN.md",
+    "theme": "dark",
+    "platform": "dashboard"
+  },
+  "colors": {
+    "brand": {
+      "50": "#212311",
+      "100": "#3c3e1b",
+      "200": "#525427",
+      "300": "#767835",
+      "400": "#a6a948",
+      "500": "#d6da5b",
+      "600": "#e7e784",
+      "700": "#f3f1b1",
+      "800": "#f8f6dc",
+      "900": "#faf8eb"
+    },
+    "surface": {
+      "1": "#0f1011",
+      "2": "#141516",
+      "3": "#18191a",
+      "4": "#1c1d1e",
+      "base": "#0a0a0a"
+    },
+    "ink": {
+      "default": "#ffffff",
+      "muted": "#cccccc",
+      "subtle": "#8a8f98",
+      "tertiary": "#62666d"
+    },
+    "border": {
+      "default": "#2a2a2a",
+      "strong": "#3a3a3a",
+      "subtle": "#3e3e44"
+    },
+    "semantic": {
+      "success": "#22c55e",
+      "danger": "#ef4444",
+      "warning": "#f59e0b",
+      "info": "#5e6ad2"
+    }
+  },
+  "typography": {
+    "fontFamilies": {
+      "display": {
+        "name": "System Display",
+        "stack": "'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif"
+      },
+      "body": {
+        "name": "Inter",
+        "stack": "Inter, sans-serif"
+      },
+      "mono": {
+        "name": "JetBrains Mono",
+        "stack": "JetBrains Mono, ui-monospace, monospace"
+      }
+    },
+    "scales": {
+      "display-xl": {
+        "fontFamily": "display",
+        "fontSize": "96px",
+        "fontWeight": 600,
+        "lineHeight": 1.05,
+        "letterSpacing": "-3.0px"
+      },
+      "display-lg": {
+        "fontFamily": "display",
+        "fontSize": "72px",
+        "fontWeight": 600,
+        "lineHeight": 1.1,
+        "letterSpacing": "-1.8px"
+      },
+      "display-md": {
+        "fontFamily": "display",
+        "fontSize": "56px",
+        "fontWeight": 600,
+        "lineHeight": 1.15,
+        "letterSpacing": "-1.0px"
+      },
+      "headline": {
+        "fontFamily": "display",
+        "fontSize": "44px",
+        "fontWeight": 600,
+        "lineHeight": 1.2,
+        "letterSpacing": "-0.6px"
+      },
+      "heading-xl": {
+        "fontFamily": "display",
+        "fontSize": "36px",
+        "fontWeight": 600,
+        "lineHeight": 1.3,
+        "letterSpacing": "-0.5px"
+      },
+      "heading-lg": {
+        "fontFamily": "display",
+        "fontSize": "30px",
+        "fontWeight": 600,
+        "lineHeight": 1.35,
+        "letterSpacing": "-0.3px"
+      },
+      "heading-md": {
+        "fontFamily": "body",
+        "fontSize": "24px",
+        "fontWeight": 600,
+        "lineHeight": 1.4,
+        "letterSpacing": "0px"
+      },
+      "body-lg": {
+        "fontFamily": "body",
+        "fontSize": "22px",
+        "fontWeight": 400,
+        "lineHeight": 1.5,
+        "letterSpacing": "-0.1px"
+      },
+      "body-md": {
+        "fontFamily": "body",
+        "fontSize": "20px",
+        "fontWeight": 400,
+        "lineHeight": 1.5,
+        "letterSpacing": "0px"
+      },
+      "body-sm": {
+        "fontFamily": "body",
+        "fontSize": "18px",
+        "fontWeight": 400,
+        "lineHeight": 1.5,
+        "letterSpacing": "0px"
+      },
+      "caption": {
+        "fontFamily": "body",
+        "fontSize": "16px",
+        "fontWeight": 400,
+        "lineHeight": 1.4,
+        "letterSpacing": "0px"
+      },
+      "eyebrow": {
+        "fontFamily": "body",
+        "fontSize": "14px",
+        "fontWeight": 500,
+        "lineHeight": 1.3,
+        "letterSpacing": "0.4px"
+      },
+      "micro": {
+        "fontFamily": "body",
+        "fontSize": "12px",
+        "fontWeight": 500,
+        "lineHeight": 1.3,
+        "letterSpacing": "0.5px"
+      },
+      "button": {
+        "fontFamily": "body",
+        "fontSize": "16px",
+        "fontWeight": 500,
+        "lineHeight": 1.2,
+        "letterSpacing": "0px"
+      },
+      "mono": {
+        "fontFamily": "mono",
+        "fontSize": "15px",
+        "fontWeight": 400,
+        "lineHeight": 1.5,
+        "letterSpacing": "0px"
+      }
+    }
+  },
+  "spacing": {
+    "1": 8,
+    "2": 16,
+    "3": 24,
+    "4": 32,
+    "5": 40,
+    "6": 48,
+    "8": 64,
+    "10": 80,
+    "12": 96,
+    "16": 128
+  },
+  "borderRadius": {
+    "none": 0,
+    "xs": 6,
+    "sm": 8,
+    "md": 12,
+    "lg": 16,
+    "xl": 20,
+    "2xl": 28,
+    "full": 9999
+  },
+  "shadows": {
+    "sm": {
+      "value": "0 2px 4px rgba(0,0,0,0.45)"
+    },
+    "md": {
+      "value": "0 6px 12px rgba(0,0,0,0.45)"
+    },
+    "lg": {
+      "value": "0 12px 36px rgba(0,0,0,0.6)"
+    },
+    "brand": {
+      "value": "0 6px 18px rgba(94,106,210,0.375)"
+    }
+  },
+  "transitions": {
+    "default": {
+      "duration": "200ms",
+      "easing": "cubic-bezier(0.215,0.61,0.355,1)"
+    },
+    "fast": {
+      "duration": "100ms",
+      "easing": "cubic-bezier(0.215,0.61,0.355,1)"
+    },
+    "slow": {
+      "duration": "300ms",
+      "easing": "cubic-bezier(0.215,0.61,0.355,1)"
+    }
+  },
+  "viewport": {
+    "xs": 480,
+    "sm": 640,
+    "md": 768,
+    "lg": 1024,
+    "xl": 1280,
+    "xxl": 1536,
+    "xxxl": 1920
+  }
+}

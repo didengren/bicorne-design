@@ -1,339 +1,340 @@
-# 页面框架规范
+# Page Framework Specification
 
-> 页面框架的结构规范——定义页面有哪些框架类型、各类型的结构参数、结构层与风格层的职责划分、导航结构规则。
-> 响应式降级策略见 `responsive-degradation.md`。
-
----
-
-## 一、结构层与风格层
-
-> **品牌库没有中后台/工具类页面结构的直接参考**——60 个 DESIGN.md 以营销面为主，没有品牌完整文档化了产品 UI / 中后台界面。Binance 最接近（区分了营销面/产品面设计参数），但也只是间接提及。F5 营销落地页的导航结构在品牌库中有较多参考，但框架结构本身（浮层 vs 实体顶栏）仍是行业共识。
-
-中后台和工具类页面结构不需要品牌参考，因为页面结构是**行业共识**，不是品牌差异点。品牌差异体现在风格层（颜色/排版/间距），不体现在结构层。
-
-```
-结构层（固定）— 本文档定义
-  ├─ 页面框架：8 种框架类型（F1-F8）
-  ├─ 响应式降级：三档断点策略
-  ├─ 导航结构：侧边栏/底部 Tab/浮层/分栏各自规则
-  └─ 组件降级：表格/表单/导航各自方案
-
-风格层（可配）— token.json 定义
-  ├─ 颜色体系：暗色（Linear）/ 亮色（Stripe）/ 双主题（Binance）
-  ├─ 排版体系：字族/字号/字重
-  ├─ 间距/圆角/阴影
-  └─ 由品牌选择决定，见 references/brand-library/INDEX.md
-```
-
-| 维度 | Ant Design 提供 | 本文档补充 | token.json 决定 |
-|------|---------------|-----------|----------------|
-| 组件结构 | Layout/Sider/Header/Content | 页面级框架规范 | — |
-| 组件交互 | Menu 折叠、Tabs 切换 | 跨组件降级策略 | — |
-| 组件默认样式 | Design Token 默认值 | — | 品牌覆盖值 |
-| 响应式断点 | Grid 断点 | 降级方案 | — |
-| 视觉风格 | — | — | 颜色/排版/间距 |
-
-**结论**：风格一致性 = 结构层规范（本文档）+ 风格层 token.json（品牌选择）+ Ant Design 组件默认值（兜底）。三者各司其职，不可互相替代。
+> Structural specification for page frameworks — defines framework types, structural parameters for each type, responsibility separation between the structural layer and the style layer, and navigation structure rules.
+> For responsive degradation strategies, see `responsive-degradation.md`.
 
 ---
 
-## 二、页面框架类型
+## 1. Structural Layer vs. Style Layer
 
-### F1 侧边栏 + 内容
+> **The brand library has no direct reference for admin/tool page structures** — the 60 DESIGN.md files focus primarily on marketing surfaces; no brand has fully documented product UI / admin interfaces. Binance comes closest (distinguishing marketing vs. product design parameters), but only indirectly. F5 marketing landing page navigation structures have more references in the brand library, but the framework structure itself (floating overlay vs. solid top bar) remains industry convention.
 
-**典型场景**：中后台管理面板
-**选择信号**：导航项 > 5 且不需要全局顶栏
+Admin and tool page structures do not need brand references because page structure is an **industry convention**, not a brand differentiator. Brand differences are expressed in the style layer (color / typography / spacing), not the structural layer.
+
+```
+Structural Layer (fixed) — defined in this document
+  ├─ Page frameworks: 8 framework types (F1-F8)
+  ├─ Responsive degradation: three-tier breakpoint strategy
+  ├─ Navigation structure: sidebar / bottom tab / floating overlay / split-pane rules
+  └─ Component degradation: table / form / navigation strategies
+
+Style Layer (configurable) — defined by token.json
+  ├─ Color system: dark (Linear) / light (Stripe) / dual-theme (Binance)
+  ├─ Typography system: font family / font size / font weight
+  ├─ Spacing / border radius / shadows
+  └─ Determined by brand selection, see references/brand-library/INDEX.md
+```
+
+| Dimension | Ant Design Provides | This Document Supplements | token.json Determines |
+|-----------|-------------------|------------------------|---------------------|
+| Component structure | Layout/Sider/Header/Content | Page-level framework specification | — |
+| Component interaction | Menu collapse, Tabs switching | Cross-component degradation strategy | — |
+| Component default styles | Design Token defaults | — | Brand override values |
+| Responsive breakpoints | Grid breakpoints | Degradation strategy | — |
+| Visual style | — | — | Color / typography / spacing |
+
+**Conclusion**: Style consistency = structural layer specification (this document) + style layer token.json (brand selection) + Ant Design component defaults (fallback). Each serves its own purpose and cannot substitute for another.
+
+---
+
+## 2. Page Framework Types
+
+### F1 Sidebar + Content
+
+**Typical scenario**: Admin management panel
+**Selection signal**: Navigation items > 5 and no global top bar needed
 
 ```
 ┌────────┬───────────────────────────┐
 │        │                           │
-│ 侧边栏  │        内容区              │
-│ 208px  │      flex: 1              │
-│ 默认    │                           │
+│Sidebar │       Content Area        │
+│ 208px  │       flex: 1             │
+│default │                           │
 │        │                           │
 └────────┴───────────────────────────┘
 ```
 
-| 区域 | 宽度 | 说明 |
-|------|------|------|
-| 侧边栏 | 208px（默认） | 详见 §三 |
-| 内容区 | `calc(100% - 208px)` | flex: 1 |
+| Area | Width | Description |
+|------|-------|-------------|
+| Sidebar | 208px (default) | See §3 |
+| Content area | `calc(100% - 208px)` | flex: 1 |
 
-### F2 顶栏 + 内容
+### F2 Top Bar + Content
 
-**典型场景**：营销站、文档站、品牌官网
-**选择信号**：导航项 ≤ 7 且内容为主
+**Typical scenario**: Marketing site, documentation site, brand website
+**Selection signal**: Navigation items ≤ 7 and content-driven
 
 ```
 ┌────────────────────────────────────┐
-│  Logo   导航项1  导航项2  导航项3    │  ← 顶栏 64px
+│  Logo   Nav1   Nav2   Nav3        │  ← Top bar 64px
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-| 区域 | 高度 | 说明 |
-|------|------|------|
-| 顶栏 | 64px | 固定顶部 |
-| 内容区 | `calc(100vh - 64px)` | 全宽 |
+| Area | Height | Description |
+|------|--------|-------------|
+| Top bar | 64px | Fixed top |
+| Content area | `calc(100vh - 64px)` | Full width |
 
-### F3 侧边栏 + 顶栏 + 内容
+### F3 Sidebar + Top Bar + Content
 
-**典型场景**：完整中后台
-**选择信号**：需要全局工具栏 + 侧边导航
+**Typical scenario**: Full admin panel
+**Selection signal**: Global toolbar + sidebar navigation needed
 
 ```
 ┌────────┬───────────────────────────┐
-│        │  顶栏（面包屑/搜索/用户）   │  ← 64px
-│ 侧边栏  ├───────────────────────────┤
-│ 208px  │                           │
-│        │        内容区              │
+│        │  Top bar (breadcrumb/     │  ← 64px
+│Sidebar │  search/user)             │
+│ 208px  ├───────────────────────────┤
+│        │                           │
+│        │       Content Area        │
 │        │                           │
 └────────┴───────────────────────────┘
 ```
 
-| 区域 | 宽度/高度 | 说明 |
-|------|----------|------|
-| 侧边栏 | 208px | 详见 §三 |
-| 顶栏 | 64px | 固定顶部 |
-| 内容区 | 剩余空间 | 侧边栏右侧 + 顶栏下方 |
+| Area | Width/Height | Description |
+|------|-------------|-------------|
+| Sidebar | 208px | See §3 |
+| Top bar | 64px | Fixed top |
+| Content area | Remaining space | Right of sidebar + below top bar |
 
-### F4 顶栏 + 侧边栏 + 内容
+### F4 Top Bar + Sidebar + Content
 
-**典型场景**：带全局导航的应用
-**选择信号**：全局导航在顶部、二级导航在侧边
+**Typical scenario**: Application with global navigation
+**Selection signal**: Global navigation on top, secondary navigation on side
 
 ```
 ┌────────────────────────────────────┐
-│  全局导航（Logo / 主导航 / 用户）    │  ← 全局顶栏
+│  Global Nav (Logo / Main / User)   │  ← Global top bar
 ├────────┬───────────────────────────┤
-│ 二级    │                           │
-│ 侧边栏  │        内容区              │
+│Secondary│                          │
+│Sidebar │       Content Area        │
 │ 208px  │                           │
 └────────┴───────────────────────────┘
 ```
 
-| 区域 | 宽度/高度 | 说明 |
-|------|----------|------|
-| 全局顶栏 | 100% | 全宽，高度 64px |
-| 二级侧边栏 | 208px | 详见 §三 |
-| 内容区 | 剩余空间 | 侧边栏右侧 |
+| Area | Width/Height | Description |
+|------|-------------|-------------|
+| Global top bar | 100% | Full width, height 64px |
+| Secondary sidebar | 208px | See §3 |
+| Content area | Remaining space | Right of sidebar |
 
-### F5 全屏沉浸 + 浮层导航
+### F5 Full-Screen Immersive + Floating Navigation
 
-**典型场景**：营销落地页、产品展示页、数据大屏
-**选择信号**：内容需要全视口、导航为辅助
+**Typical scenario**: Marketing landing page, product showcase, data dashboard
+**Selection signal**: Content needs full viewport, navigation is secondary
 
 ```
 ┌────────────────────────────────────┐
-│  Logo        导航项1  导航项2  CTA  │  ← 浮层导航（半透明）
+│  Logo        Nav1   Nav2   CTA    │  ← Floating nav (semi-transparent)
 │                                    │
-│          全屏内容区                  │
-│        （从视口顶部开始）             │
+│        Full-Screen Content         │
+│      (starts from viewport top)    │
 │                                    │
-│          Hero / 数据展示             │
+│        Hero / Data Display         │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-| 区域 | 高度 | 说明 |
-|------|------|------|
-| 浮层导航 | 64px | `position: fixed`，半透明背景，滚动后可变为实体 |
-| 内容区 | 100vh | 从视口顶部开始，导航浮于内容之上 |
+| Area | Height | Description |
+|------|--------|-------------|
+| Floating navigation | 64px | `position: fixed`, semi-transparent background, can become solid on scroll |
+| Content area | 100vh | Starts from viewport top, navigation floats above content |
 
-**与 F2 的区别**：F2 顶栏占据独立行，内容区从顶栏下方开始；F5 导航浮于内容之上，内容从视口顶部开始。F5 适用于 Hero 全屏、数据大屏等需要内容占满视口的场景。
+**Difference from F2**: F2 top bar occupies its own row, content area starts below the top bar; F5 navigation floats above content, content starts from viewport top. F5 is suitable for Hero full-screen, data dashboards, and other scenarios where content must fill the viewport.
 
-### F6 底部 Tab + 内容
+### F6 Bottom Tab + Content
 
-**典型场景**：移动端 App（≤ 5 主导航）
-**选择信号**：移动端原生、导航项 ≤ 5
+**Typical scenario**: Mobile App (≤ 5 primary navigation items)
+**Selection signal**: Mobile native, navigation items ≤ 5
 
 ```
 ┌────────────────────────────────────┐
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 ├────────────────────────────────────┤
-│  🏠    🔍    ➕    💬    👤        │  ← 底部 Tab Bar
+│  🏠    🔍    ➕    💬    👤        │  ← Bottom Tab Bar
 └────────────────────────────────────┘
 ```
 
-| 区域 | 高度 | 说明 |
-|------|------|------|
-| 内容区 | `calc(100vh - TabBar高度)` | 全宽 |
-| 底部 Tab Bar | 49px（iOS）/ 56px（Material） | 详见 §五 |
+| Area | Height | Description |
+|------|--------|-------------|
+| Content area | `calc(100vh - TabBar height)` | Full width |
+| Bottom Tab Bar | 49px (iOS) / 56px (Material) | See §5 |
 
-> **移动端原生框架**——F6 是为移动端原生设计的框架，不是桌面框架的降级产物。
+> **Mobile native framework** — F6 is designed for mobile native, not a degraded desktop framework.
 
-### F7 抽屉导航 + 内容
+### F7 Drawer Navigation + Content
 
-**典型场景**：移动端 App（> 5 导航项）
-**选择信号**：移动端原生、导航项 > 5
+**Typical scenario**: Mobile App (> 5 navigation items)
+**Selection signal**: Mobile native, navigation items > 5
 
 ```
 ┌────────────────────────────────────┐
-│ ☰  标题                            │  ← 顶栏含菜单按钮
+│ ☰  Title                          │  ← Top bar with menu button
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 
-点击 ☰ → 侧滑抽屉：
+Tap ☰ → Side drawer:
 ┌──────────┬─────────────────────────┐
-│ 导航分组1 │                         │
-│  项目1    │      遮罩               │
-│  项目2    │                         │
-│ 导航分组2 │                         │
-│  项目3    │                         │
-│  项目4    │                         │
-│ [搜索]    │                         │
+│ Group 1  │                         │
+│  Item 1  │      Overlay            │
+│  Item 2  │                         │
+│ Group 2  │                         │
+│  Item 3  │                         │
+│  Item 4  │                         │
+│ [Search] │                         │
 └──────────┴─────────────────────────┘
 ```
 
-| 区域 | 宽度/高度 | 说明 |
-|------|----------|------|
-| 顶栏 | 56px | 含菜单按钮 |
-| 侧滑抽屉 | ≤ 80% 视口 | 含分组导航、搜索 |
-| 内容区 | 100% | 全宽 |
+| Area | Width/Height | Description |
+|------|-------------|-------------|
+| Top bar | 56px | Contains menu button |
+| Side drawer | ≤ 80% viewport | Contains grouped navigation, search |
+| Content area | 100% | Full width |
 
-> **移动端原生框架**——F7 是为移动端原生设计的框架，不是桌面框架的降级产物。与 F1/F3 移动端降级后的侧滑抽屉形似但语义不同：F7 的抽屉是原生设计，支持分组导航和搜索；降级抽屉是简化版，仅保留平铺导航列表。
+> **Mobile native framework** — F7 is designed for mobile native, not a degraded desktop framework. Similar in appearance to the F1/F3 mobile-degraded side drawer but semantically different: F7's drawer is a native design supporting grouped navigation and search; the degraded drawer is a simplified version with only a flat navigation list.
 
-### F8 分栏主从
+### F8 Split-Pane Master-Detail
 
-**典型场景**：邮件客户端、对话型 AI、IDE
-**选择信号**：需要"选择-查看"双焦点
+**Typical scenario**: Email client, conversational AI, IDE
+**Selection signal**: Requires "select-view" dual focus
 
 ```
 ┌──────────────┬──────────────────────┐
 │              │                      │
-│   主栏        │      从栏             │
-│  （列表/索引） │   （详情/内容）        │
+│  Master Pane │    Detail Pane       │
+│ (list/index) │  (detail/content)    │
 │   320px      │     flex: 1          │
 │              │                      │
 │              │                      │
 └──────────────┴──────────────────────┘
 ```
 
-| 区域 | 宽度 | 说明 |
-|------|------|------|
-| 主栏 | 280-360px | 列表/索引，可调整宽度 |
-| 从栏 | 剩余空间 | 详情/内容 |
+| Area | Width | Description |
+|------|-------|-------------|
+| Master pane | 280-360px | List/index, resizable |
+| Detail pane | Remaining space | Detail/content |
 
-**分栏宽度比例**：主栏占比通常为 25%-35%。主栏最小宽度 280px（保证列表项可读），最大宽度 360px（避免从栏过窄）。
-
----
-
-## 三、侧边栏结构参数
-
-**侧边栏宽度公式**：`200+8n`（Ant Design 设计规范），默认 208px（Ant Design Pro Layout 默认值），最大 240px（n=5）。每多 8px 都是从内容区借走的——在 1024px 屏幕上，208px 比 240px 多出 32px 内容区空间（约 2 列 spacing）。
+**Split-pane width ratio**: Master pane typically occupies 25%-35%. Master pane minimum width 280px (ensures list item readability), maximum width 360px (prevents detail pane from becoming too narrow).
 
 ---
 
-## 四、侧边栏导航结构
+## 3. Sidebar Structural Parameters
 
-> 与 Ant Design Menu / Pro Layout 默认模式一致：一级有图标，二级起纯文字。
-
-| 层级 | 图标 | 文字 | 折叠态（80px）表现 |
-|------|------|------|------------------|
-| 一级菜单 | **必须有** | 显示 | 仅显示图标 + Tooltip |
-| 二级菜单 | 无 | 显示（缩进 16px） | 隐藏，通过一级项 popup 浮层展示 |
-| 三级菜单 | 无 | 显示（缩进 32px） | 隐藏，通过 popup 内嵌展开 |
-
-**一级必须全部有图标** — 这是硬性规则，不是建议。折叠态只显示图标，没有图标的一级项变为空白，用户无法发现也无法操作。
-
-**二级不加图标的理由**：
-1. **双速扫描** — 一级靠图标快速定位（前注意处理 < 100ms），二级靠文字精确选择（顺序扫描），两种速度配合最高效
-2. **空间效率** — 208px 侧边栏，二级已缩进 16px，再加图标会压缩文字空间
-3. **认知负荷** — 图标过多造成图标疲劳，二级项在父级图标上下文内，不需要独立图标识别
-4. **Ant Design Pro 默认** — 路由配置 `icon` 属性仅定义在一级，children 无 icon
-
-**边界情况处理**：
-
-| 场景 | 问题 | 解法 |
-|------|------|------|
-| 一级项无子菜单（叶子节点） | 折叠态只显示图标，语义可能不清 | Tooltip 显示完整标题；图标必须语义明确 |
-| 二级项需快速识别 | 纯文字在长列表中扫描慢 | 用字重/颜色区分 active 状态，不加图标 |
-| 折叠态二级项访问 | 二级项在折叠态不可见 | 点击一级图标 → popup 浮层展示二级文字列表 |
+**Sidebar width formula**: `200+8n` (Ant Design specification), default 208px (Ant Design Pro Layout default), maximum 240px (n=5). Every additional 8px is borrowed from the content area — on a 1024px screen, 208px provides 32px more content area space than 240px (approximately 2 columns of spacing).
 
 ---
 
-## 五、底部 Tab 结构参数与导航规则
+## 4. Sidebar Navigation Structure
 
-适用于 F6 框架。
+> Consistent with Ant Design Menu / Pro Layout defaults: first level has icons, second level onward is text-only.
 
-### 5.1 结构参数
+| Level | Icon | Text | Collapsed state (80px) behavior |
+|-------|------|------|-------------------------------|
+| First-level menu | **Required** | Displayed | Icon only + Tooltip |
+| Second-level menu | None | Displayed (16px indent) | Hidden, shown via first-level popup overlay |
+| Third-level menu | None | Displayed (32px indent) | Hidden, expanded within popup |
 
-| 参数 | iOS (HIG) | Material Design | 说明 |
-|------|-----------|----------------|------|
-| Tab Bar 高度 | 49px | 56px | 不含安全区域 |
-| 图标尺寸 | 25×25px | 24×24dp | — |
-| 标签字号 | 10px | 12sp | — |
-| 最大 Tab 数 | 5 | 5 | 超过 5 个需用 F7 |
-| 触摸目标 | ≥ 44×44px | ≥ 48×48dp | 整个 Tab 区域 |
+**All first-level items must have icons** — This is a hard rule, not a suggestion. In collapsed state only icons are shown; a first-level item without an icon becomes blank, making it undiscoverable and inoperable.
 
-### 5.2 导航规则
+**Reasons for no icons on second level**:
+1. **Dual-speed scanning** — First level uses icons for rapid positioning (pre-attentive processing < 100ms), second level uses text for precise selection (sequential scanning), the two speeds work together most efficiently
+2. **Space efficiency** — In a 208px sidebar, second-level items are already indented 16px; adding icons would compress text space
+3. **Cognitive load** — Too many icons cause icon fatigue; second-level items are within the parent icon's context and don't need independent icon recognition
+4. **Ant Design Pro default** — Route config `icon` property is only defined on first level, children have no icon
 
-1. **Tab 数量 ≤ 5** — 超过 5 个必须切换为 F7（抽屉导航）
-2. **每个 Tab 必须有图标 + 文字** — 与侧边栏不同，底部 Tab 空间充裕，图标+文字双通道识别
-3. **选中态必须有明确视觉反馈** — 品牌色填充图标 + 文字加粗
-4. **中央 Tab 可特殊处理** — 第 3 个位置可放置主操作按钮（如"新建"），视觉上突出于其他 Tab
+**Edge case handling**:
 
----
-
-## 六、浮层导航结构参数与规则
-
-适用于 F5 框架。
-
-### 6.1 结构参数
-
-| 参数 | 值 | 说明 |
-|------|------|------|
-| 导航栏高度 | 64px | 与 F2 顶栏一致 |
-| 定位方式 | `position: fixed; top: 0` | 浮于内容之上 |
-| 背景透明度 | 初始透明 → 滚动后实体 | 滚动触发背景实体化，具体颜色由 token.json 决定 |
-| 滚动触发距离 | 64-100px | 滚动超过此距离后导航栏变为实体背景 |
-| z-index | ≥ 1000 | 确保浮于所有内容之上 |
-
-### 6.2 导航规则
-
-1. **导航项 ≤ 7** — 浮层导航空间有限，超过 7 个需收纳为汉堡菜单
-2. **CTA 必须可见** — 浮层导航右侧必须保留主 CTA 按钮（如"免费试用"、"联系我们"）
-3. **滚动后实体化** — 导航栏从透明变为实体背景，确保在内容滚动时仍可读
-4. **移动端降级** — 浮层导航在移动端变为固定顶栏（始终实体背景），详见 `responsive-degradation.md`
+| Scenario | Problem | Solution |
+|----------|---------|----------|
+| First-level item with no submenu (leaf node) | Collapsed state shows only icon, semantics may be unclear | Tooltip displays full title; icon must have clear semantics |
+| Second-level item needs quick identification | Text-only is slow to scan in long lists | Use font-weight/color to distinguish active state, do not add icons |
+| Accessing second-level items in collapsed state | Second-level items are invisible in collapsed state | Click first-level icon → popup overlay shows second-level text list |
 
 ---
 
-## 七、分栏结构参数与导航规则
+## 5. Bottom Tab Structural Parameters and Navigation Rules
 
-适用于 F8 框架。
+Applies to F6 framework.
 
-### 7.1 结构参数
+### 5.1 Structural Parameters
 
-| 参数 | 值 | 说明 |
-|------|------|------|
-| 主栏默认宽度 | 320px | 列表/索引区 |
-| 主栏最小宽度 | 280px | 保证列表项可读 |
-| 主栏最大宽度 | 360px | 避免从栏过窄 |
-| 分隔线 | 1px | 主栏与从栏之间 |
-| 从栏最小宽度 | 320px | 与内容区最小可用宽度一致 |
+| Parameter | iOS (HIG) | Material Design | Description |
+|-----------|-----------|----------------|-------------|
+| Tab Bar height | 49px | 56px | Excluding safe area |
+| Icon size | 25×25px | 24×24dp | — |
+| Label font size | 10px | 12sp | — |
+| Max Tab count | 5 | 5 | More than 5 requires F7 |
+| Touch target | ≥ 44×44px | ≥ 48×48dp | Entire Tab area |
 
-### 7.2 导航规则
+### 5.2 Navigation Rules
 
-1. **主栏选中项高亮** — 当前选中项必须有明确的视觉反馈（背景色 + 左侧指示条）
-2. **主栏支持搜索/筛选** — 列表项超过 20 个时，主栏顶部应提供搜索框
-3. **从栏空状态** — 未选中任何项时，从栏显示空状态引导（详见 `ui-states.md`）
-4. **移动端降级** — 分栏在移动端降级为主栏全屏 + 返回导航，详见 `responsive-degradation.md`
+1. **Tab count ≤ 5** — More than 5 must switch to F7 (drawer navigation)
+2. **Every Tab must have icon + text** — Unlike sidebar, bottom Tabs have ample space; icon+text dual-channel recognition
+3. **Selected state must have clear visual feedback** — Brand color filled icon + bold text
+4. **Center Tab can be special** — The 3rd position can hold a primary action button (e.g. "New"), visually prominent among other Tabs
 
-### 7.3 分栏宽度调整
+---
 
-| 交互 | 行为 |
-|------|------|
-| 拖拽分隔线 | 调整主栏宽度，受最小/最大宽度约束 |
-| 双击分隔线 | 重置为默认宽度 320px |
-| 主栏折叠 | 主栏可折叠为仅显示图标的窄栏（48px），类似侧边栏折叠态 |
+## 6. Floating Navigation Structural Parameters and Rules
+
+Applies to F5 framework.
+
+### 6.1 Structural Parameters
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| Navigation bar height | 64px | Same as F2 top bar |
+| Positioning | `position: fixed; top: 0` | Floats above content |
+| Background opacity | Initially transparent → solid on scroll | Scroll triggers background solidification; specific color determined by token.json |
+| Scroll trigger distance | 64-100px | Navigation bar becomes solid background after scrolling past this distance |
+| z-index | ≥ 1000 | Ensures floating above all content |
+
+### 6.2 Navigation Rules
+
+1. **Navigation items ≤ 7** — Floating navigation has limited space; more than 7 items must be collapsed into a hamburger menu
+2. **CTA must be visible** — The right side of floating navigation must reserve the primary CTA button (e.g. "Free Trial", "Contact Us")
+3. **Solidify on scroll** — Navigation bar transitions from transparent to solid background, ensuring readability when content scrolls
+4. **Mobile degradation** — Floating navigation degrades to a fixed top bar (always solid background) on mobile, see `responsive-degradation.md`
+
+---
+
+## 7. Split-Pane Structural Parameters and Navigation Rules
+
+Applies to F8 framework.
+
+### 7.1 Structural Parameters
+
+| Parameter | Value | Description |
+|-----------|-------|-------------|
+| Master pane default width | 320px | List/index area |
+| Master pane minimum width | 280px | Ensures list item readability |
+| Master pane maximum width | 360px | Prevents detail pane from becoming too narrow |
+| Divider | 1px | Between master pane and detail pane |
+| Detail pane minimum width | 320px | Consistent with content area minimum usable width |
+
+### 7.2 Navigation Rules
+
+1. **Master pane selected item highlight** — Currently selected item must have clear visual feedback (background color + left indicator bar)
+2. **Master pane supports search/filter** — When list items exceed 20, a search box should be provided at the top of the master pane
+3. **Detail pane empty state** — When no item is selected, the detail pane displays an empty state guide (see `ui-states.md`)
+4. **Mobile degradation** — Split-pane degrades to master pane full-screen + back navigation on mobile, see `responsive-degradation.md`
+
+### 7.3 Split-Pane Width Adjustment
+
+| Interaction | Behavior |
+|-------------|----------|
+| Drag divider | Adjusts master pane width, constrained by min/max width |
+| Double-click divider | Resets to default width 320px |
+| Master pane collapse | Master pane can collapse to an icon-only narrow bar (48px), similar to sidebar collapsed state |

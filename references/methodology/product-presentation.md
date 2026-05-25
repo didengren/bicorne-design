@@ -1,125 +1,125 @@
-# 产品展示规范
+# Product Presentation Specification
 
-> 框架无关——适用于落地页 Hero、产品详情页、营销物料等任何需要展示产品视觉的场景。
-
----
-
-## 一、产品展示的资产优先级
-
-> 与核心资产协议（`references/methodology/asset-protocol.md`）配合使用。
-
-产品的视觉展示不是「装饰」，是**识别度的根基**。按识别度排序：
-
-| 资产类型 | 识别度贡献 | 必需性 |
-|---------|----------|--------|
-| **产品实物图/渲染图** | 最高 · 实体产品的"主角"就是产品本身 | 实体产品必需 |
-| **UI 截图** | 极高 · 数字产品的"主角"是它的界面 | 数字产品必需 |
-| **设备框 + 产品图** | 高 · 将产品放入使用场景 | 推荐但非必需 |
-| **Logo** | 高 · 品牌识别根基 | 任何产品必需 |
-| 色值/字体 | 中 · 辅助识别 | 辅助 |
-
-### 禁令
-
-- **禁止用 CSS 剪影/SVG 手画代替真实产品图**——生成的就是「通用科技动画」，任何产品都长一样，品牌识别度归零
-- **禁止用 generic 填充代替真实产品图**——宁可留诚实 placeholder（灰块 + 文字标签），不用假素材
-- 产品图找不到时，走核心资产协议的 fallback 路径（AI 生成以官方参考为基底 → 向用户索取 → 诚实 placeholder）
+> Framework-agnostic — applicable to landing page Heroes, product detail pages, marketing materials, and any scenario requiring product visual display.
 
 ---
 
-## 二、设备 Mockup 合成规则
+## 1. Asset Priority for Product Presentation
 
-### 核心原则
+> Used in conjunction with the Core Asset Protocol (`references/methodology/asset-protocol.md`).
 
-设备框（iPhone / MacBook / Android 等）是**展示容器**，不是设计本身。它的角色是：
+Product visual presentation is not "decoration" — it is the **foundation of recognizability**. Ranked by recognizability:
 
-1. 让产品截图有「这是真实 App/网站」的即视感
-2. 提供尺寸比例参照（手机屏幕 vs 桌面窗口）
-3. 建立场景感（手持设备 / 桌面办公 / 多屏协作）
+| Asset Type | Recognizability Contribution | Necessity |
+|------------|----------------------------|-----------|
+| **Product photos / renders** | Highest · The "protagonist" of physical products is the product itself | Required for physical products |
+| **UI screenshots** | Very high · The "protagonist" of digital products is its interface | Required for digital products |
+| **Device frame + product image** | High · Places the product in a usage context | Recommended but not required |
+| **Logo** | High · Foundation of brand recognition | Required for any product |
+| Color values / Fonts | Medium · Supplementary recognition | Supplementary |
 
-### 规范
+### Prohibitions
 
-| 维度 | 规则 | 反模式 |
-|------|------|--------|
-| **比例** | 使用真实设备比例（如 iPhone 15 Pro 393×852pt）| 拉伸截图适配非标准框 |
-| **状态栏** | 必须使用标准状态栏（时间/信号/电池），不要手写 | 空白状态栏 / 随意填数字 |
-| **安全区域** | 内容不遮挡刘海/Dynamic Island/圆角 | 内容贴到设备边缘 |
-| **阴影** | 设备框带真实感投影，不要纯黑硬边阴影 | 无阴影（浮在半空）/ 过重阴影（喧宾夺主）|
-| **圆角** | 与真实设备一致（iPhone 约 55px / MacBook 约 12px）| 0 圆角或夸张圆角 |
-| **方向** | 竖屏设备竖放、横屏设备横放，除非场景需要倾斜 | 随意倾斜无理由 |
-
-### 多设备组合
-
-| 组合方式 | 适用场景 | 要点 |
-|---------|---------|------|
-| 单手机 | 展示移动端核心功能 | 截图居中，两侧留白 |
-| 手机 + 笔记本 | 展示跨端体验 | 手机前放置偏左/右，笔记本后置，尺寸约 2:3 |
-| 三设备（手机 + 平板 + 桌面）| 展示全平台 | 梯度排列，后置设备半透明或虚化 |
-| 多手机并排 | 展示多屏/多状态 | 间距均匀，设备间不重叠 |
+- **Prohibited: using CSS silhouettes / hand-drawn SVGs as substitutes for real product images** — the result is "generic tech animation" where every product looks the same; brand recognizability drops to zero
+- **Prohibited: using generic fills as substitutes for real product images** — prefer honest placeholders (gray block + text label) over fake assets
+- When product images cannot be found, follow the Core Asset Protocol fallback path (AI generation based on official references → request from user → honest placeholder)
 
 ---
 
-## 三、Hero 图制作规则
+## 2. Device Mockup Composition Rules
 
-### 落地页 Hero 的产品展示
+### Core Principle
 
-Hero 图是落地页的第一屏，产品展示质量直接决定用户是否继续往下看。
+Device frames (iPhone / MacBook / Android, etc.) are **display containers**, not the design itself. Their roles are:
 
-#### 构图模式
+1. Giving product screenshots the impression of "this is a real App / website"
+2. Providing size ratio reference (mobile screen vs desktop window)
+3. Establishing context (handheld device / desktop office / multi-screen collaboration)
 
-| 模式 | 结构 | 适用产品 | 典型品牌 |
-|------|------|---------|---------|
-| **全出血摄影 + 覆盖文案** | 产品大图占满，文案叠在图上 | 消费品、硬件 | Nike、Tesla、SpaceX |
-| **左文案右产品图** | 左 40% 文案 + 右 60% 产品图/Mockup | SaaS、数字产品 | Stripe、Linear |
-| **居中产品 + 辐射背景** | 产品居中，背景渐变/粒子辐射 | 科技产品、AI 工具 | Vercel、Replicate |
-| **设备框 + 截图** | 设备框展示核心 UI | App、Web 产品 | Figma、Notion |
-| **纯排版 Hero** | 大字排版，无产品图 | 品牌宣言、理念页 | Apple（部分）、IBM |
+### Specification
 
-#### 产品图质量门槛
+| Dimension | Rule | Anti-pattern |
+|-----------|------|-------------|
+| **Proportions** | Use real device proportions (e.g., iPhone 15 Pro 393×852pt) | Stretching screenshots to fit non-standard frames |
+| **Status bar** | Must use standard status bar (time / signal / battery), not hand-written | Blank status bar / filling in random numbers |
+| **Safe area** | Content must not obscure notch / Dynamic Island / rounded corners | Content flush to device edges |
+| **Shadow** | Device frame should have realistic projection; avoid pure black hard-edge shadows | No shadow (floating in mid-air) / overly heavy shadow (dominating the scene) |
+| **Border radius** | Consistent with real devices (iPhone ~55px / MacBook ~12px) | 0 border radius or exaggerated border radius |
+| **Orientation** | Portrait devices upright, landscape devices horizontal, unless the scene requires tilting | Arbitrary tilting without reason |
 
-> 与核心资产协议的「5-10-2-8」原则一致。
+### Multi-Device Combinations
 
-| 维度 | 标准 | 反模式 |
-|------|------|--------|
-| **分辨率** | ≥ 2000px（4K 屏幕适配需 ≥ 3000px） | 模糊拉伸图 |
-| **去背** | 透明底或干净背景 | 随意截图带桌面背景 |
-| **多角度** | 主视角 + 细节 + 场景至少 3 张 | 只有一张正面图 |
-| **版本** | 最新版本的产品图 | 用旧版产品图 |
-
----
-
-## 四、展示格式决策
-
-不同交付场景选择不同格式：
-
-| 场景 | 推荐格式 | 理由 |
-|------|---------|------|
-| 落地页嵌入 | WebP/AVIF + 2x | 高压缩比 + 视觉保真 |
-| 公众号/视频号 | MP4 | 通用性最好 |
-| B站/作品集 | MP4（高帧率） | 高帧率展示 |
-| 社交预览 | GIF | Twitter/X 兼容 |
-| 打印/存档 | PDF（矢量文字） | 文字可搜、高保真 |
-
-### 视频输出规格参考
-
-> 以下为格式决策参考，实际编码参数由宿主项目执行层决定。
-
-| 格式 | 分辨率 | 适合场景 |
-|------|--------|---------|
-| MP4 标准帧率 | 1920×1080 | 公众号嵌入、视频号、YouTube |
-| MP4 高帧率 | 1920×1080 | 高帧率展示、B站、作品集 |
-| GIF | 960×540 | Twitter/X、Slack 预览 |
+| Combination | Applicable Scenario | Key Points |
+|-------------|-------------------|------------|
+| Single phone | Showcasing core mobile features | Screenshot centered, whitespace on both sides |
+| Phone + laptop | Showcasing cross-platform experience | Phone placed forward and offset left/right, laptop behind, size ratio ~2:3 |
+| Three devices (phone + tablet + desktop) | Showcasing full-platform coverage | Gradient arrangement, rear devices semi-transparent or blurred |
+| Multiple phones side by side | Showcasing multi-screen / multi-state | Even spacing, no overlap between devices |
 
 ---
 
-## 五、预发布检查清单
+## 3. Hero Image Production Rules
 
-产品展示物料发布前必过：
+### Landing Page Hero Product Presentation
 
-- [ ] 产品图/UI 截图是最新版本（不是旧版）
-- [ ] 产品图分辨率 ≥ 2000px（4K 场景需 ≥ 3000px）
-- [ ] 设备框比例真实，无拉伸变形
-- [ ] Logo 出现且清晰（任何展示必须带品牌 Logo）
-- [ ] 文字与产品图无遮挡
-- [ ] 暗色背景上的产品图有足够对比度
-- [ ] 移动端预览产品图不超出视口
-- [ ] 产品图加载有骨架/模糊占位，不闪白
+The Hero image is the first screen of a landing page; product presentation quality directly determines whether users continue scrolling.
+
+#### Composition Patterns
+
+| Pattern | Structure | Applicable Products | Representative Brands |
+|---------|-----------|--------------------|-----------------------|
+| **Full-bleed photography + overlay copy** | Product image fills the frame, copy overlaid on image | Consumer goods, hardware | Nike, Tesla, SpaceX |
+| **Left copy, right product image** | Left 40% copy + right 60% product image / Mockup | SaaS, digital products | Stripe, Linear |
+| **Centered product + radiating background** | Product centered, background gradient / particle radiation | Tech products, AI tools | Vercel, Replicate |
+| **Device frame + screenshot** | Device frame showcasing core UI | App, Web products | Figma, Notion |
+| **Pure typographic Hero** | Large-scale typography, no product image | Brand manifesto, philosophy pages | Apple (partial), IBM |
+
+#### Product Image Quality Gate
+
+> Consistent with the Core Asset Protocol's "5-10-2-8" principle.
+
+| Dimension | Standard | Anti-pattern |
+|-----------|----------|-------------|
+| **Resolution** | ≥ 2000px (4K screen adaptation requires ≥ 3000px) | Blurry stretched images |
+| **Background removal** | Transparent background or clean background | Casual screenshots with desktop background |
+| **Multiple angles** | Main view + details + context, at least 3 images | Only one frontal image |
+| **Version** | Latest version of product images | Using outdated product images |
+
+---
+
+## 4. Presentation Format Decision
+
+Different delivery scenarios require different formats:
+
+| Scenario | Recommended Format | Rationale |
+|----------|-------------------|-----------|
+| Landing page embed | WebP/AVIF + 2x | High compression ratio + visual fidelity |
+| WeChat Official Account / Video Account | MP4 | Best compatibility |
+| Bilibili / Portfolio | MP4 (high frame rate) | High frame rate presentation |
+| Social preview | GIF | Twitter/X compatibility |
+| Print / Archive | PDF (vector text) | Searchable text, high fidelity |
+
+### Video Output Specification Reference
+
+> The following are format decision references; actual encoding parameters are determined by the host project's execution layer.
+
+| Format | Resolution | Applicable Scenario |
+|--------|-----------|-------------------|
+| MP4 standard frame rate | 1920×1080 | WeChat embed, Video Account, YouTube |
+| MP4 high frame rate | 1920×1080 | High frame rate presentation, Bilibili, portfolio |
+| GIF | 960×540 | Twitter/X, Slack preview |
+
+---
+
+## 5. Pre-Release Checklist
+
+Product presentation materials must pass before release:
+
+- [ ] Product images / UI screenshots are the latest version (not outdated)
+- [ ] Product image resolution ≥ 2000px (4K scenarios require ≥ 3000px)
+- [ ] Device frame proportions are realistic, no stretching or deformation
+- [ ] Logo is present and clear (any presentation must include brand Logo)
+- [ ] Text and product images do not obscure each other
+- [ ] Product images on dark backgrounds have sufficient contrast
+- [ ] Product images in mobile preview do not exceed viewport
+- [ ] Product image loading has skeleton / blur placeholder, no white flash

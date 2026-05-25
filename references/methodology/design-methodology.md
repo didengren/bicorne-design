@@ -1,343 +1,343 @@
-# 五阶段设计方法论
+# Five-Phase Design Methodology
 
-> 从需求界定到质量打磨的完整设计流程；附录 AI Agent 交互协议，规范 agent 在各阶段的决策边界。
+> A complete design workflow from requirement definition to quality polish; appendix: AI Agent Interaction Protocol, defining the agent's decision boundaries at each phase.
 
 ---
 
-## 总览
+## Overview
 
 ```
-PHASE 1: 需求界定 → PHASE 2: 上下文收集 → PHASE 3: 变体产出 → PHASE 4: 生产实现 → PHASE 5: 质量打磨
+PHASE 1: Requirement Definition → PHASE 2: Context Collection + Style Selection → PHASE 3: Specification Mapping + Variant Production → PHASE 4: Production Implementation → PHASE 5: Quality Polish
 ```
 
-每个阶段都有明确的：方法、产出、检查点、反模式、异常处理。
+Each phase has explicit: methods, outputs, checkpoints, anti-patterns, and exception handling.
 
 ---
 
-## PHASE 1: 需求界定
+## PHASE 1: Requirement Definition
 
-**核心目标**: 明确「要解决什么问题」，而不是「要画什么界面」
+**Core Objective**: Clarify "what problem to solve", not "what interface to draw"
 
-### 关键步骤
+### Key Steps
 
-1. **业务目标对齐**
-   - 与产品需求文档关联对齐
-   - 量化设计成功指标（效率提升 / 错误率降低 / 任务完成率）
-   - 工具：需求文档 PRD、用户旅程地图
+1. **Business Goal Alignment**
+   - Align with product requirement documents
+   - Quantify design success metrics (efficiency improvement / error rate reduction / task completion rate)
+   - Tools: PRD, user journey maps
 
-2. **设计范围锁定**
-   - 明确 In-scope 与 Out-of-scope 的界面元素
-   - 使用「冻结线」标记不在本次迭代内的功能区域
-   - 工具：需求文档规定的设计范围、优先级矩阵
+2. **Design Scope Lockdown**
+   - Define in-scope and out-of-scope UI elements
+   - Use "freeze lines" to mark functional areas outside the current iteration
+   - Tools: design scope defined in requirement documents, priority matrix
 
-3. **约束条件清单**
-   - 列举技术约束（框架限制、数据量级、加载时间）
-   - 品牌约束（色彩体系、字体授权）
-   - 时间约束
-   - 工具：约束清单、设计规格文档、品牌规范
+3. **Constraint Checklist**
+   - List technical constraints (framework limitations, data volume, load time)
+   - Brand constraints (color system, font licensing)
+   - Time constraints
+   - Tools: constraint checklist, design specification documents, brand guidelines
 
-4. **平台约束**
-   - 确定目标平台（桌面 Web / 移动端 Web / 原生 App / 数据大屏），选择对应模板
-   - 桌面 Web：鼠标交互，精确悬停，多列布局，选择 `templates/dark-theme.template.json` 或 `light-theme.template.json`
-   - 移动端 Web/App：触摸目标 ≥ 44px，无 Hover-only 交互，安全区域适配，选择 `templates/mobile-dark.template.json` 或 `mobile-light.template.json`
-   - 数据大屏：远距离观看（3-5m），远距离可读的主要内容字号 ≥ 24px，高对比度，遥控/触控操作，选择 `templates/dashboard-dark.template.json`
-   - 跨平台产品：同一品牌共享 colors + fontFamilies，仅 scales/spacing 按平台模板调整
+4. **Platform Constraints**
+   - Determine target platform (Desktop Web / Mobile Web / Native App / Data Dashboard), select corresponding template
+   - Desktop Web: mouse interaction, precise hover, multi-column layout, select `templates/dark-theme.template.json` or `light-theme.template.json`
+   - Mobile Web/App: touch targets ≥ 44px, no hover-only interactions, safe area adaptation, select `templates/mobile-dark.template.json` or `mobile-light.template.json`
+   - Data Dashboard: long-distance viewing (3-5m), main content font size ≥ 24px for long-distance readability, high contrast, remote/touch control, select `templates/dashboard-dark.template.json`
+   - Cross-platform products: same brand shares colors + fontFamilies, only scales/spacing adjusted per platform template
 
-### 反模式
+### Anti-Pattern
 
-需求不明确就开始「找灵感」，导致设计方向与业务目标脱节。
+Starting "finding inspiration" before requirements are clear, leading to design direction disconnected from business goals.
 
-### 交付物
+### Deliverables
 
-需求文档 PRD + 场景切片 + 约束清单
+PRD + scenario slices + constraint checklist
 
-### 异常处理
+### Exception Handling
 
-如果需求不明确，必须暂停设计并与产品经理沟通，禁止在需求不明确的情况下开始设计。
-
----
-
-## PHASE 2: 上下文收集 + 风格选择
-
-**核心目标**: 让设计决策有据可依，而非凭感觉发散
-
-### 关键步骤
-
-1. **参考设计审查（含截图归档）**
-   - 对 3-5 个参考设计案例做界面截图归档
-   - 重点标注：信息架构模式、交互反馈机制、视觉密度处理策略
-   - 区分「值得借鉴」与「行业惯例」
-   - 工具：截图归档、Figma 参考板
-
-2. **品牌风格选择**
-   - 读 `references/brand-library/INDEX.md`
-   - 按场景选择 3-5 个参考品牌
-   - 读取对应 DESIGN.md 提取设计参数
-   - 工具：brand-library INDEX.md、DESIGN.md
-
-3. **现有系统上下文**
-   - 梳理当前系统的组件库状态、已有设计语言
-   - 历史设计决策（尤其是「为什么这样设计」的决策日志）
-   - 工具：组件库文档、代码审查
-
-4. **核心资产协议**
-   - 获取 Logo（SVG 优先，PNG 备选）
-   - 获取产品截图 / UI 截图
-   - 详见 `references/methodology/asset-protocol.md`
-
-5. **技术实现评估**
-   - 与前端开发确认组件复用率、动效帧率上限
-   - 异步数据加载方式
-   - 防止设计在技术实现阶段被大幅降级
-
-6. **平台上下文**
-   - 确认目标平台的设计规范（iOS HIG / Material Design / 大屏分辨率标准）
-   - 确认输入方式（鼠标 / 触摸 / 遥控 / 语音）
-   - 确认观看距离和屏幕尺寸（大屏场景必需）
-   - 确认性能预算（大屏设备 GPU 性能差异大，移动端内存受限）
-
-### 反模式
-
-跳过上下文直接进入视觉设计，导致交付物与既有系统产生风格割裂。
-
-### 交付物
-
-参考设计分析报告 + 选定品牌 DESIGN.md + 资产归档 + 技术约束确认
-
-### 异常处理
-
-如果无法收集用户行为数据，可使用用户访谈或竞品分析作为替代方案。
+If requirements are unclear, design must be paused to communicate with the product manager. Starting design with unclear requirements is prohibited.
 
 ---
 
-## PHASE 3: 规范映射 + 变体产出
+## PHASE 2: Context Collection + Style Selection
 
-**核心目标**: 至少产出 3 个可陈述意图不同的设计方向
+**Core Objective**: Ground design decisions in evidence, not gut feeling
 
-### 关键步骤
+### Key Steps
 
-1. **DESIGN.md → token.json 映射**
-   - 按 `references/token-mapping/mapping-rules.md` 逐字段映射
-   - 使用对应平台模板作为骨架（桌面：`dark-theme.template.json` / `light-theme.template.json`；移动端：`mobile-dark.template.json` / `mobile-light.template.json`；大屏：`dashboard-dark.template.json`）。详见 mapping-rules.md 第九节
-   - 缺失字段按映射规则第八节处理
-   - 工具：mapping-rules.md、field-compatibility.md
+1. **Reference Design Review (with Screenshot Archiving)**
+   - Archive UI screenshots for 3-5 reference design cases
+   - Highlight: information architecture patterns, interaction feedback mechanisms, visual density handling strategies
+   - Distinguish between "worth borrowing" and "industry convention"
+   - Tools: screenshot archive, Figma reference board
 
-2. **方向三角：效率 / 清晰 / 表达**
-   - 每次产出的变体需分别偏向三个不同方向：
-     - ① 效率优先（最短操作路径）
-     - ② 信息清晰（最高可读性）
-     - ③ 品牌表达（最强视觉识别）
-   - 三选一或混合需有明确理由
-   - 工具：方向矩阵、设计评审框架
+2. **Brand Style Selection**
+   - Read `references/brand-library/INDEX.md`
+   - Select 3-5 reference brands by scenario
+   - Read corresponding DESIGN.md to extract design parameters
+   - Tools: brand-library INDEX.md, DESIGN.md
 
-   方向三角在多平台场景下的侧重调整：
-   - 移动端：效率优先 → 减少操作步骤；信息清晰 → 触摸友好；品牌表达 → 原生平台感
-   - 大屏：效率优先 → 关键指标一目了然；信息清晰 → 层级分明远距离可读；品牌表达 → 沉浸式数据叙事
+3. **Existing System Context**
+   - Review current system's component library status and existing design language
+   - Historical design decisions (especially "why designed this way" decision logs)
+   - Tools: component library documentation, code review
 
-3. **AI 辅助变体生成**
-   - 可使用 AI 工具快速生成视觉变体
-   - 每个 AI 产出变体必须附上「为什么接受这个设计决策」的人工注释
-   - 注释格式："为什么接受这个设计决策：[具体理由]"
-   - 禁止无注释直接使用
+4. **Core Asset Protocol**
+   - Obtain Logo (SVG preferred, PNG as fallback)
+   - Obtain product screenshots / UI screenshots
+   - See `references/methodology/asset-protocol.md`
 
-4. **变体评审与取舍**
-   - 用预设评审框架对每个变体评分（总分 100 分，70 分以上方可进入下一阶段）
-   - 取舍决策必须可记录，方便后续复盘
-   - 详见 `references/methodology/review-scoring.md`
+5. **Technical Implementation Assessment**
+   - Confirm component reuse rate and animation frame rate ceiling with frontend developers
+   - Asynchronous data loading approach
+   - Prevent significant design degradation during technical implementation
 
-### 反模式
+6. **Platform Context**
+   - Confirm target platform design guidelines (iOS HIG / Material Design / dashboard resolution standards)
+   - Confirm input method (mouse / touch / remote / voice)
+   - Confirm viewing distance and screen size (required for dashboard scenarios)
+   - Confirm performance budget (dashboard devices vary greatly in GPU performance, mobile has limited memory)
 
-只产出 1 个方向并过早锁定，导致错过更优解；或变体太多没有取舍标准。
+### Anti-Pattern
 
-### 交付物
+Skipping context and jumping straight into visual design, resulting in deliverables with style disconnect from the existing system.
 
-token.json + 3 个可陈述方向的设计变体 + 评审记录 + 选型决策日志
+### Deliverables
 
-### 异常处理
+Reference design analysis report + selected brand DESIGN.md + asset archive + technical constraint confirmation
 
-如果所有变体评分均低于 70 分，必须重新产出变体或调整设计方向。
+### Exception Handling
 
----
-
-## PHASE 4: 生产实现（在宿主项目中）
-
-**核心目标**: 在宿主项目中直接产出生产级代码，不做用完就扔的 HTML 草模
-
-### 关键步骤
-
-1. **框架 skill 消费 token.json**
-   - React (impeccable): → Tailwind config `theme.extend` 或 CSS-in-JS theme object
-   - Vue (vue-best-practices): → tailwind.config.js 配置
-   - 其他框架按各自方式消费
-
-2. **页面框架结构**
-   - 页面框架的结构定义、类型分类、导航结构，详见 `references/methodology/page-framework.md`
-   - 页面框架的响应式降级策略，详见 `references/methodology/responsive-degradation.md`
-
-3. **反 slop 清单检查**
-   - 逐项检查 `references/methodology/anti-slop-checklist.md`
-   - 确保 AI 产出不出现典型 slop 特征
-
-4. **反糊化三问协议**
-   - 对每个 AI 产出的视觉决策，回答三个问题：
-     - ① 为什么选这个颜色？
-     - ② 为什么用这个间距？
-     - ③ 为什么这个元素在这里？
-   - 如果无法回答，则该决策需重新审视或替换
-   - 详见 `references/methodology/anti-blur-protocol.md`
-
-5. **组件状态全覆盖**
-   - 默认态 / Hover / Focus / Active / Disabled / Loading / Error / Empty State
-   - Loading 与 Error 状态尤其容易被遗漏
-   - Empty State 四要素与 Loading State 的 Skeleton/Spinner 判断规则，详见 `references/methodology/ui-states.md`
-
-### 反模式
-
-设计只在 Figma 中被评审通过，上线后发现大量渲染问题和状态遗漏。
-
-### 交付物
-
-生产级组件 + 页面 + 状态覆盖清单
-
-### 异常处理
-
-如果原型还原度低于 85%，必须修复关键偏差区域。
+If user behavior data cannot be collected, user interviews or competitive analysis may be used as alternatives.
 
 ---
 
-## PHASE 5: 质量打磨
+## PHASE 3: Specification Mapping + Variant Production
 
-**核心目标**: 确保上线就绪
+**Core Objective**: Produce at least 3 design directions with distinct statable intents
 
-### 关键步骤
+### Key Steps
 
-1. **无障碍检查**
-   - 颜色对比度 ≥ 4.5:1（WCAG 2.1 AA）
-   - 所有交互元素有焦点状态
-   - 表单有关联 Label，图表有文字替代
-   - 工具：Lighthouse、色彩对比检查器
+1. **DESIGN.md → token.json Mapping**
+   - Map field by field per `references/token-mapping/mapping-rules.md`
+   - Use the corresponding platform template as skeleton (Desktop: `dark-theme.template.json` / `light-theme.template.json`; Mobile: `mobile-dark.template.json` / `mobile-light.template.json`; Dashboard: `dashboard-dark.template.json`). See mapping-rules.md Section 9
+   - Handle missing fields per mapping-rules.md Section 8
+   - Tools: mapping-rules.md, field-compatibility.md
 
-2. **性能检查**
-   - 图片优化（WebP/AVIF、懒加载）
-   - 动画帧率 ≥ 60fps（桌面 Web 目标；大屏最低 30fps，见平台特定检查）
-   - 首屏加载时间
-   - 工具：Chrome DevTools Performance
+2. **Direction Triangle: Efficiency / Clarity / Expression**
+   - Each batch of variants must lean toward three different directions:
+     - ① Efficiency first (shortest operation path)
+     - ② Clarity first (highest readability)
+     - ③ Expression first (strongest visual identity)
+   - Choosing one or mixing must have explicit justification
+   - Tools: direction matrix, design review framework
 
-3. **响应式验证**
-   - 断点与 bicorne-ui BREAKPOINTS 对齐：xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
-   - 重点关注数据表格在 md(768px) 以下的信息降级策略
-   - 触摸目标 ≥ 44×44px
-   - 具体降级方案（表格/表单/导航/多列布局），详见 `references/methodology/responsive-degradation.md`
+   Direction Triangle emphasis adjustments for multi-platform scenarios:
+   - Mobile: Efficiency first → reduce operation steps; Clarity first → touch-friendly; Expression first → native platform feel
+   - Dashboard: Efficiency first → key metrics at a glance; Clarity first → clear hierarchy, long-distance readable; Expression first → immersive data narrative
 
-4. **交互状态全覆盖**
-   - 验证所有状态：默认态 / Hover / Focus / Active / Disabled / Loading / Error / Empty State
-   - Loading 与 Error 状态尤其容易被遗漏
-   - Empty State 四要素与 Loading State 的 Skeleton/Spinner 判断规则，详见 `references/methodology/ui-states.md`
+3. **AI-Assisted Variant Generation**
+   - AI tools may be used to rapidly generate visual variants
+   - Each AI-produced variant must include a human annotation explaining "why this design decision was accepted"
+   - Annotation format: "Why this design decision was accepted: [specific reason]"
+   - Using AI output without annotation is prohibited
 
-5. **平台特定检查**
-   - 移动端：触摸目标合规复查，安全区域适配，无 Hover-only 交互，手势冲突检测
-   - 原生 App：平台 HIG 合规（iOS HIG / Material Design），导航模式匹配平台惯例
-   - 大屏：3m 观看距离可读性，遥控器焦点导航，动画帧率目标 60fps / 最低 30fps
+4. **Variant Review and Selection**
+   - Score each variant using the preset review framework (total 100 points, 70+ required to advance to next phase)
+   - Selection decisions must be recorded for retrospective review
+   - See `references/methodology/review-scoring.md`
 
-6. **最终审美校验**
-   - 与审美锚点对照
-   - 三问协议最终确认
-   - 张力检查
+### Anti-Pattern
 
-### 反模式
+Producing only 1 direction and locking in too early, missing better solutions; or producing too many variants without selection criteria.
 
-以「用 AI 生成的所以质量有保障」为由跳过人工审美校验，最终交付平庸设计。
+### Deliverables
 
-### 交付物
+token.json + 3 design variants with statable directions + review record + selection decision log
 
-上线就绪的代码 + a11y 分数 + 响应式截图矩阵 + 状态覆盖清单
+### Exception Handling
+
+If all variants score below 70, variants must be re-produced or the design direction must be adjusted.
 
 ---
 
-## AI Agent 交互协议
+## PHASE 4: Production Implementation (in Host Project)
 
-本协议贯穿上述五阶段全流程，定义 agent 在什么场景下必须停下来等待用户确认（Junior 行为），什么场景下可以自主决策推进（Senior 行为）。
+**Core Objective**: Produce production-grade code directly in the host project, not throwaway HTML mockups
 
-### 核心心态
+### Key Steps
 
-Agent 默认以 Junior 模式运作：先展示假设，让用户确认或纠正。区别在于：
+1. **Framework Skill Consumes token.json**
+   - React (impeccable): → Tailwind config `theme.extend` or CSS-in-JS theme object
+   - Vue (vue-best-practices): → tailwind.config.js configuration
+   - Other frameworks consume in their own way
 
-- **Junior 展示假设**：先展示你的理解和假设，让用户确认或纠正
-- **Senior 做出判断**：直接做出判断，用户只需接受或拒绝
+2. **Page Framework Structure**
+   - Page framework structure definition, type classification, navigation structure, see `references/methodology/page-framework.md`
+   - Page framework responsive degradation strategy, see `references/methodology/responsive-degradation.md`
 
-### 工作流程（与五阶段映射）
+3. **Anti-Slop Checklist Review**
+   - Check each item in `references/methodology/anti-slop-checklist.md`
+   - Ensure AI output does not exhibit typical slop characteristics
 
-1. **理解需求** → 用自己的话复述需求，确认理解（对应 PHASE 1）
-2. **展示假设** → 列出你的设计假设（风格、布局、交互）（对应 PHASE 2）
-3. **等待确认** → 用户确认或纠正你的假设（PHASE 2 → PHASE 3 的门控）
-4. **执行设计** → 基于确认的假设执行（对应 PHASE 3–4）
-5. **展示结果** → 展示设计结果，附上设计决策说明（对应 PHASE 4 交付）
-6. **收集反馈** → 收集用户反馈，迭代优化（对应 PHASE 5）
+4. **Anti-Blur Three-Question Protocol**
+   - For every AI-produced visual decision, answer three questions:
+     - ① Why this color?
+     - ② Why this spacing?
+     - ③ Why is this element here?
+   - If unable to answer, the decision must be re-examined or replaced
+   - See `references/methodology/anti-blur-protocol.md`
 
-### 问题模板
+5. **Component State Full Coverage**
+   - Default / Hover / Focus / Active / Disabled / Loading / Error / Empty State
+   - Loading and Error states are especially easy to overlook
+   - Empty State four elements and Loading State Skeleton/Spinner decision rules, see `references/methodology/ui-states.md`
 
-在 PHASE 2 上下文收集阶段，使用以下问题模板：
+### Anti-Pattern
+
+Design is only reviewed and approved in Figma, only to discover numerous rendering issues and missing states after launch.
+
+### Deliverables
+
+Production-grade components + pages + state coverage checklist
+
+### Exception Handling
+
+If prototype fidelity is below 85%, critical deviation areas must be fixed.
+
+---
+
+## PHASE 5: Quality Polish
+
+**Core Objective**: Ensure launch readiness
+
+### Key Steps
+
+1. **Accessibility Check**
+   - Color contrast ratio ≥ 4.5:1 (WCAG 2.1 AA)
+   - All interactive elements have focus states
+   - Forms have associated labels, charts have text alternatives
+   - Tools: Lighthouse, color contrast checker
+
+2. **Performance Check**
+   - Image optimization (WebP/AVIF, lazy loading)
+   - Animation frame rate ≥ 60fps (Desktop Web target; dashboard minimum 30fps, see platform-specific checks)
+   - First contentful paint time
+   - Tools: Chrome DevTools Performance
+
+3. **Responsive Validation**
+   - Breakpoints aligned with bicorne-ui BREAKPOINTS: xs(480)/sm(640)/md(768)/lg(1024)/xl(1280)/xxl(1536)/xxxl(1920)
+   - Focus on data table information degradation strategy below md(768px)
+   - Touch targets ≥ 44×44px
+   - Specific degradation plans (tables/forms/navigation/multi-column layouts), see `references/methodology/responsive-degradation.md`
+
+4. **Interaction State Full Coverage**
+   - Verify all states: Default / Hover / Focus / Active / Disabled / Loading / Error / Empty State
+   - Loading and Error states are especially easy to overlook
+   - Empty State four elements and Loading State Skeleton/Spinner decision rules, see `references/methodology/ui-states.md`
+
+5. **Platform-Specific Checks**
+   - Mobile: touch target compliance review, safe area adaptation, no hover-only interactions, gesture conflict detection
+   - Native App: platform HIG compliance (iOS HIG / Material Design), navigation patterns matching platform conventions
+   - Dashboard: 3m viewing distance readability, remote focus navigation, animation frame rate target 60fps / minimum 30fps
+
+6. **Final Aesthetic Validation**
+   - Compare against aesthetic anchor points
+   - Three-question protocol final confirmation
+   - Tension check
+
+### Anti-Pattern
+
+Skipping human aesthetic validation on the grounds that "AI generated it so quality is guaranteed", ultimately delivering mediocre design.
+
+### Deliverables
+
+Launch-ready code + a11y score + responsive screenshot matrix + state coverage checklist
+
+---
+
+## AI Agent Interaction Protocol
+
+This protocol spans the entire five-phase workflow, defining when the agent must stop and wait for user confirmation (Junior behavior) vs. when it can make autonomous decisions and proceed (Senior behavior).
+
+### Core Mindset
+
+The agent operates in Junior mode by default: present assumptions first, let the user confirm or correct. The distinction:
+
+- **Junior presents assumptions**: Show your understanding and assumptions first, let the user confirm or correct
+- **Senior makes judgments**: Make judgments directly, the user only needs to accept or reject
+
+### Workflow (Mapped to Five Phases)
+
+1. **Understand Requirements** → Restate requirements in your own words, confirm understanding (corresponds to PHASE 1)
+2. **Present Assumptions** → List your design assumptions (style, layout, interaction) (corresponds to PHASE 2)
+3. **Wait for Confirmation** → User confirms or corrects your assumptions (PHASE 2 → PHASE 3 gate)
+4. **Execute Design** → Execute based on confirmed assumptions (corresponds to PHASE 3–4)
+5. **Present Results** → Show design results with design decision explanations (corresponds to PHASE 4 deliverables)
+6. **Collect Feedback** → Collect user feedback, iterate and optimize (corresponds to PHASE 5)
+
+### Question Template
+
+During PHASE 2 context collection, use the following question template:
 
 ```
-我理解的需求是：[复述需求]
-我的设计假设是：
-- 风格方向：[假设的风格]
-- 目标用户：[假设的用户画像]
-- 核心场景：[假设的使用场景]
-- 技术约束：[假设的约束条件]
+My understanding of the requirements is: [restate requirements]
+My design assumptions are:
+- Style direction: [assumed style]
+- Target users: [assumed user persona]
+- Core scenarios: [assumed usage scenarios]
+- Technical constraints: [assumed constraints]
 
-请确认或纠正以上假设。
+Please confirm or correct the above assumptions.
 ```
 
-### Senior vs Junior 决策边界
+### Senior vs Junior Decision Boundary
 
-Junior Designer 模式的核心是「展示假设，等待确认」。但不是所有决策都需要等待——有些场景 Agent 应该自主判断（Senior 行为），有些场景必须停下来问用户（Junior 行为）。
+The core of Junior Designer mode is "present assumptions, wait for confirmation". But not all decisions require waiting — some scenarios the agent should judge autonomously (Senior behavior), some scenarios it must stop and ask the user (Junior behavior).
 
-#### 必须停下来问用户（Junior 行为）
+#### Must Stop and Ask the User (Junior Behavior)
 
-以下场景**必须暂停执行、等待用户确认**，即使会打断工作流：
+The following scenarios **must pause execution and wait for user confirmation**, even if it interrupts the workflow:
 
-| 场景 | 为什么不能自主 | 问什么 |
-|------|--------------|--------|
-| 设计方向未确认 | 方向错了 = 全部返工，成本最高 | 「我计划用 X 风格方向，可以吗？」 |
-| 品牌资料有矛盾 | 设计规范 vs 参考截图 vs 用户口述不一致 | 「截图里是衬线，规范说无衬线，用哪个？」 |
-| 核心功能/流程不确定 | 功能理解错了 = 做错东西 | 「核心流程是 A→B→C 还是 A→C？」 |
-| 用户明确说「不要问了直接做」 | 用户催促 ≠ 授权做错 | 标注 assumption 后执行，交付时列出假设清单 |
+| Scenario | Why Not Autonomous | What to Ask |
+|----------|-------------------|-------------|
+| Design direction unconfirmed | Wrong direction = full rework, highest cost | "I plan to use X style direction, is that okay?" |
+| Brand materials contradict | Design spec vs. reference screenshot vs. user's verbal description inconsistent | "The screenshot shows serif, the spec says sans-serif, which to use?" |
+| Core function/flow uncertain | Wrong function understanding = wrong deliverable | "Is the core flow A→B→C or A→C?" |
+| User explicitly says "stop asking, just do it" | User rushing ≠ authorization to be wrong | Mark assumptions and execute, list assumption checklist at delivery |
 
-#### 可以自主判断（Senior 行为）
+#### Can Judge Autonomously (Senior Behavior)
 
-以下场景 Agent 可以自主决策并推进，不需要逐项确认：
+The following scenarios the agent can make autonomous decisions and proceed, without item-by-item confirmation:
 
-| 场景 | 自主范围 | 边界 |
-|------|---------|------|
-| 已确认方向的细节实现 | 字号微调、间距选择、圆角大小 | 不改主色调/主字体/核心布局 |
-| 标准化的设计规范 | 行高 1.5-1.8、按钮圆角 4-8px | 不超出 token.json 约束范围 |
-| 技术约束下的降级 | 动画帧数调整、图片格式选择 | 降级后需在交付时说明 |
-| 反 slop / 反糊化的自动修正 | 去掉装饰性 emoji、减少渐变层级 | 不删除用户提供的内容 |
+| Scenario | Autonomous Scope | Boundary |
+|----------|-----------------|----------|
+| Detail implementation within confirmed direction | Font size fine-tuning, spacing selection, border-radius size | Do not change primary color / primary font / core layout |
+| Standardized design specifications | Line height 1.5-1.8, button border-radius 4-8px | Do not exceed token.json constraint range |
+| Degradation under technical constraints | Animation frame count adjustment, image format selection | Degradation must be noted at delivery |
+| Anti-slop / anti-blur automatic corrections | Remove decorative emoji, reduce gradient layers | Do not delete user-provided content |
 
-#### 决策边界速查
+#### Decision Boundary Quick Reference
 
 ```
-设计决策来了 →
-├─ 涉及事实性断言？（产品/技术/版本/规格）→ #0 事实验证：先 WebSearch，再继续
-├─ 改了之后能回滚吗？
-│   ├─ 不能（方向/色调/布局）→ Junior：停下来问
-│   └─ 能（细节/间距/字号）→ Senior：自主决策
-├─ 用户会介意吗？
-│   ├─ 会（功能流程/品牌规范）→ Junior：停下来问
-│   └─ 不会（技术实现细节）→ Senior：自主决策
-└─ 信息充分吗？
-    ├─ 不充分（存在矛盾/模糊）→ Junior：停下来问
-    └─ 充分（已确认的规范内）→ Senior：自主决策
+Design decision comes in →
+├─ Involves factual assertion? (product/tech/version/spec) → #0 Fact verification: WebSearch first, then continue
+├─ Can it be rolled back after change?
+│   ├─ No (direction/color tone/layout) → Junior: stop and ask
+│   └─ Yes (details/spacing/font size) → Senior: autonomous decision
+├─ Will the user care?
+│   ├─ Yes (functional flow/brand guidelines) → Junior: stop and ask
+│   └─ No (technical implementation details) → Senior: autonomous decision
+└─ Is information sufficient?
+    ├─ No (contradictions/ambiguity exist) → Junior: stop and ask
+    └─ Yes (within confirmed specifications) → Senior: autonomous decision
 ```
 
-#### 异常场景处理
+#### Exception Scenario Handling
 
-当本协议的异常处理与五阶段各 Phase 的异常处理重叠时，以各 Phase 的异常处理为准（更具体），本协议作为补充。
+When this protocol's exception handling overlaps with each Phase's exception handling, the Phase's exception handling takes precedence (more specific), this protocol serves as supplement.
 
-| 场景 | 处理方式 |
-|------|---------|
-| 用户拒绝回答问题清单 | 尊重节奏，用 best judgment 做 1 个主方案 + 1 个差异化变体，交付时明确标注 assumption |
-| 时间紧迫 | 跳过 Junior pass 直接 Full pass，只做 1 个方案，交付标注「未经 early validation」 |
-| 设计规范 vs 产品需求冲突 | 停下指出矛盾，让用户选，不要自行降级规范 |
-| 任务太大一次吃不下 | 拆成 steps，先做第一步让用户看，再推进 |
+| Scenario | Handling |
+|----------|----------|
+| User refuses to answer question checklist | Respect their pace, use best judgment to produce 1 main plan + 1 differentiated variant, clearly mark assumptions at delivery |
+| Time is tight | Skip Junior pass, go directly to Full pass, produce only 1 plan, mark delivery as "without early validation" |
+| Design spec vs. product requirement conflict | Stop and point out the contradiction, let the user choose, do not self-downgrade the spec |
+| Task too large to handle at once | Break into steps, complete the first step for user review, then proceed |

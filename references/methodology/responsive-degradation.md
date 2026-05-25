@@ -1,496 +1,497 @@
-# 响应式降级策略
+# Responsive Degradation Strategy
 
-> 断点体系下的组件与布局降级规则，确保界面在任意视口宽度下可用。
-> 多端通用：桌面 Web / 移动端 Web / 数据大屏。
-> 断点值与 bicorne-ui BREAKPOINTS 完全一致。
-
----
-
-## 一、断点体系
-
-| 断点 | 宽度 | 典型设备 | 主要设计区间 |
-|------|------|---------|------------|
-| xs | < 480px | 小屏手机 | 移动端 |
-| sm | 480-639px | 大屏手机 | 移动端 |
-| md | 768-1023px | 平板竖屏 / 小笔记本 | 移动端 → 桌面过渡 |
-| lg | 1024-1279px | 平板横屏 / 笔记本 | 桌面 |
-| xl | 1280-1535px | 标准桌面 | 桌面 |
-| xxl | 1536-1919px | 大屏桌面 | 桌面 / 大屏 |
-| xxxl | ≥ 1920px | 超宽屏 / 数据大屏 | 大屏 |
-
-**核心降级断点**：`md(768px)` — 低于此宽度进入移动端降级模式。
+> Component and layout degradation rules under the breakpoint system, ensuring usability at any viewport width.
+> Multi-platform: Desktop Web / Mobile Web / Data Dashboard.
+> Breakpoint values are fully consistent with bicorne-ui BREAKPOINTS.
 
 ---
 
-## 二、数据表格降级（< 768px 核心场景）
+## 1. Breakpoint System
 
-数据表格是响应式降级最复杂的组件。列数多、操作密集、信息关联性强。
+| Breakpoint | Width | Typical Device | Primary Design Range |
+|------------|-------|---------------|---------------------|
+| xs | < 480px | Small-screen phone | Mobile |
+| sm | 480-639px | Large-screen phone | Mobile |
+| md | 768-1023px | Tablet portrait / Small laptop | Mobile → Desktop transition |
+| lg | 1024-1279px | Tablet landscape / Laptop | Desktop |
+| xl | 1280-1535px | Standard desktop | Desktop |
+| xxl | 1536-1919px | Large desktop | Desktop / Dashboard |
+| xxxl | ≥ 1920px | Ultra-wide / Data Dashboard | Dashboard |
 
-### 2.1 列隐藏策略
+**Core degradation breakpoint**: `md(768px)` — below this width, mobile degradation mode is activated.
 
-按优先级排序，低优先级列在小屏隐藏：
+---
 
-| 优先级 | 列类型 | 说明 | 降级行为 |
-|--------|-------|------|---------|
-| P0（必须保留） | 主标识列 | 名称、编号、标题 | 始终可见 |
-| P1 | 操作列 | 编辑、删除、更多 | 收纳为"更多"菜单 |
-| P2 | 状态列 | 标签、徽标 | 保留，可缩小标签尺寸 |
-| P3 | 时间列 | 创建时间、更新时间 | 隐藏或收纳到展开行 |
-| P4 | 辅助列 | 描述、备注、次要属性 | 隐藏，收纳到展开行 |
-| P5 | 统计列 | 数量、金额、百分比 | 隐藏或收纳到展开行 |
+## 2. Data Table Degradation (< 768px Core Scenario)
 
-**规则**：
-- < 768px 最多保留 P0 + P1 + P2 列
-- 被隐藏的列信息通过行展开或卡片模式查看
-- 列隐藏不可导致信息丢失——用户必须有路径获取完整数据
+Data tables are the most complex component in responsive degradation. Many columns, dense actions, strong information correlation.
 
-### 2.2 三种降级方案
+### 2.1 Column Hiding Strategy
 
-#### 方案 A：行转卡
+Columns are sorted by priority; low-priority columns are hidden on small screens:
 
-每行数据变为独立卡片，字段纵向排列。
+| Priority | Column Type | Description | Degradation Behavior |
+|----------|------------|-------------|---------------------|
+| P0 (must retain) | Primary identifier | Name, ID, title | Always visible |
+| P1 | Action column | Edit, delete, more | Collapsed into "More" menu |
+| P2 | Status column | Tags, badges | Retained; badge size may be reduced |
+| P3 | Time column | Created at, updated at | Hidden or collapsed into expanded row |
+| P4 | Auxiliary column | Description, notes, secondary attributes | Hidden, collapsed into expanded row |
+| P5 | Statistics column | Count, amount, percentage | Hidden or collapsed into expanded row |
+
+**Rules**:
+- < 768px retains at most P0 + P1 + P2 columns
+- Hidden column data is accessible via row expansion or card mode
+- Column hiding must not cause information loss — users must have a path to access complete data
+
+### 2.2 Three Degradation Approaches
+
+#### Approach A: Row-to-Card
+
+Each row becomes an independent card with fields stacked vertically.
 
 ```
-桌面（≥ 768px）：
+Desktop (≥ 768px):
 ┌──────┬────────┬────────┬────────┬──────────┐
-│ 编号 │ 名称   │ 状态   │ 时间   │ 操作     │
+│  ID  │  Name  │ Status │  Time  │  Actions │
 ├──────┼────────┼────────┼────────┼──────────┤
-│ 001  │ 项目 A │ 进行中 │ 05-16  │ 编辑 删除│
+│ 001  │ Proj A │ Active │ 05-16  │ Edit Del │
 └──────┴────────┴────────┴────────┴──────────┘
 
-移动端（< 768px）：
+Mobile (< 768px):
 ┌─────────────────────────┐
-│ 项目 A            进行中 │
-│ 编号: 001               │
-│ 时间: 05-16              │
-│              编辑 · 删除 │
+│ Proj A            Active │
+│ ID: 001                  │
+│ Time: 05-16               │
+│              Edit · Delete│
 └─────────────────────────┘
 ```
 
-**适用**：列数 5-8 列，行操作简单，移动端查看频率高。
+**Applicable**: 5-8 columns, simple row actions, high mobile viewing frequency.
 
-#### 方案 B：横向滚动
+#### Approach B: Horizontal Scroll
 
-保留完整表格结构，容器水平滚动。
+Retain full table structure; container scrolls horizontally.
 
 ```
-移动端（< 768px）：
+Mobile (< 768px):
 ┌─────────────────↔──────┐
-│ 编号 │ 名称 │ 状态 │···│
-├──────┼──────┼──────┤   │
-│ 001  │ A    │ 进行 │   │
-└──────┴──────┴──────┘   │
-        → 横向滚动查看更多 →
+│  ID  │ Name │ Status │···│
+├──────┼──────┼────────┤   │
+│ 001  │  A   │ Active │   │
+└──────┴──────┴────────┘   │
+        → Scroll horizontally for more →
 ```
 
-**适用**：列数 > 8 列，数据需要横向对比，移动端查看频率低。
+**Applicable**: > 8 columns, data requires horizontal comparison, low mobile viewing frequency.
 
-**增强**：
-- 首列（主标识列）固定 `position: sticky; left: 0`
-- 滚动阴影提示：左侧/右侧出现渐变阴影表示可滚动方向
-- 滚动指示器：底部显示当前可见列位置
+**Enhancements**:
+- First column (primary identifier) sticky: `position: sticky; left: 0`
+- Scroll shadow hint: gradient shadow on left/right side indicating scrollable direction
+- Scroll indicator: bottom bar showing current visible column position
 
-#### 方案 C：行展开
+#### Approach C: Row Expansion
 
-保留精简表格，点击行展开被隐藏的列信息。
+Retain a simplified table; click a row to expand hidden column information.
 
 ```
-移动端（< 768px）：
+Mobile (< 768px):
 ┌──────┬────────┬────────┐
-│ 编号 │ 名称   │ 状态   │
+│  ID  │  Name  │ Status │
 ├──────┼────────┼────────┤
-│ 001  │ 项目 A │ 进行中 │ ← 点击展开
-│  时间: 05-16            │
-│  描述: xxx              │
-│  操作: 编辑 | 删除      │
+│ 001  │ Proj A │ Active │ ← Click to expand
+│  Time: 05-16             │
+│  Description: xxx        │
+│  Actions: Edit | Delete  │
 ├──────┼────────┼────────┤
-│ 002  │ 项目 B │ 已完成 │
+│ 002  │ Proj B │  Done  │
 └──────┴────────┴────────┘
 ```
 
-**适用**：列数 4-6 列，部分列信息为辅助参考，不需要频繁查看。
+**Applicable**: 4-6 columns, some column information is auxiliary reference, not frequently viewed.
 
-### 2.3 方案决策树
+### 2.3 Approach Decision Tree
 
 ```
-表格需要降级？
-├── 移动端使用频率？
-│   ├── 高 → 方案 A（行转卡）
-│   │   └── 操作是否复杂（> 3 个操作）？
-│   │       ├── 是 → 卡片底部操作栏收纳
-│   │       └── 否 → 操作直接展示
-│   └── 低 → 列数？
-│       ├── > 8 列 → 方案 B（横向滚动 + 首列固定）
-│       └── 4-8 列 → 方案 C（行展开）
-└── 是否需要横向对比数据？
-    └── 是 → 方案 B（横向滚动），即使移动端频率高
+Table needs degradation?
+├── Mobile usage frequency?
+│   ├── High → Approach A (Row-to-Card)
+│   │   └── Are actions complex (> 3 actions)?
+│   │       ├── Yes → Collapse into card bottom action bar
+│   │       └── No → Display actions directly
+│   └── Low → Column count?
+│       ├── > 8 → Approach B (Horizontal Scroll + First Column Sticky)
+│       └── 4-8 → Approach C (Row Expansion)
+└── Need horizontal data comparison?
+    └── Yes → Approach B (Horizontal Scroll), even if mobile frequency is high
 ```
 
-### 2.4 表格操作降级
+### 2.4 Table Action Degradation
 
-| 桌面操作 | 移动端降级 |
-|---------|-----------|
-| 行内多个按钮 | 收纳为"更多"菜单（Dropdown/ActionSheet） |
-| 行选择 Checkbox | 保留，但增大触摸区域至 44×44px |
-| 排序（点击列头） | 移至表格上方排序选择器 |
-| 筛选（列头筛选器） | 移至表格上方筛选面板 |
-| 分页器 | 简化为"加载更多"或无限滚动 |
-| 列宽拖拽 | 禁用，固定列宽 |
+| Desktop Action | Mobile Degradation |
+|---------------|-------------------|
+| Multiple inline buttons | Collapsed into "More" menu (Dropdown/ActionSheet) |
+| Row selection Checkbox | Retained, but touch target enlarged to 44×44px |
+| Sort (click column header) | Moved to sort selector above table |
+| Filter (column header filter) | Moved to filter panel above table |
+| Paginator | Simplified to "Load More" or infinite scroll |
+| Column width drag | Disabled; fixed column widths |
 
 ---
 
-## 三、表单降级
+## 3. Form Degradation
 
-### 3.1 布局降级
+### 3.1 Layout Degradation
 
-| 桌面（≥ 768px） | 移动端（< 768px） |
-|----------------|-----------------|
-| Label 左置（水平布局） | Label 上置（垂直布局） |
-| 多列表单（2-3 列） | 单列表单 |
-| 行内错误提示 | 错误提示在字段下方 |
-| 分组卡片并排 | 分组卡片纵向堆叠 |
+| Desktop (≥ 768px) | Mobile (< 768px) |
+|-------------------|-----------------|
+| Label left-aligned (horizontal layout) | Label top-aligned (vertical layout) |
+| Multi-column form (2-3 columns) | Single-column form |
+| Inline error message | Error message below the field |
+| Grouped cards side by side | Grouped cards stacked vertically |
 
-### 3.2 复杂表单降级
+### 3.2 Complex Form Degradation
 
-| 桌面 | 移动端 |
-|------|-------|
-| 分步表单（Steps + 并排内容） | 分步表单（Steps 简化为进度条 + 单步内容） |
-| 标签页表单（Tabs 切换分组） | 标签页保留，但改为可滑动标签 |
-| 可折叠分组 | 保留折叠，默认展开当前编辑组 |
-| 表格内嵌表单 | 行转卡后内嵌表单 |
+| Desktop | Mobile |
+|---------|--------|
+| Stepped form (Steps + side-by-side content) | Stepped form (Steps simplified to progress bar + single-step content) |
+| Tabbed form (Tabs switching groups) | Tabs retained, but changed to scrollable tabs |
+| Collapsible groups | Collapse retained; current editing group expanded by default |
+| Table-embedded form | Row-to-card then embedded form |
 
-### 3.3 表单规则
+### 3.3 Form Rules
 
-1. **Label 上置** — < 768px 强制 Label 在输入框上方，为输入框腾出最大宽度
-2. **单列布局** — 移动端禁止多列表单，避免输入框过窄
-3. **CTA 全宽** — 提交/下一步按钮在移动端使用全宽
-4. **键盘适配** — 输入框获焦时，页面滚动使输入框可见（避免虚拟键盘遮挡）
+1. **Label top-aligned** — < 768px forces Label above the input, maximizing input width
+2. **Single-column layout** — Multi-column forms prohibited on mobile to avoid narrow inputs
+3. **Full-width CTA** — Submit/Next buttons use full width on mobile
+4. **Keyboard adaptation** — On input focus, page scrolls to keep the input visible (avoid virtual keyboard occlusion)
 
 ---
 
-## 四、页面框架降级
+## 4. Page Framework Degradation
 
-页面框架是最外层布局结构，决定了内容区的可用宽度。框架降级必须先于组件降级——如果框架不降级，组件降级的空间就不够。
+The page framework is the outermost layout structure, determining the available width of the content area. Framework degradation must precede component degradation — if the framework does not degrade, there is insufficient space for component degradation.
 
-> 页面框架的结构定义与类型分类（8 种框架 F1-F8），详见 [page-framework.md](page-framework.md)。F6/F7 为移动端原生框架，不需要降级规则。
+> For structural definitions and type classification of page frameworks (8 framework types F1-F8), see [page-framework.md](page-framework.md). F6/F7 are mobile-native frameworks and do not require degradation rules.
 
-### 4.1 侧边栏 + 内容 框架降级（F1）
+### 4.1 Sidebar + Content Framework Degradation (F1)
 
-这是中后台最常见的页面结构，降级分三档：
+This is the most common page structure in admin panels. Degradation is divided into three tiers:
 
-> 侧边栏宽度规范详见 [page-framework.md](page-framework.md)§三。
+> For sidebar width specifications, see [page-framework.md](page-framework.md)§3.
 
 ```
-桌面（≥ 1024px）：
+Desktop (≥ 1024px):
 ┌────────┬───────────────────────────┐
 │        │                           │
-│ 侧边栏  │        内容区              │
-│ 208px  │      flex: 1              │
-│ 默认    │                           │
+│Sidebar │       Content Area        │
+│ 208px  │       flex: 1             │
+│default │                           │
 │        │                           │
 └────────┴───────────────────────────┘
 
-平板（768-1023px）：
+Tablet (768-1023px):
 ┌────┬───────────────────────────────┐
 │    │                               │
-│图标│        内容区                   │
-│80px│      flex: 1                   │
-│折叠│                               │
+│Icon│       Content Area            │
+│80px│       flex: 1                 │
+│collapsed│                          │
 │    │                               │
 └────┴───────────────────────────────┘
 
-手机（< 768px）：
+Mobile (< 768px):
 ┌────────────────────────────────────┐
-│ ☰                                  │  ← 顶栏含汉堡按钮
-│            内容区                    │  ← 全宽
-│           width: 100%               │
+│ ☰                                  │  ← Top bar with hamburger button
+│           Content Area             │  ← Full width
+│          width: 100%               │
 └────────────────────────────────────┘
-   点击 ☰ → 侧滑抽屉覆盖内容区
+   Click ☰ → Slide-out drawer overlays content area
 ```
 
-| 断点 | 侧边栏行为 | 内容区宽度 | 侧边栏触发方式 |
-|------|-----------|-----------|--------------|
-| ≥ 1024px | 固定展开，208px（默认） | `calc(100% - 208px)` | 始终可见 |
-| 768-1023px | 折叠为图标栏，80px | `calc(100% - 80px)` | 悬停/点击展开浮层 |
-| < 768px | 完全隐藏 | 100% | 汉堡按钮 → 侧滑抽屉 |
+| Breakpoint | Sidebar Behavior | Content Area Width | Sidebar Trigger |
+|------------|-----------------|-------------------|----------------|
+| ≥ 1024px | Fixed expanded, 208px (default) | `calc(100% - 208px)` | Always visible |
+| 768-1023px | Collapsed to icon bar, 80px | `calc(100% - 80px)` | Hover/click to expand overlay |
+| < 768px | Fully hidden | 100% | Hamburger button → Slide-out drawer |
 
-**关键规则**：
-1. **内容区最小可用宽度 ≥ 320px** — 侧边栏展开时，如果内容区被压缩到 < 320px，必须自动折叠侧边栏
-2. **侧滑抽屉遮罩** — < 768px 侧边栏以抽屉形式出现时，内容区加半透明遮罩（`rgba(0,0,0,0.45)`），点击遮罩关闭抽屉
-3. **抽屉宽度 ≤ 80% 视口** — 移动端侧滑抽屉不超过屏幕宽度的 80%，保留部分内容区可见，让用户感知"这是覆盖层而非页面跳转"
-4. **状态持久化** — 侧边栏展开/折叠状态在 `localStorage` 持久化，刷新后恢复
+**Key Rules**:
+1. **Content area minimum usable width ≥ 320px** — When sidebar is expanded, if the content area is compressed below 320px, the sidebar must auto-collapse
+2. **Slide-out drawer overlay** — When the sidebar appears as a drawer on < 768px, a semi-transparent overlay covers the content area (`rgba(0,0,0,0.45)`); clicking the overlay closes the drawer
+3. **Drawer width ≤ 80% viewport** — The mobile slide-out drawer must not exceed 80% of screen width, keeping part of the content area visible so users perceive "this is an overlay, not a page navigation"
+4. **State persistence** — Sidebar expanded/collapsed state is persisted in `localStorage` and restored after refresh
 
-### 4.2 侧边栏 + 顶栏 + 内容 框架降级（F3）
+### 4.2 Sidebar + Top Bar + Content Framework Degradation (F3)
 
 ```
-桌面（≥ 1024px）：
+Desktop (≥ 1024px):
 ┌────────┬───────────────────────────┐
-│        │  顶栏（面包屑/搜索/用户）   │
-│ 侧边栏  ├───────────────────────────┤
-│ 208px  │                           │
-│        │        内容区              │
+│        │  Top bar (breadcrumb/     │
+│Sidebar │  search/user)             │
+│ 208px  ├───────────────────────────┤
+│        │                           │
+│        │       Content Area        │
 │        │                           │
 └────────┴───────────────────────────┘
 
-手机（< 768px）：
+Mobile (< 768px):
 ┌────────────────────────────────────┐
-│ ☰  面包屑/标题          搜索  用户  │  ← 顶栏保留，汉堡按钮替代侧边栏
+│ ☰  Breadcrumb/Title     Search User│  ← Top bar retained; hamburger button replaces sidebar
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-| 断点 | 顶栏行为 | 侧边栏行为 | 内容区 |
-|------|---------|-----------|-------|
-| ≥ 1024px | 固定顶部 | 固定展开 | 侧边栏右侧 |
-| 768-1023px | 固定顶部 | 折叠为图标栏 | 图标栏右侧 |
-| < 768px | 固定顶部，增加汉堡按钮 | 完全隐藏 | 全宽 |
+| Breakpoint | Top Bar Behavior | Sidebar Behavior | Content Area |
+|------------|----------------|-----------------|-------------|
+| ≥ 1024px | Fixed top | Fixed expanded | Right of sidebar |
+| 768-1023px | Fixed top | Collapsed to icon bar | Right of icon bar |
+| < 768px | Fixed top, hamburger button added | Fully hidden | Full width |
 
-**顶栏移动端精简规则**：
-- 面包屑 → 仅显示当前页名称（省略路径）
-- 搜索 → 收纳为搜索图标，点击展开搜索框
-- 用户信息 → 仅显示头像，点击展开下拉菜单
-- 通知 → 仅显示图标 + 未读数角标
+**Top Bar Mobile Simplification Rules**:
+- Breadcrumb → Show only current page name (omit path)
+- Search → Collapsed into search icon; click to expand search box
+- User info → Show only avatar; click to expand dropdown menu
+- Notifications → Show only icon + unread count badge
 
-### 4.3 顶栏 + 内容 框架降级（F2）
+### 4.3 Top Bar + Content Framework Degradation (F2)
 
 ```
-桌面（≥ 768px）：
+Desktop (≥ 768px):
 ┌────────────────────────────────────┐
-│  Logo   导航项1  导航项2  导航项3    │  ← 顶栏
+│  Logo   Nav1   Nav2   Nav3        │  ← Top bar
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 
-手机（< 768px）：
+Mobile (< 768px):
 ┌────────────────────────────────────┐
-│  ☰   Logo                         │  ← 汉堡菜单
+│  ☰   Logo                         │  ← Hamburger menu
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-此框架降级最简单：顶栏导航项收纳进汉堡菜单，内容区始终全宽。
+This framework has the simplest degradation: top bar navigation items are collapsed into a hamburger menu, and the content area is always full width.
 
-### 4.4 全屏沉浸 + 浮层导航 框架降级（F5）
+### 4.4 Full-Screen Immersive + Floating Navigation Framework Degradation (F5)
 
-浮层导航在移动端没有足够的视口高度让导航浮于内容之上，必须降级为固定顶栏。
+Floating navigation lacks sufficient viewport height on mobile to overlay content; it must degrade to a fixed top bar.
 
 ```
-桌面（≥ 768px）：
+Desktop (≥ 768px):
 ┌────────────────────────────────────┐
-│  Logo        导航项  导航项  CTA    │  ← 浮层导航（半透明）
-│          全屏内容区                  │
-│        （从视口顶部开始）             │
+│  Logo        Nav   Nav   CTA      │  ← Floating navigation (semi-transparent)
+│         Full-screen content        │
+│       (starts from viewport top)   │
 └────────────────────────────────────┘
 
-手机（< 768px）：
+Mobile (< 768px):
 ┌────────────────────────────────────┐
-│  ☰   Logo              CTA        │  ← 固定顶栏（实体背景）
+│  ☰   Logo              CTA        │  ← Fixed top bar (solid background)
 ├────────────────────────────────────┤
 │                                    │
-│            内容区                    │
-│           width: 100%               │
+│           Content Area             │
+│          width: 100%               │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-| 断点 | 导航行为 | 内容区 | 说明 |
-|------|---------|-------|------|
-| ≥ 768px | 浮层导航，半透明背景 | 从视口顶部开始 | 滚动后导航实体化 |
-| < 768px | 固定顶栏，实体背景 | 从顶栏下方开始 | 导航项收纳为汉堡菜单，CTA 保留 |
+| Breakpoint | Navigation Behavior | Content Area | Notes |
+|------------|-------------------|-------------|-------|
+| ≥ 768px | Floating navigation, semi-transparent background | Starts from viewport top | Navigation solidifies after scroll |
+| < 768px | Fixed top bar, solid background | Starts below top bar | Navigation items collapsed into hamburger menu; CTA retained |
 
-**与 F2 降级的区别**：F2 顶栏始终是实体，降级只是导航项收纳；F5 降级时导航从浮层变为实体顶栏，内容区从视口顶部开始变为从顶栏下方开始——这是一个**定位模式**的变化，不仅仅是收纳。
+**Difference from F2 degradation**: The F2 top bar is always solid; degradation only collapses navigation items. F5 degradation changes the navigation from floating to solid top bar, and the content area shifts from starting at viewport top to starting below the top bar — this is a **positioning mode** change, not merely a collapse.
 
-**关键规则**：
-1. **CTA 必须保留** — 浮层导航右侧的主 CTA 按钮在移动端不可隐藏，这是转化关键
-2. **滚动触发阈值降低** — 移动端滚动触发距离从 64-100px 降为 32-48px，因为移动端视口高度有限
-3. **数据大屏不降级** — F5 在 dashboard 平台不降级，浮层导航保持原生设计
+**Key Rules**:
+1. **CTA must be retained** — The primary CTA button on the right side of floating navigation must not be hidden on mobile; this is critical for conversion
+2. **Reduced scroll trigger threshold** — Mobile scroll trigger distance reduced from 64-100px to 32-48px, due to limited mobile viewport height
+3. **No degradation on data dashboard** — F5 does not degrade on the dashboard platform; floating navigation retains its native design
 
-### 4.5 分栏主从 框架降级（F8）
+### 4.5 Split-Pane Master-Detail Framework Degradation (F8)
 
-分栏在移动端无法并排显示，降级为主栏全屏 + 返回导航。
+Split-pane cannot display side by side on mobile; it degrades to master pane full-screen + back navigation.
 
 ```
-桌面（≥ 1024px）：
+Desktop (≥ 1024px):
 ┌──────────────┬──────────────────────┐
-│   主栏        │      从栏             │
-│  （列表）      │   （详情）            │
+│  Master Pane │     Detail Pane      │
+│   (List)     │    (Detail)          │
 │   320px      │     flex: 1          │
 └──────────────┴──────────────────────┘
 
-手机（< 768px）— 列表视图：
+Mobile (< 768px) — List View:
 ┌────────────────────────────────────┐
-│  ← 返回     标题                    │
+│  ← Back     Title                  │
 ├────────────────────────────────────┤
 │                                    │
-│        主栏全屏（列表）              │
+│    Master Pane Full-Screen (List)  │
 │                                    │
 └────────────────────────────────────┘
 
-手机（< 768px）— 详情视图（点击列表项后）：
+Mobile (< 768px) — Detail View (after clicking a list item):
 ┌────────────────────────────────────┐
-│  ← 返回     详情标题                │
+│  ← Back     Detail Title           │
 ├────────────────────────────────────┤
 │                                    │
-│        从栏全屏（详情）              │
+│   Detail Pane Full-Screen (Detail) │
 │                                    │
 └────────────────────────────────────┘
 ```
 
-| 断点 | 布局行为 | 导航 |
-|------|---------|------|
-| ≥ 1024px | 双栏并排 | 主栏选中项高亮 |
-| 768-1023px | 双栏并排，主栏可折叠 | 主栏折叠为窄栏（48px） |
-| < 768px | 单栏切换 | 列表视图 ↔ 详情视图，顶部返回导航 |
+| Breakpoint | Layout Behavior | Navigation |
+|------------|----------------|------------|
+| ≥ 1024px | Dual-pane side by side | Selected item highlighted in master pane |
+| 768-1023px | Dual-pane side by side; master pane collapsible | Master pane collapses to narrow bar (48px) |
+| < 768px | Single-pane toggle | List view ↔ Detail view; top back navigation |
 
-**关键规则**：
-1. **视图切换动画** — 列表→详情使用 slide-left，详情→列表使用 slide-right，时长 200-300ms
-2. **返回手势** — 移动端支持从左边缘右滑返回列表视图
-3. **列表滚动位置保持** — 从详情返回列表时，恢复之前的滚动位置
-4. **平板过渡** — 768-1023px 主栏可折叠为仅显示图标的窄栏，类似侧边栏折叠态
+**Key Rules**:
+1. **View switch animation** — List→Detail uses slide-left; Detail→List uses slide-right; duration 200-300ms
+2. **Back gesture** — Mobile supports right-swipe from left edge to return to list view
+3. **List scroll position preservation** — When returning from detail to list, restore previous scroll position
+4. **Tablet transition** — 768-1023px master pane can collapse to a narrow bar showing only icons, similar to sidebar collapsed state
 
-### 4.6 框架降级检查清单
+### 4.6 Framework Degradation Checklist
 
-**F1-F4（侧边栏/顶栏框架）**：
-- [ ] 侧边栏在 < 768px 完全隐藏，通过汉堡按钮触发侧滑抽屉
-- [ ] 侧滑抽屉宽度 ≤ 80% 视口，带半透明遮罩
-- [ ] 内容区在侧边栏展开时最小可用宽度 ≥ 320px
-- [ ] 顶栏在移动端精简（面包屑/搜索/用户信息）
-- [ ] 侧边栏展开/折叠状态持久化（localStorage）
-- [ ] 框架降级后，内容区获得全宽，组件降级才有空间执行
+**F1-F4 (Sidebar/Top Bar Frameworks)**:
+- [ ] Sidebar fully hidden at < 768px; triggered via hamburger button → slide-out drawer
+- [ ] Slide-out drawer width ≤ 80% viewport, with semi-transparent overlay
+- [ ] Content area minimum usable width ≥ 320px when sidebar is expanded
+- [ ] Top bar simplified on mobile (breadcrumb/search/user info)
+- [ ] Sidebar expanded/collapsed state persisted (localStorage)
+- [ ] After framework degradation, content area gains full width, enabling component degradation
 
-**F5（全屏沉浸 + 浮层导航）**：
-- [ ] 浮层导航在 < 768px 降级为固定顶栏（实体背景）
-- [ ] CTA 按钮在移动端保留可见
-- [ ] 滚动触发阈值在移动端降低（32-48px）
-- [ ] 数据大屏不降级，浮层导航保持原生设计
+**F5 (Full-Screen Immersive + Floating Navigation)**:
+- [ ] Floating navigation degrades to fixed top bar at < 768px (solid background)
+- [ ] CTA button remains visible on mobile
+- [ ] Scroll trigger threshold reduced on mobile (32-48px)
+- [ ] No degradation on data dashboard; floating navigation retains native design
 
-**F8（分栏主从）**：
-- [ ] 分栏在 < 768px 降级为单栏切换（列表视图 ↔ 详情视图）
-- [ ] 视图切换有方向性动画（slide-left/slide-right）
-- [ ] 移动端支持左边缘右滑返回手势
-- [ ] 从详情返回列表时恢复滚动位置
-- [ ] 768-1023px 主栏可折叠为窄栏
-
----
-
-## 五、导航降级
-
-### 5.1 侧边栏导航
-
-| 桌面（≥ 1024px） | 平板（768-1023px） | 手机（< 768px） |
-|-----------------|-------------------|----------------|
-| 固定侧边栏 | 可折叠侧边栏 | 底部 Tab 或汉堡菜单 |
-
-**决策规则**：
-- 导航项 ≤ 5 个 → 底部 Tab Bar
-- 导航项 > 5 个 → 汉堡菜单 + 侧滑抽屉
-- 二级导航 → 抽屉内展开 / 返回导航模式
-
-> 侧边栏图标层级规则详见 [page-framework.md](page-framework.md)§四。
-
-### 5.2 面包屑
-
-| 桌面 | 移动端 |
-|------|-------|
-| 完整路径：首页 > 项目 > 详情 | 仅显示上一级：< 项目 |
-
-### 5.3 标签页（Tabs）
-
-| 桌面 | 移动端 |
-|------|-------|
-| 横向标签，可容纳 5+ 个 | 可滑动标签，最多显示 3-4 个，其余滑动可见 |
+**F8 (Split-Pane Master-Detail)**:
+- [ ] Split-pane degrades to single-pane toggle at < 768px (List view ↔ Detail view)
+- [ ] View switch has directional animation (slide-left/slide-right)
+- [ ] Mobile supports right-swipe from left edge as back gesture
+- [ ] Scroll position restored when returning from detail to list
+- [ ] 768-1023px master pane can collapse to narrow bar
 
 ---
 
-## 六、多列布局降级
+## 5. Navigation Degradation
 
-### 6.1 通用规则
+### 5.1 Sidebar Navigation
 
-| 桌面列数 | 平板（768-1023px） | 手机（< 768px） |
-|---------|-------------------|----------------|
-| 4 列 | 2 列 | 1 列 |
-| 3 列 | 2 列 | 1 列 |
-| 2 列 | 2 列 | 1 列 |
+| Desktop (≥ 1024px) | Tablet (768-1023px) | Mobile (< 768px) |
+|--------------------|--------------------|--------------------|
+| Fixed sidebar | Collapsible sidebar | Bottom Tab Bar or hamburger menu |
 
-### 6.2 列优先级与排列
+**Decision Rules**:
+- Navigation items ≤ 5 → Bottom Tab Bar
+- Navigation items > 5 → Hamburger menu + slide-out drawer
+- Secondary navigation → Expand within drawer / back navigation pattern
 
-降级为单列时，按内容优先级从上到下排列：
+> For sidebar icon hierarchy rules, see [page-framework.md](page-framework.md)§4.
 
-1. **核心操作区**（主 CTA、关键信息）
-2. **主内容区**（数据展示、列表）
-3. **辅助信息区**（侧边栏、次要信息）
-4. **补充区**（相关推荐、页脚）
+### 5.2 Breadcrumb
 
-**规则**：降级后的纵向排列顺序 ≠ 桌面的从左到右顺序。按用户任务流重新排列。
+| Desktop | Mobile |
+|---------|--------|
+| Full path: Home > Project > Detail | Show only parent level: < Project |
 
----
+### 5.3 Tabs
 
-## 七、大屏适配（xl+ 场景）
-
-大屏适配不是"放大"，而是**利用空间增加信息密度**。
-
-### 7.1 内容最大宽度约束
-
-| 内容类型 | 最大宽度 | 超出处理 |
-|---------|---------|---------|
-| 文字阅读区（文章、文档） | 800-960px | 居中，两侧留白 |
-| 数据表格 | 100% | 利用全宽，增加可见列数 |
-| 表单 | 640-800px | 居中或左对齐，不拉伸输入框 |
-| 卡片网格 | 100% | 增加每行卡片数（4 → 5 → 6） |
-
-### 7.2 信息密度提升
-
-| 组件 | 桌面标准 | 大屏增强 |
-|------|---------|---------|
-| 表格行高 | 标准 54px / 紧凑 40px | 可选紧凑模式，同屏显示更多行 |
-| 侧边栏 | 单级 | 可展开二级导航常驻 |
-| 统计卡片 | 3-4 列 | 5-6 列 |
-| 图表 | 单图 | 多图并排对比 |
+| Desktop | Mobile |
+|---------|--------|
+| Horizontal tabs, accommodating 5+ items | Scrollable tabs, showing 3-4 items at most; remaining items accessible by scrolling |
 
 ---
 
-## 八、降级检查清单
+## 6. Multi-Column Layout Degradation
 
-### 数据表格
+### 6.1 General Rules
 
-- [ ] < 768px 表格有明确降级方案（行转卡 / 横向滚动 / 行展开）
-- [ ] 列隐藏不导致信息丢失（用户有路径获取完整数据）
-- [ ] 操作列已收纳为"更多"菜单
-- [ ] 分页器已简化为"加载更多"或无限滚动
-- [ ] 首列固定（横向滚动方案时）
+| Desktop Columns | Tablet (768-1023px) | Mobile (< 768px) |
+|----------------|--------------------|--------------------|
+| 4 columns | 2 columns | 1 column |
+| 3 columns | 2 columns | 1 column |
+| 2 columns | 2 columns | 1 column |
 
-### 页面框架
+### 6.2 Column Priority and Ordering
 
-> 详见 §4.6 框架降级检查清单（按 F1-F4 / F5 / F8 分组）。
+When degrading to a single column, arrange by content priority from top to bottom:
 
-### 表单
+1. **Core action area** (primary CTA, critical information)
+2. **Primary content area** (data display, lists)
+3. **Auxiliary information area** (sidebar, secondary information)
+4. **Supplementary area** (related recommendations, footer)
 
-- [ ] < 768px Label 全部上置
-- [ ] < 768px 表单单列布局
-- [ ] CTA 按钮移动端全宽
-- [ ] 输入框不被虚拟键盘遮挡
+**Rule**: The vertical ordering after degradation ≠ the desktop left-to-right order. Reorder based on the user's task flow.
 
-### 导航
+---
 
-- [ ] 侧边栏在 < 768px 降级为底部 Tab 或汉堡菜单
-- [ ] 面包屑在 < 768px 仅显示上一级
-- [ ] 标签页在 < 768px 可横向滑动
+## 7. Large Screen Adaptation (xl+ Scenarios)
 
-### 通用
+Large screen adaptation is not "scaling up" — it is **leveraging space to increase information density**.
 
-- [ ] 多列布局在 < 768px 降级为单列
-- [ ] 降级后内容按优先级重新排列（非简单从左到右堆叠）
-- [ ] 触摸目标 ≥ 44×44px
-- [ ] 无 Hover-only 交互（移动端无 hover）
-- [ ] 大屏内容有最大宽度约束（文字阅读区不超宽）
+### 7.1 Content Max-Width Constraints
+
+| Content Type | Max Width | Overflow Handling |
+|-------------|-----------|------------------|
+| Text reading area (articles, documents) | 800-960px | Centered, whitespace on both sides |
+| Data table | 100% | Utilize full width; increase visible column count |
+| Form | 640-800px | Centered or left-aligned; do not stretch inputs |
+| Card grid | 100% | Increase cards per row (4 → 5 → 6) |
+
+### 7.2 Information Density Increase
+
+| Component | Desktop Standard | Large Screen Enhancement |
+|-----------|-----------------|------------------------|
+| Table row height | Standard 54px / Compact 40px | Optional compact mode; more rows visible per screen |
+| Sidebar | Single level | Expandable second-level navigation persistent |
+| Statistic cards | 3-4 columns | 5-6 columns |
+| Charts | Single chart | Multiple charts side by side for comparison |
+
+---
+
+## 8. Degradation Checklist
+
+### Data Tables
+
+- [ ] < 768px table has a clear degradation approach (Row-to-Card / Horizontal Scroll / Row Expansion)
+- [ ] Column hiding does not cause information loss (users have a path to access complete data)
+- [ ] Action column collapsed into "More" menu
+- [ ] Paginator simplified to "Load More" or infinite scroll
+- [ ] First column sticky (for Horizontal Scroll approach)
+
+### Page Framework
+
+> See §4.6 Framework Degradation Checklist (grouped by F1-F4 / F5 / F8).
+
+### Forms
+
+- [ ] < 768px all Labels top-aligned
+- [ ] < 768px form uses single-column layout
+- [ ] CTA button full-width on mobile
+- [ ] Input not occluded by virtual keyboard
+
+### Navigation
+
+- [ ] Sidebar degrades to Bottom Tab Bar or hamburger menu at < 768px
+- [ ] Breadcrumb shows only parent level at < 768px
+- [ ] Tabs horizontally scrollable at < 768px
+
+### General
+
+- [ ] Multi-column layout degrades to single column at < 768px
+- [ ] Content reordered by priority after degradation (not simply stacked left-to-right)
+- [ ] Touch targets ≥ 44×44px
+- [ ] No hover-only interactions (mobile has no hover)
+- [ ] Large screen content has max-width constraints (text reading area not over-wide)

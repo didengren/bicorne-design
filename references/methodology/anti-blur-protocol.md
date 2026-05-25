@@ -1,93 +1,93 @@
-# 反糊化协议 (Anti-Blur Protocol)
+# Anti-Blur Protocol
 
-> 融合 admin-design-spec 的反糊化协议。防止 AI 平均化审美侵蚀设计意图。
-
----
-
-## 一、什么是设计「糊化」
-
-AI 设计糊化（AI Design Blur）指：因大量使用 AI 生成内容，导致设计失去独特审美立场。
-
-**表现为**：
-- 颜色过于安全（大量灰色、浅蓝色）
-- 布局过于对称（完美居中、等距排列）
-- 视觉节奏缺乏张力（无对比、无意外）
-- 字重选择趋同（全部 400/500，无极端搭配）
-- 间距过于均匀（缺乏呼吸感的戏剧性变化）
+> Merged from admin-design-spec's anti-blur protocol. Prevents AI-averaged aesthetics from eroding design intent.
 
 ---
 
-## 二、设立审美锚点
+## 1 · What Is Design "Blur"
 
-在项目启动时选定 3-5 个「审美参照物」（非竞品）。
+AI Design Blur refers to: the loss of a distinct aesthetic stance in design caused by heavy reliance on AI-generated content.
 
-**可以是**：
-- 艺术作品（如蒙德里安的几何构成、安藤忠雄的清水混凝土）
-- 平面设计（如瑞士国际主义、日本极简主义）
-- 品牌案例（如 Linear 的暗色工程美学、Stripe 的轻盈奢华）
-
-**使用方式**：
-- 每次AI产出后与锚点对照：「这个设计有锚点的气质吗？」
-- 如果答案是否定的，需要调整
+**Symptoms**:
+- Overly safe colors (excessive grays, light blues)
+- Overly symmetric layouts (perfect centering, equal spacing)
+- Visual rhythm lacking tension (no contrast, no surprise)
+- Convergent font-weight choices (all 400/500, no extreme pairings)
+- Overly uniform spacing (no dramatic variation for breathing room)
 
 ---
 
-## 三、「为什么」三问协议
+## 2 · Establish Aesthetic Anchors
 
-对每个 AI 产出的视觉决策，回答三个问题：
+Select 3-5 "aesthetic references" (not competitors) at project kickoff.
 
-1. **为什么选这个颜色？**
-   - 可接受的回答：因为它传达了 X 情感 / 因为它与品牌色 Y 形成对比 / 因为它在暗色背景上达到 4.5:1 对比度
-   - 不可接受的回答：因为看起来不错 / 因为 AI 生成的 / 因为是默认值
+**Can be**:
+- Artworks (e.g., Mondrian's geometric compositions, Tadao Ando's exposed concrete)
+- Graphic design movements (e.g., Swiss International Style, Japanese Minimalism)
+- Brand cases (e.g., Linear's dark engineering aesthetic, Stripe's light luxury)
 
-2. **为什么用这个间距？**
-   - 可接受的回答：因为这里需要视觉呼吸 / 因为 24px 是卡片内边距的标准值 / 因为需要与上方标题拉开层级
-   - 不可接受的回答：因为看起来均匀 / 因为 16px 是常用值
-
-3. **为什么这个元素在这里？**
-   - 可接受的回答：因为用户的视觉路径从左上到右下 / 因为 CTA 需要在首屏可见 / 因为信息密度需要在这里降低
-   - 不可接受的回答：因为这样对称 / 因为通常放在这里
-
-**判定规则**：如果无法回答任一问题，该设计决策必须重新审视或替换。
+**Usage**:
+- After each AI output, compare against anchors: "Does this design carry the anchor's character?"
+- If the answer is no, adjust
 
 ---
 
-## 四、主动制造「张力」
+## 3 · The "Why" Three-Question Protocol
 
-刻意在安全区外做尝试，但张力不是破坏规则，而是在规则内找到审美边界的极限。
+For every visual decision in AI output, answer three questions:
 
-### 张力制造手段
+1. **Why this color?**
+   - Acceptable: Because it conveys emotion X / Because it contrasts with brand color Y / Because it achieves 4.5:1 contrast on a dark background
+   - Unacceptable: Because it looks fine / Because AI generated it / Because it's the default
 
-| 手段 | 安全区 | 张力区 | 示例 |
-|------|--------|--------|------|
-| 字重搭配 | 全部 400 | 100 + 900 | Stripe: sohne-var 300 + 700 |
-| 间距对比 | 全部 16px | 4px + 96px | Linear: 紧凑标签 + 大段留白 |
-| 颜色纯度 | 全部灰度 | 纯色 + 无彩色 | Nike: 纯黑白 + 零彩色 UI |
-| 比例失调 | 1:1 对称 | 1:3 不对称 | Vercel: 大标题 + 小导航 |
-| 圆角对比 | 全部 8px | 0px + 9999px | Nike: 零圆角卡片 + 药丸 CTA |
+2. **Why this spacing?**
+   - Acceptable: Because visual breathing is needed here / Because 24px is the standard card padding / Because hierarchy separation from the title above is needed
+   - Unacceptable: Because it looks even / Because 16px is a common value
 
-### 张力检查清单
+3. **Why is this element here?**
+   - Acceptable: Because the user's visual path goes top-left to bottom-right / Because the CTA must be visible above the fold / Because information density needs to decrease here
+   - Unacceptable: Because it's symmetric / Because it's usually placed here
 
-- [ ] 是否有至少一处极端字重对比（差值 ≥ 300）？
-- [ ] 是否有至少一处极端间距对比（最小 vs 最大 ≥ 4 倍）？
-- [ ] 是否有至少一处颜色纯度对比（纯色 vs 无彩色）？
-- [ ] 是否有至少一处比例不对称？
-- [ ] 整体视觉节奏是否有"快慢"变化而非均匀？
+**Rule**: If any question cannot be answered, that design decision must be reconsidered or replaced.
 
 ---
 
-## 五、糊化风险评估
+## 4 · Deliberately Create "Tension"
 
-对每个设计产出，评估糊化风险等级：
+Make deliberate attempts outside the safe zone. Tension is not breaking rules — it is finding the limit of the aesthetic boundary within the rules.
 
-| 风险等级 | 特征 | 处理方式 |
-|---------|------|---------|
-| 🟢 低 | 每个决策都可陈述意图，有明确的审美锚点参照 | 通过 |
-| 🟡 中 | 部分决策意图模糊，但整体方向清晰 | 针对模糊决策重新审视 |
-| 🔴 高 | 大量决策无法陈述意图，缺乏独特审美立场 | 全部重新设计 |
+### Tension Creation Methods
+
+| Method | Safe Zone | Tension Zone | Example |
+|--------|-----------|--------------|---------|
+| Font-weight pairing | All 400 | 100 + 900 | Stripe: sohne-var 300 + 700 |
+| Spacing contrast | All 16px | 4px + 96px | Linear: compact labels + large whitespace |
+| Color purity | All grayscale | Pure color + achromatic | Nike: pure black/white + zero-color UI |
+| Proportion asymmetry | 1:1 symmetric | 1:3 asymmetric | Vercel: large title + small nav |
+| Border-radius contrast | All 8px | 0px + 9999px | Nike: zero-radius cards + pill CTA |
+
+### Tension Checklist
+
+- [ ] Is there at least one extreme font-weight contrast (difference ≥ 300)?
+- [ ] Is there at least one extreme spacing contrast (min vs max ≥ 4×)?
+- [ ] Is there at least one color purity contrast (pure color vs achromatic)?
+- [ ] Is there at least one proportional asymmetry?
+- [ ] Does the overall visual rhythm have "fast and slow" variation rather than uniformity?
 
 ---
 
-## 六、反糊化声明
+## 5 · Blur Risk Assessment
 
-本 skill 中所有设计产物均需经过人工审美校验阶段。AI 辅助生成的变体须在「意图可陈述」的前提下被接受或拒绝，禁止以「AI 生成」为由绕过审美判断层。设计师需对每一像素的存在负责。
+For each design output, assess the blur risk level:
+
+| Risk Level | Characteristics | Action |
+|-----------|----------------|--------|
+| 🟢 Low | Every decision has a stated intent; clear aesthetic anchor reference | Pass |
+| 🟡 Medium | Some decisions have vague intent, but overall direction is clear | Reconsider vague decisions |
+| 🔴 High | Many decisions cannot state intent; lacks a distinct aesthetic stance | Redesign entirely |
+
+---
+
+## 6 · Anti-Blur Declaration
+
+All design artifacts in this skill must undergo a human aesthetic validation stage. AI-assisted variants may only be accepted or rejected on the premise that "intent can be stated." Using "AI generated" as a reason to bypass the aesthetic judgment layer is prohibited. Designers are responsible for the existence of every pixel.

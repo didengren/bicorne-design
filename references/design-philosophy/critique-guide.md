@@ -1,161 +1,161 @@
-# 专家 5 维度评审
+# Expert 5-Dimension Review
 
-> 5 维度设计评审体系，用于 Phase 3 变体评分和 Phase 5 质量打磨。变体阶段评审用 `review-scoring.md`。
-
----
-
-## 五个维度
-
-### 1. 视觉层级 (Visual Hierarchy)
-
-**评估内容**: 信息是否有明确的优先级引导
-
-| 分数 | 标准 |
-|------|------|
-| 5 | 用户视线自然从最重要到最不重要流动，无需思考 |
-| 4 | 大部分信息层级清晰，少量区域需优化 |
-| 3 | 主要信息可辨识，但次要信息干扰较多 |
-| 2 | 信息层级混乱，用户需费力寻找关键信息 |
-| 1 | 无明确层级，所有信息视觉权重相同 |
-
-**检查项**：
-- [ ] 标题与正文有明确的大小/字重对比
-- [ ] CTA 比周围元素更突出
-- [ ] 信息分组通过间距/背景/边框清晰区分
-- [ ] 视觉焦点引导用户视线向下移动
-
-### 2. 信息架构 (Information Architecture)
-
-**评估内容**: 内容的组织是否逻辑清晰
-
-| 分数 | 标准 |
-|------|------|
-| 5 | 内容组织直觉化，用户无需思考即可找到目标 |
-| 4 | 内容组织基本清晰，少量路径可优化 |
-| 3 | 内容组织可理解，但需要学习成本 |
-| 2 | 内容组织混乱，用户需反复尝试 |
-| 1 | 内容无组织，用户无法找到目标 |
-
-**检查项**：
-- [ ] 导航层级不超过 2 级
-- [ ] 同类信息归组，不同类信息分离
-- [ ] 用户 3 秒内可判断产品/页面是什么
-- [ ] 关键路径 CTA 在首屏可见
-
-### 3. 情感共鸣 (Emotional Resonance)
-
-**评估内容**: 设计是否传达了正确的情感调性
-
-| 分数 | 标准 |
-|------|------|
-| 5 | 设计精准传达品牌情感，用户产生共鸣 |
-| 4 | 设计基本传达品牌情感，少量偏差 |
-| 3 | 设计传达了部分情感，但不够精准 |
-| 2 | 设计情感调性模糊，无法产生共鸣 |
-| 1 | 设计传达了错误的情感 |
-
-**检查项**：
-- [ ] 颜色选择与品牌调性一致
-- [ ] 字体选择传达了正确的性格
-- [ ] 图片/插图风格与品牌一致
-- [ ] 整体氛围与目标用户期望匹配
-
-### 4. 认知负荷 (Cognitive Load)
-
-**评估内容**: 用户完成任务需要投入多少认知资源
-
-| 分数 | 标准 |
-|------|------|
-| 5 | 用户可直觉操作，零学习成本 |
-| 4 | 用户需少量学习，操作路径清晰 |
-| 3 | 用户需一定学习，但可完成 |
-| 2 | 用户学习成本高，需反复尝试 |
-| 1 | 用户无法理解如何操作 |
-
-**检查项**：
-- [ ] 每屏核心操作不超过 3 个
-- [ ] 操作流程不超过 5 步
-- [ ] 错误状态有明确的恢复路径
-- [ ] 复杂操作有引导/提示
-
-### 5. 技术品质 (Technical Quality)
-
-**评估内容**: 设计的技术实现质量
-
-| 分数 | 标准 |
-|------|------|
-| 5 | 像素级精确，无任何技术瑕疵 |
-| 4 | 整体精确，少量可忽略的瑕疵 |
-| 3 | 基本可用，但存在明显技术问题 |
-| 2 | 技术问题影响使用体验 |
-| 1 | 技术问题导致无法使用 |
-
-**检查项**：
-- [ ] 颜色对比度 ≥ 4.5:1
-- [ ] 所有交互元素有焦点状态
-- [ ] 响应式在 5 个断点正常
-- [ ] 动画帧率 ≥ 60fps
-- [ ] 图片无压缩失真
+> 5-dimension design review framework, used for Phase 3 variant scoring and Phase 5 quality polish. For variant-stage review, use `review-scoring.md`.
 
 ---
 
-## 综合评分
+## Five Dimensions
 
-| 维度 | 权重 | 分数(1-5) | 加权分 |
-|------|------|----------|--------|
-| 视觉层级 | 25% | | |
-| 信息架构 | 25% | | |
-| 情感共鸣 | 20% | | |
-| 认知负荷 | 20% | | |
-| 技术品质 | 10% | | |
-| **总计** | **100%** | | **/5** |
+### 1. Visual Hierarchy
 
-### 评级标准
+**Evaluates**: Whether information has clear priority guidance
 
-| 综合分 | 评级 | 说明 |
-|--------|------|------|
-| 4.5-5.0 | ⭐⭐⭐⭐⭐ | 卓越 — 可作为标杆案例 |
-| 3.5-4.4 | ⭐⭐⭐⭐ | 优秀 — 小幅优化即可上线 |
-| 2.5-3.4 | ⭐⭐⭐ | 合格 — 需要针对性优化 |
-| 1.5-2.4 | ⭐⭐ | 不足 — 需要大幅修改 |
-| 1.0-1.4 | ⭐ | 失败 — 需要重新设计 |
+| Score | Criteria |
+|-------|----------|
+| 5 | User gaze naturally flows from most to least important, without thinking |
+| 4 | Most information hierarchy is clear, minor areas need optimization |
+| 3 | Primary information is identifiable, but secondary information causes interference |
+| 2 | Information hierarchy is chaotic, user must struggle to find key information |
+| 1 | No clear hierarchy, all information has equal visual weight |
+
+**Checklist**:
+- [ ] Title and body text have clear size/weight contrast
+- [ ] CTA stands out more than surrounding elements
+- [ ] Information groups are clearly separated by spacing/background/borders
+- [ ] Visual focal points guide the user's gaze downward
+
+### 2. Information Architecture
+
+**Evaluates**: Whether content organization is logically clear
+
+| Score | Criteria |
+|-------|----------|
+| 5 | Content organization is intuitive, user finds targets without thinking |
+| 4 | Content organization is mostly clear, minor paths need optimization |
+| 3 | Content organization is understandable, but requires learning effort |
+| 2 | Content organization is chaotic, user must try repeatedly |
+| 1 | Content has no organization, user cannot find targets |
+
+**Checklist**:
+- [ ] Navigation depth does not exceed 2 levels
+- [ ] Similar information is grouped, different information is separated
+- [ ] User can determine what the product/page is within 3 seconds
+- [ ] Critical path CTA is visible above the fold
+
+### 3. Emotional Resonance
+
+**Evaluates**: Whether the design conveys the correct emotional tone
+
+| Score | Criteria |
+|-------|----------|
+| 5 | Design precisely conveys brand emotion, user resonates |
+| 4 | Design mostly conveys brand emotion, minor deviations |
+| 3 | Design conveys some emotion, but not precisely enough |
+| 2 | Design emotional tone is vague, no resonance possible |
+| 1 | Design conveys the wrong emotion |
+
+**Checklist**:
+- [ ] Color choices are consistent with brand tone
+- [ ] Font choices convey the correct personality
+- [ ] Image/illustration style is consistent with the brand
+- [ ] Overall atmosphere matches target user expectations
+
+### 4. Cognitive Load
+
+**Evaluates**: How much cognitive resource the user must invest to complete tasks
+
+| Score | Criteria |
+|-------|----------|
+| 5 | User can operate intuitively, zero learning cost |
+| 4 | User needs minimal learning, operation path is clear |
+| 3 | User needs moderate learning, but can complete tasks |
+| 2 | User learning cost is high, must try repeatedly |
+| 1 | User cannot understand how to operate |
+
+**Checklist**:
+- [ ] No more than 3 core actions per screen
+- [ ] Operation flow does not exceed 5 steps
+- [ ] Error states have clear recovery paths
+- [ ] Complex operations have guidance/prompts
+
+### 5. Technical Quality
+
+**Evaluates**: Technical implementation quality of the design
+
+| Score | Criteria |
+|-------|----------|
+| 5 | Pixel-perfect, no technical flaws |
+| 4 | Overall precise, negligible minor flaws |
+| 3 | Basically usable, but obvious technical issues exist |
+| 2 | Technical issues affect user experience |
+| 1 | Technical issues make it unusable |
+
+**Checklist**:
+- [ ] Color contrast ratio ≥ 4.5:1
+- [ ] All interactive elements have focus states
+- [ ] Responsive layout works at 5 breakpoints
+- [ ] Animation frame rate ≥ 60fps
+- [ ] Images have no compression artifacts
 
 ---
 
-## 评审报告格式
+## Composite Scoring
+
+| Dimension | Weight | Score (1-5) | Weighted |
+|-----------|--------|-------------|----------|
+| Visual Hierarchy | 25% | | |
+| Information Architecture | 25% | | |
+| Emotional Resonance | 20% | | |
+| Cognitive Load | 20% | | |
+| Technical Quality | 10% | | |
+| **Total** | **100%** | | **/5** |
+
+### Rating Scale
+
+| Composite Score | Rating | Description |
+|-----------------|--------|-------------|
+| 4.5-5.0 | ⭐⭐⭐⭐⭐ | Exceptional — benchmark-worthy |
+| 3.5-4.4 | ⭐⭐⭐⭐ | Excellent — ready to ship with minor polish |
+| 2.5-3.4 | ⭐⭐⭐ | Acceptable — needs targeted optimization |
+| 1.5-2.4 | ⭐⭐ | Insufficient — requires major revision |
+| 1.0-1.4 | ⭐ | Failed — needs redesign |
+
+---
+
+## Review Report Format
 
 ```
-## 设计评审报告
+## Design Review Report
 
-**项目**: [项目名]
-**评审者**: [姓名]
-**日期**: YYYY-MM-DD
+**Project**: [Project Name]
+**Reviewer**: [Name]
+**Date**: YYYY-MM-DD
 
-### 维度评分
+### Dimension Scores
 
-| 维度 | 分数 | 说明 |
-|------|------|------|
-| 视觉层级 | [x]/5 | [具体说明] |
-| 信息架构 | [x]/5 | [具体说明] |
-| 情感共鸣 | [x]/5 | [具体说明] |
-| 认知负荷 | [x]/5 | [具体说明] |
-| 技术品质 | [x]/5 | [具体说明] |
+| Dimension | Score | Notes |
+|-----------|-------|-------|
+| Visual Hierarchy | [x]/5 | [Specific notes] |
+| Information Architecture | [x]/5 | [Specific notes] |
+| Emotional Resonance | [x]/5 | [Specific notes] |
+| Cognitive Load | [x]/5 | [Specific notes] |
+| Technical Quality | [x]/5 | [Specific notes] |
 
-### 综合评分: [x]/5 — [评级]
+### Composite Score: [x]/5 — [Rating]
 
-### 关键发现
+### Key Findings
 
-**优势**:
-1. [具体优势]
-2. [具体优势]
+**Strengths**:
+1. [Specific strength]
+2. [Specific strength]
 
-**问题**:
-1. [具体问题] → [建议修复方式]
-2. [具体问题] → [建议修复方式]
+**Issues**:
+1. [Specific issue] → [Suggested fix]
+2. [Specific issue] → [Suggested fix]
 
-### 优先修复项
+### Priority Fixes
 
-1. [最优先修复的问题]
-2. [次优先修复的问题]
-3. [第三优先修复的问题]
+1. [Highest priority fix]
+2. [Second priority fix]
+3. [Third priority fix]
 ```

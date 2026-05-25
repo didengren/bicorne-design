@@ -1,233 +1,233 @@
-# UI 状态设计规范
+# UI States Design Specification
 
-> 空状态（Empty State）与加载状态（Loading State）的设计规范。
-> 两者同属"易遗漏的非默认 UI 状态"——用户首次接触或等待时最先看到的界面，却最容易被忽略。
-> 多端通用：桌面 Web / 移动端 Web / 原生 App / 数据大屏。
-
----
-
-## 一、空状态（Empty State）
-
-### 1.1 四要素
-
-空状态由四个要素构成，缺一不可：
-
-| 要素 | 作用 | 示例 |
-|------|------|------|
-| **图标** | 视觉锚点，快速传达"无数据"语义 | 空文件夹、空信封、搜索无结果图标 |
-| **标题** | 一句话说明当前状态 | "暂无项目" / "未找到匹配结果" |
-| **说明** | 解释原因或补充上下文 | "点击下方按钮创建你的第一个项目" |
-| **CTA** | 引导用户走出空状态的行动按钮 | "创建项目" / "重新搜索" |
-
-**四要素优先级**：图标 + 标题 + CTA 为必要项，说明为可选项（当标题已足够清晰时可省略）。
-
-### 1.2 场景变体
-
-不同空状态场景的四要素侧重不同：
-
-| 场景 | 图标 | 标题 | 说明 | CTA | 典型位置 |
-|------|------|------|------|-----|---------|
-| **首次使用** | 引导性插图 | "开始你的第一步" | 功能价值描述 | "立即创建" | 列表/表格主体区 |
-| **数据清空** | 中性图标 | "暂无数据" | 可选：上次操作提示 | "添加数据" | 列表/表格主体区 |
-| **搜索无结果** | 搜索图标 | "未找到匹配结果" | 建议调整筛选条件 | "清除筛选" | 搜索结果区 |
-| **权限不足** | 锁定图标 | "无访问权限" | 联系管理员说明 | "申请权限" | 页面主体区 |
-| **网络异常** | 断连图标 | "无法加载数据" | 建议检查网络 | "重试" | 页面主体区 |
-| **过滤无结果** | 筛选图标 | "没有符合条件的数据" | 建议调整筛选 | "重置筛选" | 列表主体区 |
-
-### 1.3 多平台适配
-
-#### 桌面 Web
-
-- 完整四要素：插图 + 标题 + 说明 + CTA
-- 插图尺寸：120-200px
-- 垂直居中于内容区域，左右留白充足
-- CTA 使用品牌主色按钮
-
-#### 移动端 Web / App
-
-- 精简为三要素：图标 + 标题 + CTA（说明可选）
-- 图标尺寸：80-120px
-- 屏幕纵向空间有限，避免过长说明文案
-- CTA 使用全宽按钮或底部固定按钮
-
-#### 数据大屏
-
-- 强调数据维度说明 + 刷新 CTA
-- 图标简化为线框图标（远距离可识别）
-- 配色与主题一致，避免空状态区域过于突兀
-- 可考虑自动刷新机制（每 30s 重试），减少用户手动操作
-
-### 1.4 设计规则
-
-1. **空状态不是错误状态** — 语气保持中性或积极，避免使用"失败""错误"等负面词汇
-2. **CTA 必须可操作** — 按钮指向具体动作，禁止使用"确定""关闭"等无意义 CTA
-3. **避免纯文字** — 无图标的纯文字空状态缺乏视觉锚点，用户容易忽略
-4. **与页面布局对齐** — 空状态占据内容区域，不是覆盖层
-5. **文案与场景匹配** — 首次使用用引导语气，数据清空用中性语气，权限不足用说明语气
-6. **图标风格一致** — 空状态图标与整体图标系统风格统一（线框/填充/插画）
-
-### 1.5 与 Ant Design 对齐
-
-| Ant Design 组件 | 对应规范 | 注意事项 |
-|----------------|---------|---------|
-| `Empty` | 四要素的图标+标题+说明 | Ant Design `description` 对应"标题+说明"，需补充 CTA |
-| `Result` | 权限不足/网络异常场景 | `status=403/500` + `extra` 作为 CTA |
-| `Table` 的 `locale.emptyText` | 表格空状态 | 默认仅文字，需自定义渲染四要素 |
+> Design specification for Empty State and Loading State.
+> Both belong to "easily overlooked non-default UI states" — the first interface users see on initial contact or while waiting, yet the most likely to be neglected.
+> Multi-platform: Desktop Web / Mobile Web / Native App / Data Dashboard.
 
 ---
 
-## 二、加载状态（Loading State）
+## 1. Empty State
 
-### 2.1 Skeleton vs Spinner 判断规则
+### 1.1 Four Elements
 
-| 维度 | Skeleton（骨架屏） | Spinner（旋转指示器） |
-|------|-------------------|---------------------|
-| **内容结构** | 可预测（已知布局） | 不可预测（未知布局） |
-| **等待时长** | > 300ms | < 300ms 或不确定 |
-| **区域大小** | 大面积（卡片、列表、表格） | 小面积（按钮、图标旁） |
-| **信息价值** | 骨架暗示即将出现的内容结构 | 仅表示"正在处理" |
-| **用户感知** | 减少布局跳动（CLS 优化） | 轻量，不干扰当前内容 |
+An empty state consists of four elements, none of which should be omitted:
 
-#### 决策树
+| Element | Purpose | Example |
+|---------|---------|---------|
+| **Icon** | Visual anchor, quickly conveys "no data" semantics | Empty folder, empty envelope, no-search-result icon |
+| **Title** | One-sentence description of the current state | "No projects yet" / "No matching results found" |
+| **Description** | Explains the reason or provides additional context | "Click the button below to create your first project" |
+| **CTA** | Action button guiding users out of the empty state | "Create Project" / "Search Again" |
 
-```
-需要加载指示？
-├── 内容区域布局是否可预测？
-│   ├── 是 → 区域面积是否 ≥ 一个卡片？
-│   │   ├── 是 → Skeleton
-│   │   └── 否 → Spinner（小区域骨架屏无意义）
-│   └── 否 → Spinner
-├── 是否为按钮/操作反馈？
-│   └── 是 → Spinner（按钮内）或 Progress Bar
-└── 是否为全页面加载？
-    └── 是 → Skeleton（页面级骨架屏）
-```
+**Element priority**: Icon + Title + CTA are required; Description is optional (can be omitted when the title is sufficiently clear).
 
-### 2.2 渐进式加载策略
+### 1.2 Scenario Variants
 
-对于含图片的内容区域，采用三阶段渐进加载：
+The four elements are emphasized differently across empty state scenarios:
 
-```
-阶段 1: Skeleton（0-300ms）
-  → 显示内容结构骨架
+| Scenario | Icon | Title | Description | CTA | Typical Location |
+|----------|------|-------|-------------|-----|-----------------|
+| **First-time use** | Guiding illustration | "Take your first step" | Feature value description | "Create Now" | List/table main area |
+| **Data cleared** | Neutral icon | "No data" | Optional: last action hint | "Add Data" | List/table main area |
+| **No search results** | Search icon | "No matching results found" | Suggest adjusting filters | "Clear Filters" | Search results area |
+| **Insufficient permissions** | Lock icon | "No access" | Contact admin instructions | "Request Access" | Page main area |
+| **Network error** | Disconnected icon | "Unable to load data" | Suggest checking network | "Retry" | Page main area |
+| **No filter results** | Filter icon | "No data matches the criteria" | Suggest adjusting filters | "Reset Filters" | List main area |
 
-阶段 2: 低质图/占位色（300ms-数据到达）
-  → 图片位置显示品牌色块或极低分辨率图
+### 1.3 Multi-Platform Adaptation
 
-阶段 3: 高清图（数据到达后）
-  → 淡入替换为高清图
-```
+#### Desktop Web
 
-**最小展示时间**：Skeleton 至少展示 300ms，避免数据快速返回时的闪烁（布局抖动 + 视觉跳跃）。
+- Complete four elements: illustration + title + description + CTA
+- Illustration size: 120-200px
+- Vertically centered within the content area, ample horizontal whitespace
+- CTA uses brand primary color button
 
-### 2.3 多平台差异
+#### Mobile Web / App
 
-#### 桌面 Web
+- Simplified to three elements: icon + title + CTA (description optional)
+- Icon size: 80-120px
+- Limited vertical screen space; avoid overly long description text
+- CTA uses full-width button or bottom-fixed button
 
-- 页面级加载：Skeleton（侧边栏 + 主内容区各自骨架）
-- 组件级加载：Skeleton 或 Spinner，按决策树选择
-- 按钮加载：Spinner 内嵌 + 按钮宽度锁定（防止布局跳动）
-- 网络通常稳定，Skeleton 使用频率低于移动端
+#### Data Dashboard
 
-#### 移动端 Web / App
+- Emphasize data dimension description + refresh CTA
+- Icons simplified to line icons (identifiable from a distance)
+- Color scheme consistent with the theme; avoid the empty state area being too conspicuous
+- Consider auto-refresh mechanism (retry every 30s) to reduce manual user action
 
-- **Skeleton 优先**：移动网络波动大，骨架屏减少白屏焦虑
-- 列表/Feed 加载：Skeleton 卡片占位
-- 下拉刷新：平台原生指示器优先（iOS UIRefreshControl / Android SwipeRefreshLayout）
-- 按钮加载：Spinner + 按钮禁用 + 文案变更（"提交中..."）
-- 分页加载：底部 Spinner + "加载更多"文字
+### 1.4 Design Rules
 
-#### 数据大屏
+1. **Empty state is not an error state** — Maintain a neutral or positive tone; avoid negative words like "failed" or "error"
+2. **CTA must be actionable** — Button points to a specific action; prohibit meaningless CTAs like "OK" or "Close"
+3. **Avoid text-only** — A text-only empty state without an icon lacks a visual anchor and is easily overlooked
+4. **Align with page layout** — Empty state occupies the content area, not an overlay
+5. **Copy matches the scenario** — First-time use uses a guiding tone, data cleared uses a neutral tone, insufficient permissions uses an explanatory tone
+6. **Consistent icon style** — Empty state icons should be unified with the overall icon system style (line/filled/illustration)
 
-- **分区块 Skeleton**：大屏数据量大，按数据模块分块加载
-- 骨架屏需与最终布局精确匹配（大屏布局跳动影响远距离观看体验）
-- 避免全屏 Spinner — 大屏白屏 + 旋转器 = 运维恐慌
-- 可考虑数据占位：无实时数据时显示"最近一次数据" + "数据更新中"标识
+### 1.5 Ant Design Alignment
 
-#### 原生 App
-
-- **平台原生加载指示器优先**：iOS `UIActivityIndicator` / Android `ProgressBar`
-- 页面级加载：平台原生 Skeleton 或自定义骨架屏
-- 与平台 HIG 保持一致（iOS 用细线条骨架，Android 用色块骨架）
-
-### 2.4 加载状态设计规则
-
-1. **绝不白屏** — 任何超过 100ms 的等待都必须有视觉反馈
-2. **布局稳定** — 加载指示器占据的空间 = 内容加载后的空间（CLS = 0）
-3. **进度可感知** — 能用 Progress Bar 就不用 Spinner（确定性 > 不确定性）
-4. **避免嵌套加载** — 同一视口内最多 1 个 Skeleton 区域 + 若干小 Spinner
-5. **加载状态有退出条件** — 超时后必须显示 Error State + 重试 CTA，不可无限加载
-6. **Skeleton 动画克制** — 骨架屏 shimmer 动画使用一次 ease-out（200ms），不循环闪烁
-
-### 2.5 与 Ant Design 对齐
-
-| Ant Design 组件 | 对应规范 | 注意事项 |
-|----------------|---------|---------|
-| `Skeleton` | 大面积可预测区域 | 设置 `active` 开启 shimmer，但注意克制 |
-| `Spin` | 小面积/不可预测区域 | 配合 `tip` 提供文字说明 |
-| `Progress` | 确定性进度 | 优先于 Spinner 使用 |
-| `Button` 的 `loading` | 按钮加载态 | 自动内嵌 Spinner + 禁用按钮 |
+| Ant Design Component | Corresponding Specification | Notes |
+|---------------------|---------------------------|-------|
+| `Empty` | Four elements' icon + title + description | Ant Design `description` corresponds to "title + description"; CTA needs to be added |
+| `Result` | Insufficient permissions / network error scenarios | `status=403/500` + `extra` as CTA |
+| `Table` `locale.emptyText` | Table empty state | Default is text-only; custom rendering of four elements is needed |
 
 ---
 
-## 三、状态组合场景
+## 2. Loading State
 
-### 3.1 加载中 → 空结果
+### 2.1 Skeleton vs Spinner Decision Rules
 
-最常见的状态链，需避免"闪烁"问题：
+| Dimension | Skeleton | Spinner |
+|-----------|----------|---------|
+| **Content structure** | Predictable (known layout) | Unpredictable (unknown layout) |
+| **Wait duration** | > 300ms | < 300ms or uncertain |
+| **Area size** | Large area (cards, lists, tables) | Small area (beside buttons, icons) |
+| **Information value** | Skeleton implies the upcoming content structure | Only indicates "processing" |
+| **User perception** | Reduces layout shift (CLS optimization) | Lightweight, does not interfere with current content |
 
-```
-用户触发操作
-  → 立即显示 Skeleton（最小展示 300ms）
-  → 数据返回为空
-  → 淡出 Skeleton，淡入 Empty State
-```
-
-**关键**：Skeleton 最小展示时间 300ms，防止数据瞬间返回时的 Skeleton 闪烁。
-
-### 3.2 加载中 → 错误
+#### Decision Tree
 
 ```
-用户触发操作
-  → 显示 Skeleton
-  → 请求失败
-  → 显示 Error State（图标 + 错误说明 + 重试 CTA）
+Need loading indicator?
+├── Is the content area layout predictable?
+│   ├── Yes → Is the area ≥ one card?
+│   │   ├── Yes → Skeleton
+│   │   └── No → Spinner (skeleton is meaningless for small areas)
+│   └── No → Spinner
+├── Is it a button/action feedback?
+│   └── Yes → Spinner (inside button) or Progress Bar
+└── Is it a full-page load?
+    └── Yes → Skeleton (page-level skeleton)
 ```
 
-**关键**：Error State 的 CTA 必须是"重试"而非"确定"，让用户有路径走出错误状态。
+### 2.2 Progressive Loading Strategy
 
-### 3.3 状态转换动画
+For content areas containing images, use a three-stage progressive loading approach:
 
-| 转换 | 动画 | 时长 | 缓动 |
-|------|------|------|------|
-| Skeleton → 内容 | 淡入 | 200ms | ease-out |
-| Skeleton → Empty | 淡入 | 200ms | ease-out |
-| Skeleton → Error | 淡入 | 200ms | ease-out |
-| 内容 → Skeleton（刷新） | 淡出 + 骨架淡入 | 150ms + 200ms | ease-out |
+```
+Stage 1: Skeleton (0-300ms)
+  → Display content structure skeleton
 
-> 动画原则遵循 `references/methodology/animation-best-practices.md`：UI 微交互 100-300ms，ease-out 为默认缓动。
+Stage 2: Low-quality image / placeholder color (300ms - data arrival)
+  → Image position displays brand color block or very low-resolution image
+
+Stage 3: High-quality image (after data arrival)
+  → Fade in replacement with high-quality image
+```
+
+**Minimum display time**: Skeleton must display for at least 300ms to avoid flicker when data returns quickly (layout jitter + visual jump).
+
+### 2.3 Multi-Platform Differences
+
+#### Desktop Web
+
+- Page-level loading: Skeleton (sidebar + main content area each with its own skeleton)
+- Component-level loading: Skeleton or Spinner, selected per decision tree
+- Button loading: Embedded Spinner + button width locked (prevents layout shift)
+- Network is typically stable; Skeleton usage frequency is lower than mobile
+
+#### Mobile Web / App
+
+- **Skeleton first**: Mobile network fluctuates more; skeleton screens reduce blank-screen anxiety
+- List/Feed loading: Skeleton card placeholders
+- Pull-to-refresh: Prefer platform native indicators (iOS UIRefreshControl / Android SwipeRefreshLayout)
+- Button loading: Spinner + button disabled + copy change ("Submitting...")
+- Pagination loading: Bottom Spinner + "Load more" text
+
+#### Data Dashboard
+
+- **Block-level Skeleton**: Dashboard data volume is large; load by data module blocks
+- Skeleton must precisely match the final layout (dashboard layout shifts affect distant viewing experience)
+- Avoid full-screen Spinner — dashboard blank screen + spinner = ops panic
+- Consider data placeholders: When no real-time data, display "most recent data" + "data updating" indicator
+
+#### Native App
+
+- **Platform native loading indicators first**: iOS `UIActivityIndicator` / Android `ProgressBar`
+- Page-level loading: Platform native Skeleton or custom skeleton screen
+- Consistent with platform HIG (iOS uses thin-line skeletons, Android uses color-block skeletons)
+
+### 2.4 Loading State Design Rules
+
+1. **Never show a blank screen** — Any wait exceeding 100ms must have visual feedback
+2. **Layout stability** — Loading indicator occupies the same space as the loaded content (CLS = 0)
+3. **Progress should be perceivable** — Prefer Progress Bar over Spinner (determinate > indeterminate)
+4. **Avoid nested loading** — At most 1 Skeleton area + several small Spinners within the same viewport
+5. **Loading state must have an exit condition** — After timeout, must display Error State + retry CTA; never load indefinitely
+6. **Restrained Skeleton animation** — Skeleton shimmer animation uses a single ease-out pass (200ms), no looping flash
+
+### 2.5 Ant Design Alignment
+
+| Ant Design Component | Corresponding Specification | Notes |
+|---------------------|---------------------------|-------|
+| `Skeleton` | Large predictable areas | Set `active` to enable shimmer, but use restraint |
+| `Spin` | Small / unpredictable areas | Use with `tip` for text description |
+| `Progress` | Determinate progress | Prefer over Spinner |
+| `Button` `loading` | Button loading state | Automatically embeds Spinner + disables button |
 
 ---
 
-## 四、检查清单
+## 3. State Combination Scenarios
 
-### 空状态检查
+### 3.1 Loading → Empty Result
 
-- [ ] 每个可能为空的数据展示区域都有 Empty State
-- [ ] Empty State 包含四要素（图标/标题/说明/CTA）
-- [ ] CTA 指向具体可操作动作
-- [ ] 文案语气与场景匹配（引导/中性/说明）
-- [ ] 图标风格与整体图标系统一致
-- [ ] 移动端 Empty State 已精简（说明可选）
-- [ ] 大屏 Empty State 有自动刷新或刷新 CTA
+The most common state chain; must avoid "flicker":
 
-### 加载状态检查
+```
+User triggers action
+  → Immediately display Skeleton (minimum display 300ms)
+  → Data returns empty
+  → Fade out Skeleton, fade in Empty State
+```
 
-- [ ] 任何 > 100ms 的等待都有加载指示
-- [ ] Skeleton vs Spinner 按决策树选择
-- [ ] Skeleton 布局与最终内容布局匹配（CLS = 0）
-- [ ] Skeleton 最小展示时间 ≥ 300ms
-- [ ] 按钮加载态：内嵌 Spinner + 禁用 + 宽度锁定
-- [ ] 加载超时有退出条件（Error State + 重试 CTA）
-- [ ] 移动端优先使用 Skeleton
-- [ ] 原生 App 优先使用平台原生指示器
+**Key**: Skeleton minimum display time of 300ms prevents flicker when data returns instantly.
+
+### 3.2 Loading → Error
+
+```
+User triggers action
+  → Display Skeleton
+  → Request fails
+  → Display Error State (icon + error description + retry CTA)
+```
+
+**Key**: Error State CTA must be "Retry" not "OK", giving users a path out of the error state.
+
+### 3.3 State Transition Animations
+
+| Transition | Animation | Duration | Easing |
+|-----------|-----------|----------|--------|
+| Skeleton → Content | Fade in | 200ms | ease-out |
+| Skeleton → Empty | Fade in | 200ms | ease-out |
+| Skeleton → Error | Fade in | 200ms | ease-out |
+| Content → Skeleton (refresh) | Fade out + skeleton fade in | 150ms + 200ms | ease-out |
+
+> Animation principles follow `references/methodology/animation-best-practices.md`: UI micro-interactions 100-300ms, ease-out as default easing.
+
+---
+
+## 4. Checklist
+
+### Empty State Checklist
+
+- [ ] Every data display area that may be empty has an Empty State
+- [ ] Empty State includes four elements (icon / title / description / CTA)
+- [ ] CTA points to a specific actionable action
+- [ ] Copy tone matches the scenario (guiding / neutral / explanatory)
+- [ ] Icon style is consistent with the overall icon system
+- [ ] Mobile Empty State is simplified (description optional)
+- [ ] Dashboard Empty State has auto-refresh or refresh CTA
+
+### Loading State Checklist
+
+- [ ] Any wait > 100ms has a loading indicator
+- [ ] Skeleton vs Spinner selected per decision tree
+- [ ] Skeleton layout matches final content layout (CLS = 0)
+- [ ] Skeleton minimum display time ≥ 300ms
+- [ ] Button loading state: embedded Spinner + disabled + width locked
+- [ ] Loading timeout has exit condition (Error State + retry CTA)
+- [ ] Mobile prioritizes Skeleton
+- [ ] Native App prioritizes platform native indicators

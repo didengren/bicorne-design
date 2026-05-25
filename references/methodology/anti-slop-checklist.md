@@ -1,98 +1,98 @@
-# 反 AI Slop 清单
+# Anti-AI Slop Checklist
 
-> 识别并消除 AI 生成内容的典型缺陷。检测项与修复策略一一对应。
-
----
-
-## 一、什么是 AI Slop
-
-AI Slop 是 AI 生成内容中的典型缺陷模式，表现为视觉上的"塑料感"和内容上的"空洞感"。
+> Identify and eliminate typical defects in AI-generated content. Detection items and fix strategies are one-to-one mapped.
 
 ---
 
-## 二、视觉 Slop 检测清单
+## 1. What is AI Slop
 
-### 颜色
-
-- [ ] **彩虹渐变滥用** — 无目的的多色渐变（品牌色 → 紫色 → 粉色 → 橙色）
-- [ ] **灰色过度使用** — 大面积 #f5f5f5 / #e5e5e5 / #d4d4d4，缺乏品牌色注入
-- [ ] **蓝紫默认色** — 使用 AI 默认的蓝紫色系（#6366f1 / #8b5cf6）而非品牌色
-- [ ] **对比度不足** — 文字与背景对比度低于 4.5:1
-- [ ] **语义色滥用** — 用 success/warning/danger 色做装饰而非状态表达
-
-### 排版
-
-- [ ] **字重趋同** — 标题与正文字重差 < 300，缺乏极端字重对比
-- [ ] **间距均匀** — 所有元素间距相同，缺乏视觉节奏
-- [ ] **居中强迫** — 所有内容居中排列，缺乏不对称张力
-- [ ] **标题过长** — 标题超过 15 字，缺乏提炼
-- [ ] **负字距缺失** — 字号 ≥ 32px 时未使用负字距，显得松散
-
-### 布局
-
-- [ ] **卡片堆叠** — 无限的等大卡片网格，缺乏层次
-- [ ] **三列强迫** — 所有内容都是三列等宽，缺乏变化
-- [ ] **图标滥用** — 每个功能点都配一个图标，但图标无信息增量
-- [ ] **Hero 空洞** — Hero 区只有大标题 + 副标题 + CTA，无产品截图
-- [ ] **CTA 重复** — 页面出现 3 个以上相同 CTA
-
-### 交互
-
-- [ ] **Hover 无反馈** — 卡片/按钮 hover 无任何视觉变化
-- [ ] **状态缺失** — 缺少 Loading / Error / Empty 状态
-- [ ] **动画过度** — 同屏入场动画 > 3 个，造成视觉疲劳
-- [ ] **焦点缺失** — 交互元素无 focus 状态
+AI Slop refers to typical defect patterns in AI-generated content, manifesting as visual "plastic feel" and content "emptiness."
 
 ---
 
-## 三、内容 Slop 检测清单
+## 2. Visual Slop Detection Checklist
 
-- [ ] **空洞副标题** — "赋能企业数字化转型" / "让创新触手可及"
-- [ ] **假数据** — 使用 "Lorem ipsum" 或 "John Doe" 而非真实数据
-- [ ] **过度承诺** — "10x 效率提升" / "零学习成本"
-- [ ] **功能罗列** — 列出 20 个功能但无场景说明
-- [ ] **社会证明空洞** — "被 10,000+ 团队信赖" 但无具体案例
+### Color
 
----
+- [ ] **Rainbow gradient abuse** — Purposeless multi-color gradients (brand → purple → pink → orange)
+- [ ] **Gray overuse** — Large areas of #f5f5f5 / #e5e5e5 / #d4d4d4 without brand color injection
+- [ ] **Blue-purple default** — Using AI-default blue-purple palette (#6366f1 / #8b5cf6) instead of brand colors
+- [ ] **Insufficient contrast** — Text-to-background contrast ratio below 4.5:1
+- [ ] **Semantic color misuse** — Using success/warning/danger colors for decoration rather than status expression
 
-## 四、Slop 修复策略
+### Typography
 
-| Slop 类型 | 修复策略 |
-|----------|---------|
-| 彩虹渐变 | 限制为品牌色 + 1 个强调色，渐变方向统一 |
-| 灰色过度 | 在灰色区域注入品牌色（边框、图标、标签） |
-| 蓝紫默认色 | 替换为 token.json 中 colors.brand.500，禁止 #6366f1 / #8b5cf6 |
-| 对比度不足 | 文字/背景对比度 ≥ 4.5:1（大文字 ≥ 3:1），用 WCAG 工具验证 |
-| 语义色滥用 | 语义色仅用于状态反馈，装饰用品牌色或中性色 |
-| 字重趋同 | 标题使用 700-900，正文使用 300-400，差值 ≥ 300 |
-| 间距均匀 | 关键区域使用 2-4 倍间距对比（如 8px vs 32px） |
-| 居中强迫 | Hero 区左对齐，CTA 右对齐，制造不对称 |
-| 标题过长 | 标题 ≤ 15 字，超出拆为主标题 + 副标题 |
-| 负字距缺失 | 字号 ≥ 32px 时 letter-spacing 设为 -0.02em ~ -0.04em |
-| 卡片堆叠 | 引入 featured card（2x 大小）+ 标准 card 混排 |
-| 三列强迫 | 引入不等宽列（如 2:1）或混合单列/双列布局 |
-| 图标滥用 | 只在图标能传达信息时使用，否则删除 |
-| Hero 空洞 | 加入产品截图 / UI 演示 / 数据可视化 |
-| CTA 重复 | 全页仅 1 个主 CTA，次 CTA 不超过 1 个 |
-| Hover 无反馈 | 卡片 hover 加底色/边框色变化，按钮 hover 加底色加深或阴影 |
-| 状态缺失 | 补全 Loading / Error / Empty 三态，参照 ui-states.md |
-| 动画过度 | 仅首屏 1-2 个关键元素有入场动画，其余静默出现 |
-| 焦点缺失 | 所有可交互元素加 focus-visible 轮廓，颜色用品牌色 |
-| 空洞副标题 | 替换为具体场景描述 + 数据支撑 |
-| 假数据 | 替换为真实业务数据或行业典型数据，禁止 Lorem ipsum |
-| 过度承诺 | 删除无法量化的承诺，改为具体功能描述或可验证的数据 |
-| 功能罗列 | 每个功能配 1 句场景说明，超过 8 个按场景分组 |
-| 社会证明空洞 | 补充具体客户名/案例链接，无法补充则删除 |
+- [ ] **Font weight convergence** — Heading vs body weight difference < 300, lacking extreme weight contrast
+- [ ] **Uniform spacing** — All element spacing identical, lacking visual rhythm
+- [ ] **Center-alignment compulsion** — All content center-aligned, lacking asymmetric tension
+- [ ] **Overly long headings** — Headings exceeding 15 characters, lacking refinement
+- [ ] **Missing negative letter-spacing** — No negative letter-spacing at font-size ≥ 32px, appearing loose
+
+### Layout
+
+- [ ] **Card stacking** — Infinite equal-sized card grids, lacking hierarchy
+- [ ] **Three-column compulsion** — All content in three equal-width columns, lacking variation
+- [ ] **Icon overuse** — Every feature point paired with an icon, but icons add no informational value
+- [ ] **Empty hero** — Hero section only has heading + subtitle + CTA, no product screenshot
+- [ ] **CTA repetition** — Page contains 3+ identical CTAs
+
+### Interaction
+
+- [ ] **No hover feedback** — Cards/buttons have no visual change on hover
+- [ ] **Missing states** — Lacking Loading / Error / Empty states
+- [ ] **Animation overload** — More than 3 simultaneous entrance animations on screen, causing visual fatigue
+- [ ] **Missing focus** — Interactive elements have no focus state
 
 ---
 
-## 五、Slop 评分
+## 3. Content Slop Detection Checklist
 
-对每个设计产出，评估 slop 程度：
+- [ ] **Hollow subtitles** — "Empowering enterprise digital transformation" / "Making innovation accessible"
+- [ ] **Fake data** — Using "Lorem ipsum" or "John Doe" instead of real data
+- [ ] **Over-promising** — "10x efficiency boost" / "Zero learning curve"
+- [ ] **Feature listing** — Listing 20 features without scenario context
+- [ ] **Hollow social proof** — "Trusted by 10,000+ teams" without specific case studies
 
-| 评分 | 含义 | 处理 |
-|------|------|------|
-| 0-2 | 无明显 slop | 通过 |
-| 3-5 | 轻微 slop，可修复 | 针对性修复 |
-| 6-8 | 严重 slop | 大幅修改 |
-| 9-10 | 全面 slop | 重新设计 |
+---
+
+## 4. Slop Fix Strategies
+
+| Slop Type | Fix Strategy |
+|-----------|-------------|
+| Rainbow gradient | Limit to brand color + 1 accent color; unify gradient direction |
+| Gray overuse | Inject brand color into gray areas (borders, icons, labels) |
+| Blue-purple default | Replace with colors.brand.500 in token.json; prohibit #6366f1 / #8b5cf6 |
+| Insufficient contrast | Text/background contrast ≥ 4.5:1 (large text ≥ 3:1); verify with WCAG tools |
+| Semantic color misuse | Semantic colors only for status feedback; use brand or neutral colors for decoration |
+| Font weight convergence | Headings use 700-900, body uses 300-400; difference ≥ 300 |
+| Uniform spacing | Key areas use 2-4x spacing contrast (e.g., 8px vs 32px) |
+| Center-alignment compulsion | Hero left-aligned, CTA right-aligned; create asymmetry |
+| Overly long headings | Headings ≤ 15 characters; split into heading + subtitle if exceeded |
+| Missing negative letter-spacing | Set letter-spacing to -0.02em ~ -0.04em at font-size ≥ 32px |
+| Card stacking | Introduce featured card (2x size) + standard card mixed layout |
+| Three-column compulsion | Introduce unequal-width columns (e.g., 2:1) or mixed single/double column layouts |
+| Icon overuse | Only use icons when they convey information; otherwise remove |
+| Empty hero | Add product screenshot / UI demo / data visualization |
+| CTA repetition | Only 1 primary CTA per page; secondary CTA no more than 1 |
+| No hover feedback | Cards: add background/border color change on hover; buttons: darken background or add shadow |
+| Missing states | Complete Loading / Error / Empty tri-state; refer to ui-states.md |
+| Animation overload | Only 1-2 key elements in first screen have entrance animations; rest appear silently |
+| Missing focus | Add focus-visible outline to all interactive elements; use brand color |
+| Hollow subtitles | Replace with specific scenario descriptions + data support |
+| Fake data | Replace with real business data or industry-typical data; prohibit Lorem ipsum |
+| Over-promising | Remove unquantifiable claims; replace with specific feature descriptions or verifiable data |
+| Feature listing | Each feature paired with 1 scenario description; group by scenario if exceeding 8 |
+| Hollow social proof | Add specific client names/case links; remove if unverifiable |
+
+---
+
+## 5. Slop Scoring
+
+For each design output, assess the slop level:
+
+| Score | Meaning | Action |
+|-------|---------|--------|
+| 0-2 | No significant slop | Pass |
+| 3-5 | Minor slop, fixable | Targeted fixes |
+| 6-8 | Severe slop | Major revision |
+| 9-10 | Comprehensive slop | Redesign |

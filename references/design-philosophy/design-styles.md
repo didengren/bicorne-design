@@ -1,152 +1,152 @@
-# 20 种设计哲学
+# 20 Design Philosophies
 
-> 20 种设计哲学，用于 Phase 2 风格定向和 Phase 3 变体方向选择。每种哲学提供特征、适用场景和实现方向。实现方向受冲突裁决原则约束——动画时长/缓动/命名遵循 `animation-best-practices.md` 双层规范。
-
----
-
-## 1. 极简主义 (Minimalism)
-
-**特征**: 最少元素，最大留白，单一焦点
-**适用**: 高端品牌、创意工具、冥想应用
-**实现**: 每屏一个核心信息，删除所有非必要装饰
-
-## 2. 瑞士国际主义 (Swiss International)
-
-**特征**: 网格系统，无衬线字体，左对齐，数学精确
-**适用**: 数据密集型应用、企业官网、文档系统
-**实现**: 严格 8px 网格，Helvetica/Inter 字体，左对齐排版
-
-## 3. 新拟态 (Neumorphism)
-
-**特征**: 柔和凸起/凹陷，同色阴影，触感模拟
-**适用**: IoT 控制面板、健康应用、智能家居
-**实现**: 双阴影（亮/暗），表面色与背景色接近
-
-## 4. 玻璃拟态 (Glassmorphism)
-
-**特征**: 毛玻璃效果，半透明，背景模糊，微妙边框
-**适用**: 音乐播放器、天气应用、浮动面板
-**实现**: `backdrop-filter: blur()`, 半透明背景，1px 白色边框
-
-## 5. 暗色工程美学 (Dark Engineering)
-
-**特征**: 近纯黑画布，极细边框，代码感，产品截图主导
-**适用**: 开发者工具、CLI 应用、SaaS 中后台
-**实现**: canvas #010102, hairline 边框, mono 字体点缀
-**代表品牌**: Linear, Raycast, Warp
-
-## 6. 轻盈奢华 (Light Luxury)
-
-**特征**: 白色画布，超细字重，大量留白，精致阴影
-**适用**: 金融科技、高端 SaaS、支付平台
-**实现**: 字重 300, 多层蓝色调阴影, 保守圆角
-**代表品牌**: Stripe, Coinbase
-
-## 7. 摄影优先 (Photography-First)
-
-**特征**: 大幅摄影，极简 UI 覆盖，纯黑白灰界面
-**适用**: 电商、旅游、生活方式品牌
-**实现**: UI 退入背景，摄影占据 70%+ 面积
-**代表品牌**: Nike, Airbnb
-
-## 8. 内容沉浸 (Content Immersion)
-
-**特征**: 暗色背景，UI 退入阴影，内容成为色彩来源
-**适用**: 音乐流媒体、视频平台、媒体应用
-**实现**: 近黑背景，重阴影，紧凑排版
-**代表品牌**: Spotify
-
-## 9. 超大排版 (Mega Typography)
-
-**特征**: 极端字号，极端负字距，排版即视觉
-**适用**: 品牌官网、活动页、创意机构
-**实现**: 标题 80-110px, 负字距 -3px 到 -5.5px
-**代表品牌**: Linear, Framer
-
-## 10. 色块叙事 (Color Block Narrative)
-
-**特征**: 超大柔和色块段落，每页一个叙事节奏
-**适用**: 创意工具、设计平台、教育产品
-**实现**: 全宽色块，柔和色调，色块间无间隔
-**代表品牌**: Figma
-
-## 11. 几何药丸 (Geometric Pill)
-
-**特征**: 药丸形按钮，圆形元素，柔和圆角
-**适用**: 搜索型产品、社交应用、消费级产品
-**实现**: CTA 全部 pill 形, 圆形图标, 大圆角卡片
-**代表品牌**: Airbnb, Notion
-
-## 12. 基础设施极简 (Infrastructure Minimal)
-
-**特征**: 阴影即边框，极端负字距，三色工作流
-**适用**: 云平台、部署工具、基础设施产品
-**实现**: box-shadow 替代 border, Geist 字体, 工作流三色
-**代表品牌**: Vercel
-
-## 13. 编辑式布局 (Editorial Layout)
-
-**特征**: 杂志式排版，不对称网格，大胆标题
-**适用**: 新闻媒体、博客平台、内容发布
-**实现**: 不对称列，大标题 + 小正文，pull quote
-
-## 14. 数据可视化优先 (Data-Viz First)
-
-**特征**: 图表即界面，颜色编码数据，紧凑信息密度
-**适用**: 分析平台、监控仪表盘、金融终端
-**实现**: 颜色仅用于数据编码，最小化装饰元素
-
-## 15. 复古未来主义 (Retro-Futurism)
-
-**特征**: 像素字体，CRT 扫描线，霓虹色，网格背景
-**适用**: 游戏、Web3、创意实验
-**实现**: pixel font, glow 效果, 暗色 + 霓虹
-
-## 16. 有机自然 (Organic Natural)
-
-**特征**: 曲线，自然色调，手绘元素，不规则形状
-**适用**: 健康食品、环保品牌、儿童产品
-**实现**: blob 形状, 暖色调, 手绘插图
-
-## 17. 粗野主义 (Brutalism)
-
-**特征**: 原始，未打磨，大字号，高对比，打破规则
-**适用**: 艺术项目、实验性网站、反主流品牌
-**实现**: 系统字体, 粗边框, 不对齐, 强对比色
-
-## 18. 渐变沉浸 (Gradient Immersion)
-
-**特征**: 大面积渐变，色彩流动，深度感
-**适用**: AI 产品、创意工具、品牌展示
-**实现**: 多色渐变背景, mesh gradient, 半透明叠加
-**代表品牌**: Framer (渐变聚光灯卡片)
-
-## 19. 功能至上 (Functional First)
-
-**特征**: 信息密度高，紧凑布局，零装饰，效率优先
-**适用**: 中后台、管理工具、内部系统
-**实现**: 小字号, 紧凑间距, 表格为主, 最少动画
-**代表品牌**: HashiCorp, Sentry
-
-## 20. 情感化设计 (Emotional Design)
-
-**特征**: 插画，微动画，温暖色调，人格化文案
-**适用**: 消费级应用、教育产品、社交平台
-**实现**: 品牌插画, 彩色空状态, 友好文案, 彩蛋
+> 20 design philosophies for Phase 2 style direction and Phase 3 variant direction selection. Each philosophy provides characteristics, applicable scenarios, and implementation direction. Implementation direction is constrained by conflict resolution principles — animation duration/easing/naming follows the dual-layer specification in `animation-best-practices.md`.
 
 ---
 
-## 哲学选择指南
+## 1. Minimalism
 
-> 未列出的哲学用于特殊场景（新拟态→IoT 面板，复古未来主义→Web3，粗野主义→艺术项目）。更细粒度的品牌→哲学映射见 `references/brand-library/INDEX.md`。主选与次选的判断条件：用户停留时长短→次选（更克制），品牌表达需求强→主选（更风格化）。
+**Characteristics**: Fewest elements, maximum whitespace, single focal point
+**Applicable**: Premium brands, creative tools, meditation apps
+**Implementation**: One core message per screen, remove all non-essential decoration
 
-| 项目类型 | 推荐哲学 | 次选 |
+## 2. Swiss International
+
+**Characteristics**: Grid system, sans-serif type, left-aligned, mathematical precision
+**Applicable**: Data-intensive apps, corporate websites, documentation systems
+**Implementation**: Strict 8px grid, Helvetica/Inter typeface, left-aligned typography
+
+## 3. Neumorphism
+
+**Characteristics**: Soft raised/recessed, same-color shadows, tactile simulation
+**Applicable**: IoT control panels, health apps, smart home
+**Implementation**: Dual shadows (light/dark), surface color close to background color
+
+## 4. Glassmorphism
+
+**Characteristics**: Frosted glass effect, semi-transparency, background blur, subtle borders
+**Applicable**: Music players, weather apps, floating panels
+**Implementation**: `backdrop-filter: blur()`, semi-transparent background, 1px white border
+
+## 5. Dark Engineering
+
+**Characteristics**: Near-pure-black canvas, hairline borders, code feel, product screenshot dominant
+**Applicable**: Developer tools, CLI apps, SaaS dashboards
+**Implementation**: canvas #010102, hairline borders, mono typeface accents
+**Representative brands**: Linear, Raycast, Warp
+
+## 6. Light Luxury
+
+**Characteristics**: White canvas, ultra-light font weight, generous whitespace, refined shadows
+**Applicable**: Fintech, premium SaaS, payment platforms
+**Implementation**: Font weight 300, multi-layer blue-toned shadows, conservative border radius
+**Representative brands**: Stripe, Coinbase
+
+## 7. Photography-First
+
+**Characteristics**: Large-scale photography, minimal UI overlay, pure black/white/gray interface
+**Applicable**: E-commerce, travel, lifestyle brands
+**Implementation**: UI recedes into background, photography occupies 70%+ area
+**Representative brands**: Nike, Airbnb
+
+## 8. Content Immersion
+
+**Characteristics**: Dark background, UI recedes into shadows, content becomes the color source
+**Applicable**: Music streaming, video platforms, media apps
+**Implementation**: Near-black background, heavy shadows, compact typography
+**Representative brands**: Spotify
+
+## 9. Mega Typography
+
+**Characteristics**: Extreme font sizes, extreme negative letter-spacing, typography as visual
+**Applicable**: Brand websites, event pages, creative agencies
+**Implementation**: Headings 80-110px, negative letter-spacing -3px to -5.5px
+**Representative brands**: Linear, Framer
+
+## 10. Color Block Narrative
+
+**Characteristics**: Oversized soft color block sections, one narrative rhythm per page
+**Applicable**: Creative tools, design platforms, education products
+**Implementation**: Full-width color blocks, soft tones, no gaps between blocks
+**Representative brands**: Figma
+
+## 11. Geometric Pill
+
+**Characteristics**: Pill-shaped buttons, circular elements, soft rounded corners
+**Applicable**: Search products, social apps, consumer products
+**Implementation**: All CTAs pill-shaped, circular icons, large border-radius cards
+**Representative brands**: Airbnb, Notion
+
+## 12. Infrastructure Minimal
+
+**Characteristics**: Shadow as border, extreme negative letter-spacing, three-color workflow
+**Applicable**: Cloud platforms, deployment tools, infrastructure products
+**Implementation**: box-shadow replaces border, Geist typeface, workflow three-color
+**Representative brands**: Vercel
+
+## 13. Editorial Layout
+
+**Characteristics**: Magazine-style typography, asymmetric grid, bold headlines
+**Applicable**: News media, blog platforms, content publishing
+**Implementation**: Asymmetric columns, large headline + small body, pull quote
+
+## 14. Data-Viz First
+
+**Characteristics**: Charts as interface, color-encoded data, compact information density
+**Applicable**: Analytics platforms, monitoring dashboards, financial terminals
+**Implementation**: Color only for data encoding, minimize decorative elements
+
+## 15. Retro-Futurism
+
+**Characteristics**: Pixel fonts, CRT scanlines, neon colors, grid backgrounds
+**Applicable**: Gaming, Web3, creative experiments
+**Implementation**: pixel font, glow effects, dark + neon
+
+## 16. Organic Natural
+
+**Characteristics**: Curves, natural tones, hand-drawn elements, irregular shapes
+**Applicable**: Health food, eco brands, children's products
+**Implementation**: blob shapes, warm tones, hand-drawn illustrations
+
+## 17. Brutalism
+
+**Characteristics**: Raw, unpolished, large font sizes, high contrast, rule-breaking
+**Applicable**: Art projects, experimental websites, anti-mainstream brands
+**Implementation**: System fonts, thick borders, misaligned, strong contrast colors
+
+## 18. Gradient Immersion
+
+**Characteristics**: Large-area gradients, color flow, sense of depth
+**Applicable**: AI products, creative tools, brand showcases
+**Implementation**: Multi-color gradient backgrounds, mesh gradient, semi-transparent overlays
+**Representative brands**: Framer (gradient spotlight cards)
+
+## 19. Functional First
+
+**Characteristics**: High information density, compact layout, zero decoration, efficiency first
+**Applicable**: Dashboards, management tools, internal systems
+**Implementation**: Small font sizes, compact spacing, table-dominant, minimal animation
+**Representative brands**: HashiCorp, Sentry
+
+## 20. Emotional Design
+
+**Characteristics**: Illustrations, micro-animations, warm tones, personable copy
+**Applicable**: Consumer apps, education products, social platforms
+**Implementation**: Brand illustrations, colorful empty states, friendly copy, easter eggs
+
+---
+
+## Philosophy Selection Guide
+
+> Unlisted philosophies are for special scenarios (Neumorphism → IoT panels, Retro-Futurism → Web3, Brutalism → art projects). For finer-grained brand → philosophy mapping, see `references/brand-library/INDEX.md`. Primary vs. secondary selection criteria: short user dwell time → secondary (more restrained), strong brand expression needs → primary (more stylized).
+
+| Project Type | Recommended Philosophy | Secondary |
 |---------|---------|------|
-| 开发者工具 | 暗色工程美学 | 基础设施极简 |
-| 金融科技 | 轻盈奢华 | 功能至上 |
-| 电商 | 摄影优先 | 几何药丸 |
-| SaaS 中后台 | 功能至上 | 暗色工程美学 |
-| 创意工具 | 色块叙事 | 超大排版 |
-| AI 产品 | 渐变沉浸 | 暗色工程美学 |
-| 品牌官网 | 超大排版 | 编辑式布局 |
-| 数据平台 | 数据可视化优先 | 瑞士国际主义 |
+| Developer tools | Dark Engineering | Infrastructure Minimal |
+| Fintech | Light Luxury | Functional First |
+| E-commerce | Photography-First | Geometric Pill |
+| SaaS dashboards | Functional First | Dark Engineering |
+| Creative tools | Color Block Narrative | Mega Typography |
+| AI products | Gradient Immersion | Dark Engineering |
+| Brand websites | Mega Typography | Editorial Layout |
+| Data platforms | Data-Viz First | Swiss International |
