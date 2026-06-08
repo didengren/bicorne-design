@@ -235,7 +235,7 @@ function getHslLightness(hex) {
 }
 
 function parseDesignMd(content) {
-  const result = { colors: {}, typography: {}, spacing: {}, rounded: {} }
+  const result = { colors: {}, typography: {}, spacing: {}, rounded: {}, components: {}, layoutHints: { containerMaxWidth: null } }
 
   const yamlMatch = content.match(/^---\n([\s\S]*?)\n---/)
   if (yamlMatch) {
@@ -299,6 +299,26 @@ function parseDesignMd(content) {
       lines.forEach(line => {
         const m = line.match(/^\s+([\w-]+):\s*(\d+)px/)
         if (m) result.rounded[m[1]] = parseInt(m[2])
+      })
+    }
+
+    const componentsSection = yaml.match(/components:\s*\n([\s\S]*?)(?=\n[a-zA-Z]|\n$|$)/)
+    if (componentsSection) {
+      const lines = componentsSection[1].split('\n')
+      let currentComponent = null
+      lines.forEach(line => {
+        const componentMatch = line.match(/^  ([\w-]+):\s*$/)
+        if (componentMatch) {
+          currentComponent = componentMatch[1]
+          result.components[currentComponent] = {}
+          return
+        }
+        if (currentComponent) {
+          const propMatch = line.match(/^    ([\w-]+):\s*(.+)/)
+          if (propMatch) {
+            result.components[currentComponent][propMatch[1]] = propMatch[2].trim().replace(/^['"]|['"]$/g, '')
+          }
+        }
       })
     }
   }
@@ -452,7 +472,167 @@ function parseDesignMd(content) {
     }
   }
 
+  const mdBody = content.replace(/^---[\s\S]*?---/, '')
+  const maxWidthMatch = mdBody.match(/Max (?:content|width)\s*(?:width)?[:\s]*(\d+)px/i)
+  if (maxWidthMatch) {
+    result.layoutHints.containerMaxWidth = parseInt(maxWidthMatch[1])
+  }
+
   return result
+}
+
+function inferComponentSignatures(components) {
+  const archetypeRules = [
+    { keywords: ['button', 'input', 'toggle', 'tab', 'search'], archetype: 'actionable' },
+    { keywords: ['card', 'banner', 'panel', 'tile', 'block', 'strip'], archetype: 'containment' },
+    { keywords: ['nav', 'footer', 'sidebar', 'header'], archetype: 'navigation' },
+    { keywords: ['badge', 'tag', 'dot', 'status', 'chip'], archetype: 'indicator' },
+    { keywords: ['hero', 'illustration', 'mockup', 'screenshot', 'band'], archetype: 'display' },
+    { keywords: ['row', 'cell', 'item', 'entry', 'listing'], archetype: 'data' },
+  ]
+
+  function getArchetype(name) {
+    const lower = name.toLowerCase()
+    for (const rule of archetypeRules) {
+      if (rule.keywords.some(kw => lower.includes(kw))) return rule.archetype
+    }
+    return 'containment'
+  }
+
+  const signatureKeyAliases = {
+    'footer': 'navigation',
+    'sidebar': 'navigation',
+    'tile': 'card',
+    'panel': 'card',
+    'block': 'card',
+    'strip': 'card',
+    'banner': 'hero',
+    'band': 'hero',
+    'screenshot': 'hero',
+    'mockup': 'hero',
+    'illustration': 'hero',
+    'cell': 'data-row',
+    'item': 'data-row',
+    'entry': 'data-row',
+    'listing': 'data-row',
+    'dot': 'badge',
+    'status': 'badge',
+    'chip': 'badge',
+    'tag': 'badge',
+    'search': 'input',
+    'toggle': 'tab',
+  }
+
+  function getSignatureKey(name) {
+    const lower = name.toLowerCase()
+    if (lower.includes('nav')) return 'navigation'
+    if (lower.includes('row')) return 'data-row'
+    for (const rule of archetypeRules) {
+      if (rule.keywords.some(kw => lower.includes(kw))) {
+        const matched = rule.keywords.find(kw => lower.includes(kw))
+        return signatureKeyAliases[matched] || matched
+      }
+    }
+    const dashIdx = name.indexOf('-')
+    return dashIdx > 0 ? name.substring(0, dashIdx) : name
+  }
+
+  function extractTokenKey(ref) {
+    if (typeof ref !== 'string') return undefined
+    const m = ref.match(/\{(\w+)\.([\w-]+)\}/)
+    return m ? m[2] : undefined
+  }
+
+  const groups = {}
+  for (const [compName, props] of Object.entries(components)) {
+    const sigKey = getSignatureKey(compName)
+    if (!groups[sigKey]) groups[sigKey] = []
+    groups[sigKey].push({ compName, props })
+  }
+
+  const signatures = {}
+  for (const [sigKey, entries] of Object.entries(groups)) {
+    const archetype = getArchetype(entries[0].compName)
+    const signature = { archetype }
+
+    for (const entry of entries) {
+      if (!signature.borderRadius && entry.props.rounded) {
+        signature.borderRadius = extractTokenKey(entry.props.rounded)
+      }
+      if (!signature.padding && entry.props.padding) {
+        signature.padding = entry.props.padding
+      }
+      if (!signature.height && entry.props.height) {
+        signature.height = entry.props.height
+      }
+      if (!signature.typography && entry.props.typography) {
+        signature.typography = extractTokenKey(entry.props.typography)
+      }
+      if (!signature.border && entry.props.border) {
+        signature.border = entry.props.border
+      }
+    }
+
+    const stateKeyAliases = {
+      'active': 'pressed',
+      'featured': 'elevated',
+      'tertiary': 'ghost',
+      'text-link': 'ghost',
+      'link': 'ghost',
+      'on-dark': 'on-dark',
+      'on-light': 'on-light',
+    }
+
+    const sigKeyExtraKeywords = {
+      'navigation': ['nav'],
+      'data-row': ['row'],
+      'card': ['tile', 'panel', 'block', 'strip'],
+      'hero': ['banner', 'band', 'screenshot', 'mockup', 'illustration'],
+      'badge': ['dot', 'status', 'chip', 'tag'],
+      'input': ['search'],
+      'tab': ['toggle'],
+    }
+
+    const sigKeyKeywords = [
+      sigKey,
+      ...Object.entries(signatureKeyAliases).filter(([, v]) => v === sigKey).map(([k]) => k),
+      ...(sigKeyExtraKeywords[sigKey] || []),
+    ]
+
+    function computeStateKey(compName) {
+      let remainder = compName
+      for (const kw of sigKeyKeywords) {
+        const patterns = [kw + '-', '-' + kw, kw]
+        for (const pat of patterns) {
+          if (remainder === pat) return 'default'
+          if (remainder.includes(pat)) {
+            remainder = remainder.replace(pat, '').replace(/^-|-$/g, '')
+          }
+        }
+      }
+      if (!remainder) return 'default'
+      if (stateKeyAliases[remainder]) return stateKeyAliases[remainder]
+      const parts = remainder.split('-')
+      const normalizedParts = parts.map(p => stateKeyAliases[p] || p)
+      return normalizedParts.join('-')
+    }
+
+    const states = {}
+    for (const entry of entries) {
+      const stateKey = computeStateKey(entry.compName)
+      const state = {}
+      if (entry.props.backgroundColor) state.backgroundColor = entry.props.backgroundColor
+      if (entry.props.textColor) state.textColor = entry.props.textColor
+      if (entry.props.border) state.border = entry.props.border
+      if (entry.props.boxShadow) state.boxShadow = entry.props.boxShadow
+      if (entry.props.opacity) state.opacity = entry.props.opacity
+      states[stateKey] = state
+    }
+    signature.states = states
+    signatures[sigKey] = signature
+  }
+
+  return { signatures }
 }
 
 function mapToToken(design, brandName, theme, sourcePath, platform = 'desktop') {
@@ -611,6 +791,46 @@ function mapToToken(design, brandName, theme, sourcePath, platform = 'desktop') 
     platform,
   }
 
+  const layoutDefaults = {
+    desktop: { containerMaxWidth: 1280, navHeight: 56, sectionSpacing: 96 },
+    mobile: { containerMaxWidth: 640, navHeight: 56, sectionSpacing: 64 },
+    dashboard: { containerMaxWidth: 1920, navHeight: 64, sectionSpacing: 64 },
+  }
+  const layout = template.layout ? { ...template.layout } : { ...layoutDefaults[platform] }
+  if (!layout.containerMaxWidth) layout.containerMaxWidth = layoutDefaults[platform].containerMaxWidth
+  if (!layout.navHeight) layout.navHeight = layoutDefaults[platform].navHeight
+  if (!layout.sectionSpacing) layout.sectionSpacing = layoutDefaults[platform].sectionSpacing
+  if (design.layoutHints && design.layoutHints.containerMaxWidth) {
+    layout.containerMaxWidth = design.layoutHints.containerMaxWidth
+  }
+  if (design.components) {
+    for (const [compName, props] of Object.entries(design.components)) {
+      if (compName.includes('nav') && props.height) {
+        layout.navHeight = parseInt(props.height.replace(/px$/, ''))
+        break
+      }
+    }
+  }
+  if (design.spacing) {
+    if (design.spacing.section) layout.sectionSpacing = design.spacing.section
+    else if (design.spacing.xxl) layout.sectionSpacing = design.spacing.xxl
+  }
+
+  const componentGrammar = (design.components && Object.keys(design.components).length > 0)
+    ? inferComponentSignatures(design.components)
+    : null
+
+  const extendedTransitions = {
+    ...template.transitions,
+    "expand": { "duration": "200ms", "easing": "ease-in-out" },
+    "collapse": { "duration": "150ms", "easing": "ease-in" },
+    "modal-enter": { "duration": "280ms", "easing": "ease-out" },
+    "modal-exit": { "duration": "180ms", "easing": "ease-in" },
+    "toast-enter": { "duration": "300ms", "easing": "ease-out" },
+    "toast-exit": { "duration": "200ms", "easing": "ease-in" },
+    "scroll-reveal": { "duration": "500ms", "easing": "cubic-bezier(0.16,1,0.3,1)" },
+  }
+
   const result = {
     meta,
     colors: { brand, surface, ink, border, semantic },
@@ -618,10 +838,14 @@ function mapToToken(design, brandName, theme, sourcePath, platform = 'desktop') 
     spacing,
     borderRadius,
     shadows: template.shadows,
-    transitions: template.transitions,
+    transitions: extendedTransitions,
   }
   if (template.viewport) {
     result.viewport = template.viewport
+  }
+  result.layout = layout
+  if (componentGrammar) {
+    result.componentGrammar = componentGrammar
   }
   return result
 }

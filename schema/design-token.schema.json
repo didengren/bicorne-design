@@ -309,6 +309,77 @@
         }
       },
       "additionalProperties": false
+    },
+    "componentGrammar": {
+      "type": "object",
+      "description": "Component specification grammar derived from DESIGN.md components",
+      "properties": {
+        "signatures": {
+          "type": "object",
+          "description": "Brand-level component rules, keyed by semantic name (button/card/input/navigation/badge/hero/data-row)",
+          "patternProperties": {
+            "^[a-z][a-z0-9-]*$": {
+              "type": "object",
+              "description": "Component signature: common structure + variant states",
+              "properties": {
+                "archetype": {
+                  "type": "string",
+                  "enum": ["actionable", "containment", "navigation", "indicator", "display", "data"],
+                  "description": "Component archetype determining required attributes"
+                },
+                "borderRadius": { "type": "string", "description": "Token reference (e.g. 'md') or literal value (e.g. '8px')" },
+                "padding": { "type": "string", "description": "Literal value (e.g. '8px 14px', '24px')" },
+                "height": { "type": "string", "description": "Literal value (e.g. '40px', '56px')" },
+                "typography": { "type": "string", "description": "Token reference to typography.scales key (e.g. 'button', 'body-md')" },
+                "border": { "type": "string", "description": "Literal CSS border value (e.g. '1px solid {colors.border.default}')" },
+                "states": {
+                  "type": "object",
+                  "description": "Variant states keyed by semantic name (primary/secondary/ghost/hover/pressed/focused/disabled/elevated)",
+                  "patternProperties": {
+                    "^[a-z][a-z0-9-]*$": {
+                      "type": "object",
+                      "properties": {
+                        "backgroundColor": { "type": "string" },
+                        "textColor": { "type": "string" },
+                        "border": { "type": "string" },
+                        "boxShadow": { "type": "string" },
+                        "opacity": { "type": "number" }
+                      },
+                      "additionalProperties": false
+                    }
+                  },
+                  "additionalProperties": false
+                }
+              },
+              "additionalProperties": false
+            }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "layout": {
+      "type": "object",
+      "description": "Brand-level layout constants",
+      "properties": {
+        "containerMaxWidth": {
+          "type": "integer",
+          "minimum": 320,
+          "description": "Max content container width in px"
+        },
+        "navHeight": {
+          "type": "integer",
+          "minimum": 40,
+          "description": "Primary navigation bar height in px"
+        },
+        "sectionSpacing": {
+          "type": "integer",
+          "minimum": 32,
+          "description": "Vertical spacing between major sections in px"
+        }
+      },
+      "additionalProperties": false
     }
   }
 }

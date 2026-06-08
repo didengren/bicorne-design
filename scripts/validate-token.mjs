@@ -73,6 +73,37 @@ function validateCrossReferences(token) {
     }
   }
 
+  if (token.componentGrammar?.signatures) {
+    const validArchetypes = new Set(['actionable', 'containment', 'navigation', 'indicator', 'display', 'data'])
+    for (const [name, sig] of Object.entries(token.componentGrammar.signatures)) {
+      if (sig.archetype && !validArchetypes.has(sig.archetype)) {
+        errors.push(`Invalid archetype: componentGrammar.signatures.${name}.archetype = "${sig.archetype}" (expected one of: ${[...validArchetypes].join(', ')})`)
+      }
+      if (sig.states) {
+        for (const [stateName, state] of Object.entries(sig.states)) {
+          const allowedStateProps = new Set(['backgroundColor', 'textColor', 'border', 'boxShadow', 'opacity'])
+          for (const prop of Object.keys(state)) {
+            if (!allowedStateProps.has(prop)) {
+              errors.push(`Unexpected property: componentGrammar.signatures.${name}.states.${stateName}.${prop} (allowed: ${[...allowedStateProps].join(', ')})`)
+            }
+          }
+        }
+      }
+    }
+  }
+
+  if (token.layout) {
+    if (token.layout.containerMaxWidth !== undefined && (typeof token.layout.containerMaxWidth !== 'number' || token.layout.containerMaxWidth < 320)) {
+      errors.push(`Invalid value: layout.containerMaxWidth = ${token.layout.containerMaxWidth} (expected integer >= 320)`)
+    }
+    if (token.layout.navHeight !== undefined && (typeof token.layout.navHeight !== 'number' || token.layout.navHeight < 40)) {
+      errors.push(`Invalid value: layout.navHeight = ${token.layout.navHeight} (expected integer >= 40)`)
+    }
+    if (token.layout.sectionSpacing !== undefined && (typeof token.layout.sectionSpacing !== 'number' || token.layout.sectionSpacing < 32)) {
+      errors.push(`Invalid value: layout.sectionSpacing = ${token.layout.sectionSpacing} (expected integer >= 32)`)
+    }
+  }
+
   return errors
 }
 
@@ -161,6 +192,24 @@ function collectWarnings(token) {
         warnings.push(`Recommended: typography.scales.${required} is missing`)
       }
     }
+  }
+
+  if (token.componentGrammar?.signatures && Object.keys(token.componentGrammar.signatures).length === 0) {
+    warnings.push('Recommended: componentGrammar.signatures is empty, consider adding component signatures')
+  }
+
+  if (!token.componentGrammar) {
+    warnings.push('Recommended: componentGrammar is missing, component specifications help consumers build consistent UI')
+  }
+
+  if (!token.layout) {
+    warnings.push('Recommended: layout is missing, layout constants help consumers set correct container dimensions')
+  }
+
+  if (token.layout) {
+    if (!token.layout.containerMaxWidth) warnings.push('Recommended: layout.containerMaxWidth is missing')
+    if (!token.layout.navHeight) warnings.push('Recommended: layout.navHeight is missing')
+    if (!token.layout.sectionSpacing) warnings.push('Recommended: layout.sectionSpacing is missing')
   }
 
   return warnings

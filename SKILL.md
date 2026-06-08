@@ -115,12 +115,18 @@ The JSON Schema in Layer 2 is an interface protocol, not an implementation. Any 
 
 **Goal**: Produce at least 3 design directions with distinct statable intents
 **Method**: DESIGN.md → `mapping-rules.md` → generate token.json; Direction Triangle (Efficiency / Clarity / Expression) → 3 variants
-**Output**: token.json + 3 design variants with statable directions + review record + selection decision log
+**Output**: token.json + design-spec.md + 3 design variants with statable directions + review record + selection decision log
 
 ### PHASE 4: Production Implementation
 
 **Goal**: Produce production-grade code directly in the host project
 **Method**: Framework skill consumes token.json; page framework → `page-framework.md`; responsive → `responsive-degradation.md`; state coverage → `ui-states.md`; anti-slop → `anti-slop-checklist.md`; anti-blur → `anti-blur-protocol.md`
+**Context Consumption Checklist** (AI agent must read all before coding):
+- `token.json` — style primitives (colors / spacing / typography / shadows) + component syntax
+- `design-spec.md` — layout / animation / responsive specifications
+- `references/methodology/page-framework.md` — page framework types & navigation rules
+- `references/methodology/animation-best-practices.md` — easing, keyframes, duration rules
+- `references/methodology/responsive-degradation.md` — breakpoint system & degradation strategies
 **Output**: Production-grade components + pages + state coverage checklist
 
 ### PHASE 5: Quality Polish
@@ -158,6 +164,16 @@ token.json is a framework-agnostic interface protocol. Each framework skill cons
 | Flutter skill | `ThemeData` | To be built |
 | iOS skill | `UIColor` extension + `UIFont` metrics | To be built |
 | Android skill | `Color` resource + `dimens.xml` | To be built |
+
+### design-spec.md Consumption
+
+design-spec.md complements token.json by specifying layout, animation, and responsive rules that cannot be expressed as flat tokens. Host projects consume it as follows:
+
+| Spec Area | Consumption Method |
+|-----------|-------------------|
+| Layout (page framework type, sidebar/header/footer structure) | Map to component composition — select page framework type from `page-framework.md`, implement structural components accordingly |
+| Animation (easing curves, keyframe definitions, duration rules) | Map to framework animation primitives — CSS transitions / Framer Motion / Vue Transition / React Native Animated |
+| Responsive (breakpoint behavior, component degradation strategies) | Map to breakpoint logic — Tailwind responsive prefixes / CSS media queries / React Native dimension hooks |
 
 ---
 
@@ -202,7 +218,8 @@ bicorne-design/
 │   ├── light-theme.template.json         ← Light theme skeleton
 │   ├── mobile-dark.template.json         ← Mobile dark theme skeleton
 │   ├── mobile-light.template.json        ← Mobile light theme skeleton
-│   └── dashboard-dark.template.json      ← Dashboard dark theme skeleton
+│   ├── dashboard-dark.template.json      ← Dashboard dark theme skeleton
+│   └── design-spec.template.md           ← Design spec template (layout / animation / responsive)
 ├── scripts/
 │   ├── generate-token.mjs               ← Token generation script
 │   └── validate-token.mjs               ← Token validation script

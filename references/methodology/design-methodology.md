@@ -122,7 +122,12 @@ If user behavior data cannot be collected, user interviews or competitive analys
    - Handle missing fields per mapping-rules.md Section 8
    - Tools: mapping-rules.md, field-compatibility.md
 
-2. **Direction Triangle: Efficiency / Clarity / Expression**
+2. **Generate design-spec.md** — Read `templates/design-spec.template.md` and fill in design decisions based on token.json + methodology references:
+   - **Layout Specification**: Select page framework (F1-F8 from `page-framework.md`), define container parameters, navigation structure, and section composition (equivalent to text wireframe)
+   - **Motion Specification**: Define brand motion personality, assign interaction motion map (family + variant + duration + easing per interaction scenario from `animation-best-practices.md`), define scroll reveal groups, page transition
+   - **Responsive Specification**: Define breakpoint behavior matrix, component-level rules per breakpoint, typography scaling table, touch target rules (from `responsive-degradation.md`)
+
+3. **Direction Triangle: Efficiency / Clarity / Expression**
    - Each batch of variants must lean toward three different directions:
      - ① Efficiency first (shortest operation path)
      - ② Clarity first (highest readability)
@@ -134,13 +139,13 @@ If user behavior data cannot be collected, user interviews or competitive analys
    - Mobile: Efficiency first → reduce operation steps; Clarity first → touch-friendly; Expression first → native platform feel
    - Dashboard: Efficiency first → key metrics at a glance; Clarity first → clear hierarchy, long-distance readable; Expression first → immersive data narrative
 
-3. **AI-Assisted Variant Generation**
+4. **AI-Assisted Variant Generation**
    - AI tools may be used to rapidly generate visual variants
    - Each AI-produced variant must include a human annotation explaining "why this design decision was accepted"
    - Annotation format: "Why this design decision was accepted: [specific reason]"
    - Using AI output without annotation is prohibited
 
-4. **Variant Review and Selection**
+5. **Variant Review and Selection**
    - Score each variant using the preset review framework (total 100 points, 70+ required to advance to next phase)
    - Selection decisions must be recorded for retrospective review
    - See `references/methodology/review-scoring.md`
@@ -151,7 +156,7 @@ Producing only 1 direction and locking in too early, missing better solutions; o
 
 ### Deliverables
 
-token.json + 3 design variants with statable directions + review record + selection decision log
+token.json + `design-spec.md` — Layout specification (text wireframe) + Motion specification (element-level motion map) + Responsive specification (component-level breakpoint behavior matrix) + 3 design variants with statable directions + review record + selection decision log
 
 ### Exception Handling
 

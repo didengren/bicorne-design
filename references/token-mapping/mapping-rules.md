@@ -282,3 +282,110 @@ Primary design range per platform:
 | Mobile | xs–md (480–768) | Phone portrait/landscape |
 | Desktop | md–xxl (768–1536) | Laptop/desktop monitor |
 | Dashboard | xl–xxxl (1280–1920+) | Data display dashboard/control room |
+
+---
+
+## 10. Components Mapping
+
+### 10.1 Overview
+
+DESIGN.md YAML `components` section defines brand-level component specifications. The mapping goal is not to enumerate every component, but to distill them into `componentGrammar.signatures` — brand-level component grammar rules that can derive components not present in DESIGN.md.
+
+```
+DESIGN.md components (enumeration)
+    │
+    ▼  Group by archetype → Extract common attributes → Merge variant states
+    │
+componentGrammar.signatures (grammar)
+```
+
+### 10.2 Component Name → Archetype Matching
+
+| Archetype | Name Pattern (case-insensitive) | Required Attributes | Semantic |
+|-----------|-------------------------------|--------------------|----------|
+| actionable | button, input, toggle, tab, search, pill-tab | borderRadius, padding, height, typography | Interactive controls |
+| containment | card, banner, panel, tile, block, strip | borderRadius, padding | Content containers |
+| navigation | nav, footer, sidebar, header | height | Navigation structures |
+| indicator | badge, tag, dot, status, chip | borderRadius, padding | Status indicators |
+| display | hero, illustration, mockup, screenshot, band | borderRadius, padding | Display blocks |
+| data | row, cell, item, entry, listing | padding | Data units |
+
+**Default**: If a component name matches none of the above patterns, classify as `containment`.
+
+### 10.3 Grouping Rule
+
+Components sharing the same base name (prefix before `-`) are grouped into one signature. The base name becomes the signature key.
+
+**Examples**:
+- `button-primary`, `button-secondary`, `button-tertiary` → signature key `button`
+- `pricing-card`, `pricing-card-featured` → signature key `card` (contains "card" pattern)
+- `top-nav` → signature key `navigation` (contains "nav" pattern)
+- `hero-band` → signature key `hero` (contains "hero" pattern)
+- `badge-pill` → signature key `badge` (contains "badge" pattern)
+- `changelog-row` → signature key `data-row` (contains "row" pattern)
+
+**Special cases**:
+- If the base name already contains an archetype keyword (e.g., `pricing-card` contains "card"), use the archetype keyword as the signature key
+- If multiple archetype keywords exist (e.g., `search-input` contains both "search" and "input"), prefer the first match in the archetype table order
+
+### 10.4 Attribute Induction Rule
+
+For each signature group:
+
+1. **Common attributes**: Take values from the first component in the group that has a complete definition
+   - `borderRadius`: from `rounded` field → token key reference (e.g., `"md"` for `rounded.md`)
+   - `padding`: literal value (e.g., `"8px 14px"`)
+   - `height`: literal value (e.g., `"40px"`)
+   - `typography`: from `typography` field → token key reference (e.g., `"button"`)
+   - `border`: literal CSS value (e.g., `"1px solid {colors.border.default}"`)
+
+2. **Variant states**: Each component in the group becomes a state entry
+   - State key: semantic suffix after the base name (e.g., `button-primary` → state `primary`, `button-secondary` → state `secondary`)
+   - If no suffix exists, the state key is `default`
+   - State attributes: `backgroundColor`, `textColor`, `border`, `boxShadow`, `opacity`
+   - `backgroundColor` and `textColor` use token reference syntax (e.g., `"{colors.brand.500}"`, `"{colors.ink.default}"`)
+
+3. **State key normalization**:
+   - `primary`, `pressed`, `active` → `primary`, `primary-pressed` (pressed is a sub-state of primary)
+   - `secondary`, `on-dark` → `secondary`, `secondary-on-dark`
+   - `ghost`, `tertiary`, `text-link` → `ghost`
+   - `disabled` → `disabled` (applies to all variants)
+   - `focused` → `focused` (applies to all variants)
+   - `elevated`, `featured` → `elevated`
+
+### 10.5 Attribute Value Type Rules
+
+| Attribute | Value Type | Example | Notes |
+|-----------|-----------|---------|-------|
+| `archetype` | enum string | `"actionable"` | One of: actionable, containment, navigation, indicator, display, data |
+| `borderRadius` | token key | `"md"` | References `borderRadius.md` in token.json |
+| `padding` | literal | `"8px 14px"` | CSS padding shorthand value |
+| `height` | literal | `"40px"` | CSS height value |
+| `typography` | token key | `"button"` | References `typography.scales.button` in token.json |
+| `border` | literal | `"1px solid {colors.border.default}"` | CSS border shorthand, may contain token references |
+| `states.*.backgroundColor` | token reference | `"{colors.brand.500}"` | Token reference syntax with curly braces |
+| `states.*.textColor` | token reference | `"{colors.ink.default}"` | Token reference syntax with curly braces |
+| `states.*.border` | literal | `"2px solid {colors.brand.500}"` | May contain token references |
+| `states.*.boxShadow` | literal | `"0 0 0 2px {colors.brand.500}33"` | May contain token references |
+| `states.*.opacity` | number | `0.5` | CSS opacity value |
+
+### 10.6 Missing Field Degradation
+
+| Scenario | Behavior |
+|----------|----------|
+| DESIGN.md has no `components` section | Do not output `componentGrammar` in token.json |
+| Component missing `backgroundColor` | Omit from state, consumer uses archetype default |
+| Component missing `textColor` | Omit from state, consumer uses `ink.default` |
+| Component missing `rounded` | Omit `borderRadius` from signature |
+| Component missing `padding` | Omit `padding` from signature |
+| Component missing `height` | Omit `height` from signature (only required for actionable/navigation archetypes) |
+| Component missing `typography` | Omit `typography` from signature |
+| Component missing `border` | Omit `border` from signature |
+
+### 10.7 Layout Constants Mapping
+
+| token.json Target | Extraction Source | Default (Desktop) | Default (Mobile) | Default (Dashboard) |
+|-------------------|------------------|-------------------|------------------|---------------------|
+| `layout.containerMaxWidth` | Markdown body "Max content width" / "Max width" / "Container width" regex | 1280 | 640 | 1920 |
+| `layout.navHeight` | Component `top-nav` / `nav-bar` / `primary-nav` `height` field | 56 | 56 | 64 |
+| `layout.sectionSpacing` | `spacing.section` / `spacing.xxl` value | 96 | 64 | 64 |

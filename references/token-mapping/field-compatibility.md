@@ -135,3 +135,94 @@ Spotify's UI has almost no light-colored elements. When mapping:
 - `surface.base` takes `#121212`
 - `ink.default` takes `#ffffff`
 - Semantic colors preserve original values
+
+---
+
+## 6. Component Grammar Field Compatibility
+
+### 6.1 Component Name → Signature Key Mapping
+
+Standard mapping from DESIGN.md component names to `componentGrammar.signatures` keys.
+
+| DESIGN.md Component Name Pattern | Signature Key | Archetype |
+|---------------------------------|---------------|-----------|
+| button-primary, button-cta, button-submit | button | actionable |
+| button-secondary, button-outline | button | actionable |
+| button-tertiary, button-ghost, button-text-link, button-link | button | actionable |
+| button-primary-active, button-primary-pressed | button (state: primary-pressed) | actionable |
+| button-primary-disabled | button (state: disabled) | actionable |
+| button-icon, button-icon-circular | button-icon | actionable |
+| card, card-base, card-default | card | containment |
+| feature-card, card-feature | card | containment |
+| pricing-card, pricing-tier-card, pricing-tier | card | containment |
+| pricing-card-featured, pricing-tier-featured | card (state: elevated) | containment |
+| testimonial-card | card | containment |
+| product-card, product-mockup-card | card | containment |
+| code-block, code-window, code-window-card | card | containment |
+| hero-band, hero-card, hero-stripe | hero | display |
+| top-nav, nav-bar, primary-nav, global-nav | navigation | navigation |
+| footer, footer-section, footer-region | navigation | navigation |
+| sub-nav, sub-nav-pill, sub-nav-strip | navigation | navigation |
+| text-input, text-input-focused | input | actionable |
+| search-input, search-pill, search-bar | input | actionable |
+| badge-pill, badge-tag, badge-status | badge | indicator |
+| badge-orange, badge-coral, badge-green | badge (state: semantic variant) | indicator |
+| pill-tab, category-tab, segmented-tab | tab | actionable |
+| cta-band, cta-banner, cta-strip | cta | containment |
+| changelog-row, faq-row, comparison-row | data-row | data |
+| stat-callout, stat-cell, stat-row | data-row | data |
+| logo-wall-item, customer-logo-tile, logo-strip | logo-strip | containment |
+
+### 6.2 Brand-Specific Component Mapping
+
+Components unique to specific brands that require special handling.
+
+| Brand | Component Name | Signature Key | State | Notes |
+|-------|---------------|---------------|-------|-------|
+| Binance | button-trading-up | button | trading-up | Semantic color: green for price up |
+| Binance | button-trading-down | button | trading-down | Semantic color: red for price down |
+| Binance | button-subscribe | button | subscribe | CTA variant |
+| Binance | markets-table-card | card | — | Data table container |
+| Binance | price-up-down-cell | data-row | — | Trading data unit |
+| Airbnb | search-bar-pill | input | — | Pill-shaped search input |
+| Airbnb | search-orb | input | — | Circular search trigger |
+| Airbnb | property-card | card | — | Listing card |
+| Airbnb | date-picker-day | input | — | Date selection cell |
+| Meta | button-buy-cta | button | buy-cta | Commerce CTA variant |
+| Meta | card-checkout-summary | card | checkout | Checkout flow card |
+| Meta | color-swatch-circle | badge | swatch | Product color selector |
+| BMW | configurator-option-tile | card | configurator | Car configuration selector |
+| BMW | model-card | card | model | Vehicle model card |
+| Ferrari | race-position-cell | data-row | — | Race result data |
+| Ferrari | preowned-listing-card | card | preowned | Pre-owned listing |
+| PlayStation | game-tile | card | game | Game product card |
+| PlayStation | ps-plus-banner | cta | ps-plus | Subscription CTA |
+| Nike | swatch-dot | badge | swatch | Color/size selector |
+| Nike | campaign-tile | card | campaign | Marketing campaign card |
+| Apple | product-tile-light/dark | card | product-tile | Product showcase tile |
+| Apple | button-pearl-capsule | button | pearl | Premium CTA variant |
+| Apple | sub-nav-frosted | navigation | frosted | Frosted glass sub-navigation |
+| HashiCorp | button-product-terraform/vault/waypoint | button | product-terraform/vault/waypoint | Product-line colored buttons |
+| Raycast | command-palette-row | data-row | — | Command palette item |
+| Raycast | keycap | badge | keycap | Keyboard shortcut indicator |
+| Mintlify | sidebar-nav-item | navigation | sidebar-item | Documentation sidebar |
+| Mintlify | doc-toc-item | navigation | toc-item | Table of contents item |
+| Ollama | terminal-card | card | terminal | Terminal emulator container |
+| PostHog | hedgehog-mascot-card | card | mascot | Brand mascot card |
+
+### 6.3 State Key Normalization
+
+| DESIGN.md Suffix | Normalized State Key | Applies To |
+|-------------------|---------------------|------------|
+| -primary | primary | button, input |
+| -secondary | secondary | button, input |
+| -tertiary, -ghost, -text-link, -link | ghost | button |
+| -active, -pressed | primary-pressed | button (sub-state of primary) |
+| -disabled | disabled | button, input |
+| -focused | focused | input, tab |
+| -featured, -elevated | elevated | card |
+| -on-dark | on-dark | button, card (dark surface variant) |
+| -on-light, -on-cream | on-light | button, card (light surface variant) |
+| -dark | dark | card, hero (dark background variant) |
+| -light | light | card, hero (light background variant) |
+| -yellow, -coral, -green, -orange | semantic-{color} | badge, card (color-coded variant) |

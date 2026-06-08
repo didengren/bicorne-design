@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "clickhouse-dark",
-    "version": "0.1.0",
+    "version": "0.2.0",
     "source": "references/brand-library/developer-tools/clickhouse-DESIGN.md",
     "theme": "dark",
     "platform": "dashboard"
@@ -215,6 +215,34 @@
     "slow": {
       "duration": "300ms",
       "easing": "cubic-bezier(0.215,0.61,0.355,1)"
+    },
+    "expand": {
+      "duration": "200ms",
+      "easing": "ease-in-out"
+    },
+    "collapse": {
+      "duration": "150ms",
+      "easing": "ease-in"
+    },
+    "modal-enter": {
+      "duration": "280ms",
+      "easing": "ease-out"
+    },
+    "modal-exit": {
+      "duration": "180ms",
+      "easing": "ease-in"
+    },
+    "toast-enter": {
+      "duration": "300ms",
+      "easing": "ease-out"
+    },
+    "toast-exit": {
+      "duration": "200ms",
+      "easing": "ease-in"
+    },
+    "scroll-reveal": {
+      "duration": "500ms",
+      "easing": "cubic-bezier(0.16,1,0.3,1)"
     }
   },
   "viewport": {
@@ -225,5 +253,192 @@
     "xl": 1280,
     "xxl": 1536,
     "xxxl": 1920
+  },
+  "layout": {
+    "containerMaxWidth": 1280,
+    "navHeight": 64,
+    "sectionSpacing": 96
+  },
+  "componentGrammar": {
+    "signatures": {
+      "button": {
+        "archetype": "actionable",
+        "borderRadius": "md",
+        "padding": "12px 20px",
+        "height": "40px",
+        "typography": "button",
+        "states": {
+          "primary": {
+            "backgroundColor": "{colors.primary}",
+            "textColor": "{colors.on-primary}"
+          },
+          "primary-pressed": {
+            "backgroundColor": "{colors.primary-active}",
+            "textColor": "{colors.on-primary}"
+          },
+          "primary-disabled": {
+            "backgroundColor": "{colors.primary-disabled}",
+            "textColor": "{colors.muted}"
+          },
+          "secondary": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "ghost": {
+            "backgroundColor": "transparent",
+            "textColor": "{colors.on-dark}"
+          },
+          "icon-circular": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          }
+        }
+      },
+      "text": {
+        "archetype": "containment",
+        "typography": "body-md",
+        "states": {
+          "ghost": {
+            "backgroundColor": "transparent",
+            "textColor": "{colors.primary}"
+          }
+        }
+      },
+      "navigation": {
+        "archetype": "navigation",
+        "height": "64px",
+        "typography": "nav-link",
+        "padding": "64px",
+        "states": {
+          "top": {
+            "backgroundColor": "{colors.canvas}",
+            "textColor": "{colors.on-dark}"
+          },
+          "default": {
+            "backgroundColor": "{colors.canvas}",
+            "textColor": "{colors.muted}"
+          }
+        }
+      },
+      "hero": {
+        "archetype": "display",
+        "padding": "96px",
+        "typography": "display-xl",
+        "borderRadius": "lg",
+        "states": {
+          "default": {
+            "backgroundColor": "{colors.canvas}",
+            "textColor": "{colors.on-dark}"
+          },
+          "cta-yellow": {
+            "backgroundColor": "{colors.primary}",
+            "textColor": "{colors.on-primary}"
+          }
+        }
+      },
+      "card": {
+        "archetype": "containment",
+        "typography": "stat-display",
+        "borderRadius": "lg",
+        "padding": "32px",
+        "states": {
+          "hero-stat": {
+            "backgroundColor": "{colors.canvas}",
+            "textColor": "{colors.primary}"
+          },
+          "feature-yellow": {
+            "backgroundColor": "{colors.surface-yellow-band}",
+            "textColor": "{colors.on-yellow}"
+          },
+          "feature-dark": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "code-window": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "product-mockup": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "pricing-tier": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "pricing-tier-elevated": {
+            "backgroundColor": "{colors.primary}",
+            "textColor": "{colors.on-primary}"
+          },
+          "events": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "customer-logo": {
+            "backgroundColor": "{colors.canvas}",
+            "textColor": "{colors.muted}"
+          }
+        }
+      },
+      "stat": {
+        "archetype": "containment",
+        "typography": "stat-display",
+        "states": {
+          "callout": {
+            "backgroundColor": "transparent",
+            "textColor": "{colors.primary}"
+          }
+        }
+      },
+      "input": {
+        "archetype": "actionable",
+        "borderRadius": "md",
+        "padding": "10px 14px",
+        "height": "40px",
+        "typography": "body-md",
+        "states": {
+          "text": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "text-focused": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          }
+        }
+      },
+      "tab": {
+        "archetype": "actionable",
+        "borderRadius": "md",
+        "padding": "8px 14px",
+        "typography": "nav-link",
+        "states": {
+          "category": {
+            "backgroundColor": "transparent",
+            "textColor": "{colors.muted}"
+          },
+          "category-pressed": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          }
+        }
+      },
+      "badge": {
+        "archetype": "indicator",
+        "borderRadius": "pill",
+        "padding": "4px 12px",
+        "typography": "caption",
+        "states": {
+          "pill": {
+            "backgroundColor": "{colors.surface-card}",
+            "textColor": "{colors.on-dark}"
+          },
+          "yellow": {
+            "backgroundColor": "{colors.primary}",
+            "textColor": "{colors.on-primary}"
+          }
+        }
+      }
+    }
   }
 }
