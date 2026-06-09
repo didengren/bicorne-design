@@ -1,0 +1,81 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* perf: 字体优化 (P-2 · 主动管理 font-display + woff2 · 避免 FOIT 阻塞首屏) */
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-var.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body, #app {
+  margin: 0;
+  background: #0a0a0a;
+  color: #d4d4d4;
+  font-family: 'Inter', 'PingFang SC', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  overflow: hidden;
+}
+
+* { box-sizing: border-box; }
+
+/* Scrollbar — VSCode style */
+::-webkit-scrollbar { width: 10px; height: 10px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #424242; border-radius: 5px; }
+::-webkit-scrollbar-thumb:hover { background: #5a5a5a; }
+
+/* Typewriter cursor */
+.cursor-blink::after {
+  content: '▌';
+  display: inline-block;
+  color: #a78bfa;
+  animation: ai-pulse 1000ms ease-in-out infinite;
+  margin-left: 1px;
+}
+
+/* Code syntax */
+.code-keyword { color: #c586c0; }
+.code-string  { color: #ce9178; }
+.code-func    { color: #dcdcaa; }
+.code-comment { color: #6a9955; font-style: italic; }
+.code-number  { color: #b5cea8; }
+.code-type    { color: #4ec9b0; }
+
+/* a11y: 键盘焦点样式（H-4 · 符合 WCAG 2.1 AA） */
+*:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+  border-radius: 4px;
+}
+button:focus-visible,
+a:focus-visible,
+textarea:focus-visible,
+input:focus-visible {
+  outline: 2px solid #a78bfa;
+  outline-offset: 2px;
+}
+
+/* a11y: 动效降级（H-5 · 尊重系统设置） */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+}

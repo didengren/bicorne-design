@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "stripe-light",
-    "version": "0.2.0",
+    "version": "2.12.0",
     "source": "references/brand-library/fintech/stripe-DESIGN.md",
     "theme": "light",
     "platform": "mobile"
@@ -48,15 +48,24 @@
     "fontFamilies": {
       "display": {
         "name": "sohne-var",
-        "stack": "'sohne-var', sans-serif"
+        "stack": "'sohne-var', sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [300, 400, 500, 600],
+        "openTypeFeatures": ["tnum", "cv11"]
       },
       "body": {
         "name": "System Body",
-        "stack": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        "stack": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600],
+        "openTypeFeatures": ["cv11"]
       },
       "mono": {
         "name": "SourceCodePro",
-        "stack": "'SourceCodePro', sans-serif"
+        "stack": "'SourceCodePro', sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500],
+        "openTypeFeatures": ["tnum", "calt"]
       }
     },
     "scales": {

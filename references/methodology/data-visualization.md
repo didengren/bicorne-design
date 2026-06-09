@@ -271,7 +271,7 @@ When data needs encoding, select the encoding method by the following priority:
 |----------|-----------------|-------|
 | Data is null | Dashed-line connection (line chart) / Gap (bar chart) | No interpolation, no zero-filling |
 | Data is 0 | Normal display (bar height 0) | 0 is valid data |
-| Data loading | Skeleton placeholder | See `ui-states.md` |
+| Data loading | Skeleton placeholder | See `./ui-states.md` |
 | Data unavailable | `{colors.ink.tertiary}` label "N/A" | Do not hide chart area |
 
 ---

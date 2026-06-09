@@ -92,23 +92,47 @@ export default {
 | 反 AI slop 清单 | 避免 AI 产出的平均化审美 | `references/methodology/anti-slop-checklist.md` |
 | 页面框架规范 | 8 种框架类型 F1-F8 | `references/methodology/page-framework.md` |
 | 响应式降级策略 | 断点降级方案 | `references/methodology/responsive-degradation.md` |
-| 组件状态覆盖 | 空状态 + 加载状态 | `references/methodology/ui-states.md` |
+| 组件状态覆盖 | 通用空/加载状态 | `references/methodology/ui-states.md` |
+| **Dashboard 6 状态** | **数据大屏专用** | **`dashboards/ui-states.md`** |
+| **Dashboard 排版** | **数据大屏专用** | **`dashboards/typography.md`** |
+| **Dashboard 动画映射** | **数据大屏专用** | **`dashboards/animation-matrix.md`** |
+| **Dashboard 反模式** | **数据大屏专用** | **`dashboards/pitfalls/`** |
 
 ## 目录结构
 
 ```
 bicorne-design/
 ├── SKILL.md                              # AI agent 入口（原则 + 工作流 + 场景路由）
+├── package.json
+│
+├── # L1 · 通用层（类别无关）
 ├── schema/
 │   └── design-token.schema.json          # 框架无关的设计令牌规范
-├── references/
+├── references/                           # Layer 1 + Layer 2 输入
 │   ├── brand-library/                    # 60 个品牌 DESIGN.md + INDEX.md
-│   ├── methodology/                      # 12 个方法论文档
+│   ├── methodology/                      # 12 个方法论文档（通用）
 │   ├── design-philosophy/                # 设计哲学 + 评审指南
 │   └── token-mapping/                    # 映射规则 + 示例 token.json
-├── templates/                            # 5 个平台模板（桌面/移动端/大屏）
+├── templates/                            # 5 个平台模板
 ├── scripts/                              # generate-token + validate-token
-└── package.json
+│
+└── # L2 · 平台专题（按项目类别组织）
+    └── dashboards/                       # Dashboard / 大屏 / 驾驶舱 / 监控屏
+        ├── README.md                     # 类别专题索引
+        ├── meta-prompt.md                # PHASE 4 前预检清单
+        ├── component-contract/           # 8 个核心组件契约
+        ├── layouts/                      # L1-L8 布局原型
+        ├── data-viz/                     # 6 种数据可视化
+        ├── animation-matrix.md           # 场景→动画曲线/时长映射
+        ├── typography.md                 # dashboard 专用排版
+        ├── ui-states.md                  # dashboard 6 状态
+        ├── performance.md                # 60fps 性能预算
+        ├── pitfalls/                     # 25 个反模式
+        ├── tailwind-bridge/              # token.json → tailwind.config.ts
+        └── verification/                 # 3 个真实参考实现
+            ├── 4-1-linear-vue/
+            ├── 4-2-stripe-landing/
+            └── 4-3-dashboard-command-center/
 ```
 
 ## 支持平台

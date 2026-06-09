@@ -188,6 +188,26 @@
                 "stack": {
                   "type": "string",
                   "description": "CSS font-stack value"
+                },
+                "fontDisplay": {
+                  "type": "string",
+                  "enum": ["auto", "block", "swap", "fallback", "optional"],
+                  "default": "swap",
+                  "description": "CSS font-display strategy. v2.12 B 方案后必须 swap 避免 FOIT"
+                },
+                "fontWeight": {
+                  "type": "array",
+                  "items": {
+                    "type": "integer",
+                    "minimum": 100,
+                    "maximum": 900
+                  },
+                  "description": "Available font weights in the family (e.g. [400, 500, 600, 700])"
+                },
+                "openTypeFeatures": {
+                  "type": "array",
+                  "items": { "type": "string" },
+                  "description": "OpenType features enabled (e.g. ['tnum', 'cv11', 'ss01'])"
                 }
               },
               "additionalProperties": false

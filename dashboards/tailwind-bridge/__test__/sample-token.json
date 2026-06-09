@@ -1,0 +1,17 @@
+{
+  "colors": {
+    "surface": { "1": "#0f1219", "2": "#161b26", "3": "#1d2333" },
+    "border": { "soft": "#2a3142", "faint": "#1a2030" },
+    "accent": { "blue": "#2b7fff", "cyan": "#54c5ff", "green": "#00d4a8" }
+  },
+  "spacing": { "1": 4, "2": 8, "4": 16, "6": 24 },
+  "borderRadius": { "md": 8, "lg": 12 },
+  "shadows": { "panel": "0 8px 32px rgba(0,0,0,0.4)" },
+  "fontFamilies": { "mono": "JetBrains Mono" },
+  "animations": {
+    "draw": { "duration": "1.6s", "easing": "cubic-bezier(0.4, 0, 0.2, 1)" }
+  },
+  "keyframes": {
+    "draw": { "0%": { "stroke-dashoffset": "1000" }, "100%": { "stroke-dashoffset": "0" } }
+  }
+}

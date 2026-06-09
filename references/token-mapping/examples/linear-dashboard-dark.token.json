@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "linear-dark",
-    "version": "0.2.0",
+    "version": "2.12.0",
     "source": "references/brand-library/developer-tools/linear.app-DESIGN.md",
     "theme": "dark",
     "platform": "dashboard"
@@ -48,15 +48,24 @@
     "fontFamilies": {
       "display": {
         "name": "Linear Display",
-        "stack": "'Linear Display', sans-serif"
+        "stack": "'Linear Display', sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600, 700],
+        "openTypeFeatures": ["tnum", "cv11", "ss01"]
       },
       "body": {
         "name": "Linear Text",
-        "stack": "'Linear Text', sans-serif"
+        "stack": "'Linear Text', sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600],
+        "openTypeFeatures": ["cv11"]
       },
       "mono": {
         "name": "Linear Mono",
-        "stack": "'Linear Mono', sans-serif"
+        "stack": "'Linear Mono', sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500],
+        "openTypeFeatures": ["tnum", "calt"]
       }
     },
     "scales": {

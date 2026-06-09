@@ -10,3 +10,34 @@ pnpm-lock.yaml
 yarn.lock
 
 verification/
+
+# 项目维护文档（LLM 通过 SKILL.md 入口进入，不需要历史与未来）
+CHANGELOG.md
+ROADMAP.md
+PERF_RUNTIME_REPORT.md
+
+# CI/CD 与 issue 流程（人类维护者用，LLM 不消费）
+.github/
+
+# 截图册（视觉证据，LLM 不消费图像）
+screenshots/
+
+# CI / 审计 / 运维脚本（开发者 / CI 用，LLM 通过 SKILL.md 间接引用）
+scripts/README.md
+scripts/download-fonts.sh
+scripts/build-all.sh
+scripts/perf-runtime-all.sh
+scripts/perf-runtime-test.sh
+scripts/perf-runtime-check.sh
+scripts/perf-scan.sh
+scripts/a11y-scan.sh
+scripts/e2e-validate.sh
+scripts/ci-e2e.sh
+scripts/cycle-detect.sh
+scripts/file-loc-stats.sh
+scripts/duplication-check.sh
+scripts/gen-bplan-compare.py
+scripts/gen-warn-trend.py
+
+# Sandbox 工具（一次性脚本，sandbox 流程结束后清理）
+sandbox/

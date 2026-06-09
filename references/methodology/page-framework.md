@@ -328,7 +328,7 @@ Applies to F8 framework.
 
 1. **Master pane selected item highlight** — Currently selected item must have clear visual feedback (background color + left indicator bar)
 2. **Master pane supports search/filter** — When list items exceed 20, a search box should be provided at the top of the master pane
-3. **Detail pane empty state** — When no item is selected, the detail pane displays an empty state guide (see `ui-states.md`)
+3. **Detail pane empty state** — When no item is selected, the detail pane displays an empty state guide (see `./ui-states.md`)
 4. **Mobile degradation** — Split-pane degrades to master pane full-screen + back navigation on mobile, see `responsive-degradation.md`
 
 ### 7.3 Split-Pane Width Adjustment

@@ -70,6 +70,13 @@ function validateCrossReferences(token) {
       if (scale.fontFamily && !token.typography.fontFamilies[scale.fontFamily]) {
         errors.push(`Broken reference: typography.scales.${name}.fontFamily = "${scale.fontFamily}" not found in typography.fontFamilies`)
       }
+      // Issue 2 修复：scales.fontWeight 必须在 fontFamilies[name].fontWeight 列表内
+      const fam = scale.fontFamily && token.typography.fontFamilies[scale.fontFamily]
+      if (fam && Array.isArray(fam.fontWeight) && fam.fontWeight.length > 0 &&
+          typeof scale.fontWeight === 'number' &&
+          !fam.fontWeight.includes(scale.fontWeight)) {
+        errors.push(`Broken reference: typography.scales.${name}.fontWeight = ${scale.fontWeight} not in typography.fontFamilies.${scale.fontFamily}.fontWeight = ${JSON.stringify(fam.fontWeight)}`)
+      }
     }
   }
 
@@ -121,6 +128,46 @@ function collectWarnings(token) {
 
   if (token.typography?.fontFamilies && Object.keys(token.typography.fontFamilies).length === 0) {
     warnings.push('Recommended: typography.fontFamilies is empty, at least one font family is expected')
+  }
+
+  // ===== v2.12 fontFamilies 三段 + fontDisplay 审计（Task 8.7）=====
+  const requiredFamilies = ['display', 'body', 'mono']
+  const validFontDisplay = new Set(['auto', 'block', 'swap', 'fallback', 'optional'])
+  // OpenType 特性白名单（v2.12 Issue 3 修复）
+  const validOpenTypeFeatures = new Set([
+    'tnum', 'lnum', 'onum', 'pnum', 'frac',
+    'cv01', 'cv02', 'cv11',
+    'ss01', 'ss02', 'ss03', 'ss20',
+    'liga', 'dlig', 'clig', 'calt', 'kern'
+  ])
+  if (token.typography?.fontFamilies) {
+    for (const required of requiredFamilies) {
+      if (!token.typography.fontFamilies[required]) {
+        warnings.push(`v2.12 Recommended: typography.fontFamilies.${required} is missing (三段缺失)`)
+      }
+    }
+    for (const [name, family] of Object.entries(token.typography.fontFamilies)) {
+      // Issue 1: 缺失 fontDisplay 也应警告（v2.12 强制 swap）
+      if (family.fontDisplay === undefined) {
+        warnings.push(`v2.12 Recommended: typography.fontFamilies.${name}.fontDisplay is missing (建议显式 "swap" 避免 FOIT)`)
+      } else if (family.fontDisplay === 'auto' || family.fontDisplay === 'block') {
+        // Issue 4: 删除重复的 AJV-style Invalid 警告；仅保留 "改 swap" 推荐（AJV 已 reject 无效值，此处不重复）
+        warnings.push(`v2.12 Recommended: typography.fontFamilies.${name}.fontDisplay = "${family.fontDisplay}" → 改 swap 避免 FOIT`)
+      }
+      if (!family.fontWeight || family.fontWeight.length === 0) {
+        warnings.push(`v2.12 Recommended: typography.fontFamilies.${name}.fontWeight is missing (字重列表)`)
+      }
+      if (!family.openTypeFeatures || family.openTypeFeatures.length === 0) {
+        warnings.push(`v2.12 Recommended: typography.fontFamilies.${name}.openTypeFeatures is missing (OT features)`)
+      } else {
+        // Issue 3: openTypeFeatures 元素必须在白名单内
+        for (const feat of family.openTypeFeatures) {
+          if (!validOpenTypeFeatures.has(feat)) {
+            warnings.push(`v2.12 Recommended: typography.fontFamilies.${name}.openTypeFeatures includes "${feat}" (非白名单 OpenType 特性，可能浏览器忽略)`)
+          }
+        }
+      }
+    }
   }
 
   if (token.typography?.scales && Object.keys(token.typography.scales).length === 0) {

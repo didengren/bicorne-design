@@ -48,15 +48,24 @@
     "fontFamilies": {
       "display": {
         "name": "System Display",
-        "stack": "'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif"
+        "stack": "'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600, 700, 800],
+        "openTypeFeatures": ["tnum", "cv11"]
       },
       "body": {
         "name": "System Body",
-        "stack": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif"
+        "stack": "-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial, sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600],
+        "openTypeFeatures": ["cv11"]
       },
       "mono": {
         "name": "System Mono",
-        "stack": "ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Menlo, Monaco, monospace"
+        "stack": "ui-monospace, 'SF Mono', 'Cascadia Code', 'JetBrains Mono', Menlo, Monaco, monospace",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500],
+        "openTypeFeatures": ["tnum", "calt"]
       }
     },
     "scales": {

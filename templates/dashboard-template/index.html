@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1920" />
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'%3E%3Crect width='32' height='32' rx='6' fill='%23111'/%3E%3C/svg%3E" fetchpriority="high" />
+    <!-- perf: 关键资源预加载 (P-3 · 浏览器提前解析, 减少 LCP 等待) -->
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-var.woff2" crossorigin />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/jetbrains-mono.woff2" crossorigin />
+    <link rel="preconnect" href="https://rsms.me" crossorigin />
+    <link rel="dns-prefetch" href="https://rsms.me" />
+    <title>Bicorne Dashboard Template</title>
+  </head>
+  <body class="bg-dash-bg text-dash-text">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

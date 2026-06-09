@@ -1,6 +1,10 @@
 # Brand Design System Index
 
-> 60 brands curated from 71 candidates, categorized by scenario, with a selection decision tree.
+> 60+ brands curated from 71 candidates, categorized by scenario, with a selection decision tree.
+> **v1.7 onward: 13 industry categories** (original 11 + new `luxury/` for high-end fashion / watches / home appliances + `aerospace/` for aerospace / aviation).
+> **v1.8: first industry landed**: `luxury/` industry moved from index → actual verification. `ps-3-hermes-bo-luxury` (Hermès + Bang & Olufsen maison · warm-light + beige canvas + Serif) has been built and references the luxury industry in this directory (see `../../premium-showcase/verification/ps-3-hermes-bo-luxury/token.json`).
+>
+> **Scope note (v2.12 Task 1 review)**: The v1.7/v1.8 paragraph above and the two luxury/aerospace sections added below **are not within the scope of v2.12 Task 1** (Task 1 only covers "3 temporary v2.11 scripts scattered in /tmp → migrate to scripts/"). This part should belong to v2.12 Task 8 (brand-library 13 industry README annotation) or an earlier task, and will be planned uniformly during the v2.12 full review. **Do not roll back** — only annotate ownership.
 
 ---
 
@@ -126,6 +130,35 @@ Best for: Premium product showcases, brand websites, immersive experiences
 | [bmw](./automotive/bmw-DESIGN.md) | BMW blue CTA + BMW Type Next + model configuration card grid | ❌ | Automotive brand websites, product configurators |
 | [ferrari](./automotive/ferrari-DESIGN.md) | Near-pure black + Rosso Corsa racing red + FerrariSans + cinematic Hero | ✅ | Luxury cars, premium product showcases |
 | [lamborghini](./automotive/lamborghini-DESIGN.md) | True black canvas + LamboType 12° slant + gold CTA + zero border-radius | ✅ | Supercars, extreme dark aesthetics |
+
+### Luxury & Lifestyle（new in v1.7）
+
+Best for: **premium-showcase** category (cinematic / photography-led) · inquiry-style footer
+
+| Brand | Core Characteristics | Dark | Typical Scenarios |
+|-------|---------------------|------|-------------------|
+| Hermès | Beige canvas + caramel accent + serif uppercase + photography 80% viewport | ❌ | High-end fashion / leather goods / accessories |
+| Bang & Olufsen | Minimalist Nordic + aluminum + black / white / gray + photography 75% viewport + sans ultra-thin | ❌ | High-end home appliances / audio |
+| Aston Martin | British racing green #00665e + champagne gold accent + serif + cinematic scrolling | ✅ | Luxury GT cars / motorsport |
+| Rolls-Royce | Pure black #0a0a0a + silver chrome accent + extreme serif + ultra-wide photography 90% viewport | ✅ | Top-tier luxury cars |
+| Rolex | Emerald green + gold + serif + photography 70% + inquiry-style footer | ❌ | Top-tier watches |
+| Bottega Veneta | Sand color + woven texture + minimalist sans + photography 75% | ❌ | High-end fashion / leather goods |
+
+> **Detailed specs**: [`./luxury/INDEX.md`](./luxury/INDEX.md) (v1.7 index-only, DESIGN.md pending v1.8+ on-demand)
+> **Priority**: Hermès / Aston Martin / Bang & Olufsen (ps-3 candidates) > others
+
+### Aerospace & Aviation（new in v1.7）
+
+Best for: **premium-showcase** category (cinematic / engineering-grade photography) · booking / waitlist footer
+
+| Brand | Core Characteristics | Dark | Typical Scenarios |
+|-------|---------------------|------|-------------------|
+| SpaceX | Pure black + silver-white + blue flame #0a84ff orbital insertion + cinematic rocket launch + mono spec | ✅ | Commercial aerospace / rocket launch |
+| Virgin Galactic | Magenta #ff0046 + dark purple + cinematic space capsule + serif uppercase | ✅ | Commercial suborbital aerospace |
+| Boom Supersonic | Silver-white gradient + teal #1f6b8c + streamlined + cinematic flight spec (Mach 2.2) | ❌ | Supersonic airliners |
+
+> **Detailed specs**: [`./aerospace/INDEX.md`](./aerospace/INDEX.md) (v1.7 index-only, DESIGN.md pending v1.8+ on-demand)
+> **Resolution of consumer-lifestyle/spacex duplication**: consumer-lifestyle is classified as 'mainstream consumer brands', while this directory is classified as 'commercial aerospace' — different perspectives on the same brand
 
 ### Media
 

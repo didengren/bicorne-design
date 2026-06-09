@@ -1,7 +1,7 @@
 {
   "meta": {
     "name": "clickhouse-dark",
-    "version": "0.2.0",
+    "version": "2.12.0",
     "source": "references/brand-library/developer-tools/clickhouse-DESIGN.md",
     "theme": "dark",
     "platform": "dashboard"
@@ -48,15 +48,24 @@
     "fontFamilies": {
       "display": {
         "name": "System Display",
-        "stack": "'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif"
+        "stack": "'SF Pro Display', -apple-system, system-ui, 'Segoe UI', Roboto, sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600, 700, 800, 900],
+        "openTypeFeatures": ["tnum", "cv11"]
       },
       "body": {
         "name": "Inter",
-        "stack": "Inter, sans-serif"
+        "stack": "Inter, sans-serif",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 600, 700],
+        "openTypeFeatures": ["tnum", "cv11"]
       },
       "mono": {
         "name": "JetBrains Mono",
-        "stack": "JetBrains Mono, ui-monospace, monospace"
+        "stack": "JetBrains Mono, ui-monospace, monospace",
+        "fontDisplay": "swap",
+        "fontWeight": [400, 500, 700],
+        "openTypeFeatures": ["tnum", "calt"]
       }
     },
     "scales": {

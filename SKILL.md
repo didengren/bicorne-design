@@ -1,12 +1,12 @@
 ---
 name: bicorne-design
-description: Use when creating design systems, generating design tokens, or doing UI design. Triggers: admin dashboards, marketing landing pages, mobile interfaces, data dashboards, design reviews, style exploration, UI optimization. Does not trigger: pure backend logic, database design, API development, ops configuration
+description: Use when creating design systems, generating design tokens, or doing UI design. Triggers: admin dashboards, marketing landing pages, mobile interfaces, data dashboards, design reviews, style exploration, UI optimization, AI product UIs (chat / IDE / playground), native app interfaces (iOS / Android), premium showcase sites (Tesla / Apple Vision Pro / Hermès), e-commerce flows (PDP / cart / checkout), documentation sites, auth flows (sign-in / sign-up / 2FA), e2e verification of real reference implementations. Does not trigger: pure backend logic, database design, API development, ops configuration
 license: MIT
 compatibility: any-framework
 metadata:
-  version: 0.1.0
+  version: 2.12.0
   author: Sam Xu <twonian@gmail.com>
-  keywords: design-system, design-token, brand-library, methodology, anti-blur, anti-slop
+  keywords: design-system, design-token, brand-library, methodology, anti-blur, anti-slop, a11y, perf, real-deploy, e2e
 ---
 
 # Bicorne Design — Unified Design System Skill
@@ -120,7 +120,7 @@ The JSON Schema in Layer 2 is an interface protocol, not an implementation. Any 
 ### PHASE 4: Production Implementation
 
 **Goal**: Produce production-grade code directly in the host project
-**Method**: Framework skill consumes token.json; page framework → `page-framework.md`; responsive → `responsive-degradation.md`; state coverage → `ui-states.md`; anti-slop → `anti-slop-checklist.md`; anti-blur → `anti-blur-protocol.md`
+**Method**: Framework skill consumes token.json; page framework → `page-framework.md`; responsive → `responsive-degradation.md`; state coverage → `references/methodology/ui-states.md` (generic) or `dashboards/ui-states.md` (dashboard 6-state); anti-slop → `anti-slop-checklist.md`; anti-blur → `anti-blur-protocol.md`
 **Context Consumption Checklist** (AI agent must read all before coding):
 - `token.json` — style primitives (colors / spacing / typography / shadows) + component syntax
 - `design-spec.md` — layout / animation / responsive specifications
@@ -195,22 +195,34 @@ bicorne-design/
 │   │   ├── review-scoring.md             ← Variant review framework
 │   │   ├── asset-protocol.md             ← Core asset protocol
 │   │   ├── animation-best-practices.md   ← Animation design knowledge
+│   │   ├── dark-mode-a11y.md             ← Dark mode + accessibility (8 category-specific topics)
+│   │   ├── typography.md                 ← Typography rules
+│   │   ├── nav-footer.md                 ← Navigation + footer design
 │   │   ├── ui-states.md                  ← Empty state + loading state design specification
 │   │   ├── responsive-degradation.md     ← Responsive degradation strategy
 │   │   ├── page-framework.md             ← Page framework specification
+│   │   ├── seo-checklist.md              ← SEO / Lighthouse must-do
 │   │   ├── slide-design.md               ← Slide design specification
 │   │   ├── product-presentation.md       ← Product presentation specification
-│   │   └── font-loading-strategy.md      ← Font loading strategy
+│   │   ├── font-loading-strategy.md      ← Font loading strategy
+│   │   ├── dashboard-layout-patterns.md  ← 6 dashboard layout skeletons (D1-D6)
+│   │   ├── data-visualization.md         ← Chart color system + component spec
+│   │   ├── dashboard-interaction.md      ← Dashboard interaction (remote control / touch / display)
+│   │   ├── INDEX.md                      ← Cross-category methodology index (start here)
+│   │   ├── animation-cross-platform.md   ← Cross-category/cross-platform animation diff cheatsheet
+│   │   └── performance-budget.md         ← Cross-category performance budget (Web Vitals + per-category)
 │   ├── design-philosophy/                ← Design philosophy
 │   │   ├── design-styles.md              ← 20 design philosophies
 │   │   └── critique-guide.md             ← Expert 5-dimension review
 │   └── token-mapping/                    ← Layer 1 → Layer 2 bridge
 │       ├── mapping-rules.md              ← DESIGN.md → token.json field mapping
 │       ├── field-compatibility.md        ← Cross-brand field name compatibility table
-│       └── examples/                     ← Example token.json files
+│       ├── font-token-audit.md           ← Font token audit (v2.11 real font after)
+│       └── examples/                     ← Example token.json files (6 total)
 │           ├── linear-dark.token.json              ← Linear desktop dark theme
 │           ├── linear-dashboard-dark.token.json     ← Linear dashboard dark theme
 │           ├── linear-mobile-dark.token.json        ← Linear mobile dark theme
+│           ├── clickhouse-dashboard-dark.token.json ← ClickHouse dashboard dark theme
 │           ├── stripe-light.token.json              ← Stripe desktop light theme
 │           └── stripe-mobile-light.token.json       ← Stripe mobile light theme
 ├── templates/
@@ -223,6 +235,96 @@ bicorne-design/
 ├── scripts/
 │   ├── generate-token.mjs               ← Token generation script
 │   └── validate-token.mjs               ← Token validation script
+├── admin-panels/                       ← Layer 2.5 · Platform-specific: Admin Panels
+├── dashboards/                          ← Layer 2.5 · Platform-specific: Dashboards
+│   ├── README.md                        ← Category workspace index
+│   ├── meta-prompt.md                   ← PHASE 4 pre-flight checklist
+│   ├── component-contract/              ← 8 core components (panel / metric / sparkline / map / gauge / ring / ticker / datatable)
+│   ├── layouts/                         ← L1-L8 layout archetypes
+│   ├── data-viz/                        ← Bar / donut / funnel / heatmap / mini-map
+│   ├── animation-matrix.md              ← Scenario→animation/duration/easing mapping
+│   ├── typography.md                    ← Dashboard-specific typography rules
+│   ├── ui-states.md                     ← Dashboard 6 states (loading/refreshing/empty/error/offline/stale)
+│   ├── performance.md                   ← 60fps performance budget
+│   ├── pitfalls/                        ← 25 anti-patterns
+│   ├── tailwind-bridge/                 ← Auto-generate tailwind.config.ts from token.json
+│   └── verification/                    ← 3 runnable reference projects
+│       └── 4-3-dashboard-command-center/  (Dashboard flagship)
+├── saas-marketing/                      ← Layer 2.5 · Platform-specific: SaaS Marketing Sites
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── component-contract/              ← nav/hero/features/pricing/testimonial/faq/blog-card/cta-band
+│   ├── layouts/                         ← S1-S7 (product/pricing/customers/blog/careers/changelog/legal)
+│   ├── typography.md
+│   ├── ui-states.md
+│   ├── seo-checklist.md                 ← SEO/Lighthouse must-do
+│   ├── performance.md
+│   ├── pitfalls/
+│   └── verification/4-2-stripe-landing/ (SaaS marketing flagship)
+├── landing-pages/                       ← Layer 2.5 · Platform-specific: Landing Pages (single-page marketing MVI)
+│   ├── README.md
+│   ├── meta-prompt.md                   ← PHASE 4 pre-flight: conversion goal / audience / main CTA / measurement
+│   ├── component-contract/              ← hero-cta / feature-row / testimonial-logos / pricing-simple
+│   └── pitfalls/                        ← 8 single-page marketing anti-patterns
+├── ecommerce/                           ← Layer 2.5 · Platform-specific: E-commerce
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── component-contract/              ← product-card/gallery/variant/cart/checkout/order/review
+│   ├── layouts/                         ← P1-P9 (PLP/PDP/cart/checkout/thank-you/tracking/account/homepage)
+│   └── ...
+├── documentation/                       ← Layer 2.5 · Platform-specific: Documentation
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── component-contract/              ← sidebar-nav/toc/code-block/callout/api-table/search
+│   ├── layouts/                         ← D1-D6 (three-column/tutorial/reference/concepts/changelog/faq)
+│   └── ...
+├── auth-flows/                          ← Layer 2.5 · Platform-specific: Auth & Authz
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── component-contract/              ← sign-in/sign-up/otp/password/2fa/social/forgot/error
+│   ├── layouts/                         ← AF1-AF5 (centered/split/modal/fullscreen/stepper)
+│   ├── pitfalls/                        ← security/accessibility/error-ux/rate-limiting
+│   └── ...
+├── mobile-web/                          ← Layer 2.5 · Platform-specific: Mobile Web (mobile-first H5/PWA)
+│   ├── README.md
+│   ├── meta-prompt.md                   ← PHASE 4 pre-flight: mobile-first decision / device support / touch / PWA
+│   ├── component-contract/              ← bottom-tab-bar / mobile-modal / touch-gesture-handler / mobile-form-input
+│   └── pitfalls/                        ← 10 mobile-web anti-patterns
+├── native-app/                          ← Layer 2.5 · Platform-specific: Native Apps
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── dark-mode-a11y.md
+│   ├── component-contract/              ← 5 core component contracts (iOS/Android platform adaptation)
+│   ├── layouts/                         ← Native App specific layouts
+│   ├── pitfalls/                        ← Native App anti-patterns
+│   └── verification/                    ← 2 real reference implementations
+│       ├── native-1-ios-settings/
+│       └── native-2-android-material-you/
+├── ai-products/                         ← Layer 2.5 · Platform-specific: AI Products (v2.12 新增)
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── dark-mode-a11y.md
+│   ├── component-contract/              ← 6 core component contracts (chat stream / message bubble / tool call)
+│   │   ├── chat-stream.md               ← Streaming chat (SSE / WebSocket + typing cursor)
+│   │   ├── citation-source.md           ← RAG citation result
+│   │   ├── message-bubble.md            ← User / assistant / tool message bubble
+│   │   ├── model-selector.md            ← Model picker (GPT / Claude / Gemini)
+│   │   ├── prompt-composer.md           ← Multi-modal prompt composer with attachments
+│   │   └── tool-call-card.md            ← Function calling result card
+│   └── pitfalls/                        ← AI product anti-patterns
+├── premium-showcase/                    ← Layer 2.5 · Platform-specific: Premium Showcase (v2.12 新增 · Tesla / Apple Vision Pro / Hermès)
+│   ├── README.md
+│   ├── meta-prompt.md
+│   ├── dark-mode-a11y.md
+│   ├── component-contract/              ← 5 cinematic component contracts
+│   │   ├── hero-cta.md                  ← Cinematic Hero (80-120px + slow easing)
+│   │   ├── feature-row.md               ← Cinematic feature row (long scroll)
+│   │   ├── image-gallery.md             ← Photography gallery (masonry / lightbox)
+│   │   ├── spec-sheet.md                ← Mono spec data table (thrust / speed / altitude)
+│   │   └── footer-cta.md                ← Inquiry-style footer (mailto + no price)
+│   ├── layouts/                         ← L1-L5 (full-bleed / scroll-story / spec / gallery / footer-cta)
+│   ├── premium-showcase-token.schema.json  ← Premium showcase dedicated schema
+│   └── pitfalls/                        ← Premium showcase anti-patterns
 └── package.json
 ```
 

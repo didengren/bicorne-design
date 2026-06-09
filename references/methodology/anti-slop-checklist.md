@@ -75,7 +75,7 @@ AI Slop refers to typical defect patterns in AI-generated content, manifesting a
 | Empty hero | Add product screenshot / UI demo / data visualization |
 | CTA repetition | Only 1 primary CTA per page; secondary CTA no more than 1 |
 | No hover feedback | Cards: add background/border color change on hover; buttons: darken background or add shadow |
-| Missing states | Complete Loading / Error / Empty tri-state; refer to ui-states.md |
+| Missing states | Complete Loading / Error / Empty tri-state; refer to `./ui-states.md` (generic) or `../../dashboards/ui-states.md` (dashboard 6-state) |
 | Animation overload | Only 1-2 key elements in first screen have entrance animations; rest appear silently |
 | Missing focus | Add focus-visible outline to all interactive elements; use brand color |
 | Hollow subtitles | Replace with specific scenario descriptions + data support |

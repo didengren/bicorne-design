@@ -1,0 +1,18 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" fetchpriority="high" />
+    <!-- perf: 关键资源预加载 (P-3 · 浏览器提前解析, 减少 LCP 等待) -->
+    <link rel="preload" href="/favicon.svg" as="image" type="image/svg+xml" fetchpriority="high" />
+    <link rel="preload" as="font" type="font/woff2" href="/fonts/inter-var.woff2" crossorigin />
+    <link rel="preconnect" href="https://rsms.me" crossorigin />
+    <link rel="dns-prefetch" href="https://rsms.me" />
+    <title>Bicorne AI Product Template</title>
+  </head>
+  <body class="bg-ai-bg text-ai-text antialiased">
+    <div id="app"></div>
+    <script type="module" src="/src/main.ts"></script>
+  </body>
+</html>

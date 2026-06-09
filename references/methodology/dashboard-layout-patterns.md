@@ -408,8 +408,8 @@ Font size recommendations for different physical screen sizes at standard 3m vie
 | Hover | Rich hover feedback | Zero hover; information visible by default |
 | Pop-ups | Modal / Drawer | Side panel or overlay area; no centered modals |
 | Pagination | Table pagination | No pagination; data updates in real-time |
-| Empty state | Guiding empty state | Display "awaiting data" + auto-refresh, see `ui-states.md` |
-| Loading | Spinner / Skeleton | Block-level Skeleton; avoid full-screen white flash, see `ui-states.md` |
+| Empty state | Guiding empty state | Display "awaiting data" + auto-refresh, see `../../dashboards/ui-states.md` (dashboard 6-state) |
+| Loading | Spinner / Skeleton | Block-level Skeleton; avoid full-screen white flash, see `../../dashboards/ui-states.md` |
 
 ---
 

@@ -1,0 +1,93 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* perf: 字体优化 (P-2 · 主动管理 font-display + woff2 · 避免 FOIT 阻塞首屏) */
+@font-face {
+  font-family: 'Inter';
+  src: url('/fonts/inter-var.woff2') format('woff2-variations');
+  font-weight: 100 900;
+  font-style: normal;
+  font-display: swap;
+}
+
+@font-face {
+  font-family: 'JetBrains Mono';
+  src: url('/fonts/jetbrains-mono.woff2') format('woff2');
+  font-weight: 100 800;
+  font-style: normal;
+  font-display: swap;
+}
+
+html, body, #app {
+  height: 100%;
+  margin: 0;
+  background: #08090c;
+  color: #e6edf3;
+  font-family: 'Inter', 'PingFang SC', system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+/* Scrollbar styling for dark theme */
+::-webkit-scrollbar { width: 6px; height: 6px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: #2a3142; border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: #3a4252; }
+
+/* perf: 动效时长合规 (P-4 · 主动管理 transition/animation duration · 交互 < 300ms) */
+* {
+  transition-duration: 200ms;
+  transition-timing-function: cubic-bezier(0.4, 0, 0.2, 1);
+}
+.metric-pulse { animation: dash-pulse 1.2s ease-in-out infinite; }
+@keyframes dash-pulse {
+  0%, 100% { opacity: 1; }
+  50%      { opacity: 0.6; }
+}
+
+/* SVG text inherits currentColor by default */
+svg text { fill: currentColor; }
+
+/* 4-3 P0 a11y 修复：focus-visible 焦点环 / sr-only / prefers-reduced-motion */
+.sr-only {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+*:focus-visible {
+  outline: 2px solid #5be9ff;
+  outline-offset: 2px;
+}
+*:focus:not(:focus-visible) {
+  outline: none;
+}
+
+/* Reduced motion: 关闭所有动效 — 4-3 P0 a11y 修复（scan/aurora/ticker 全部停止） */
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: 0.001ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.001ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* ticker 滚动停止 */
+  .animate-dash-ticker {
+    animation: none !important;
+    transform: none !important;
+  }
+  .animate-dash-ripple,
+  .animate-dash-pulse,
+  .animate-dash-shimmer,
+  .animate-dash-fade-up,
+  .animate-dash-aurora {
+    animation: none !important;
+  }
+}

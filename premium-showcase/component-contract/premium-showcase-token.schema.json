@@ -1,0 +1,201 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "premium-showcase-token.schema.json",
+  "title": "Premium Showcase Design Token",
+  "description": "Design token schema for the premium-showcase category (Tesla / Apple Vision Pro / Hermès / Aston Martin / Bang & Olufsen style). Cinema-led, photography-first, editorial typography. Sits beside schema/design-token.schema.json (Layer 2 framework-agnostic base) and adds premium-showcase-specific keys. Used by ps-1-tesla-cinematic / ps-2-apple-vision-pro verification projects.",
+  "type": "object",
+  "required": ["category", "namespace", "subproject", "version", "theme", "colors", "fonts", "fontSize", "spacing", "keyframes"],
+  "additionalProperties": false,
+  "properties": {
+    "$schema": {
+      "type": "string",
+      "description": "Schema reference (this file)"
+    },
+    "category": {
+      "type": "string",
+      "const": "premium-showcase",
+      "description": "Category identifier. Must be 'premium-showcase'."
+    },
+    "namespace": {
+      "type": "string",
+      "pattern": "^ps-[a-z]+-$",
+      "description": "Tailwind utility class namespace. Convention: 'ps-auto-' for premium-showcase (shared with native-app pattern)."
+    },
+    "subproject": {
+      "type": "string",
+      "pattern": "^ps-\\d+-[a-z-]+$",
+      "description": "Verification subproject id, e.g. 'ps-1-tesla-cinematic' or 'ps-2-apple-vision-pro'."
+    },
+    "version": {
+      "type": "string",
+      "pattern": "^\\d+\\.\\d+\\.\\d+$",
+      "description": "Semantic version"
+    },
+    "description": {
+      "type": "string",
+      "description": "Human-readable summary of this token set"
+    },
+    "theme": {
+      "type": "string",
+      "enum": ["dark", "light"],
+      "description": "Theme mode. Tesla uses OLED dark (#000 base), Apple Vision Pro uses light (#FFF base) — premium-showcase is the only category where theme varies per subproject."
+    },
+    "reference_brands": {
+      "type": "array",
+      "description": "3-5 brands whose visual language inspired this token set (e.g. ['Tesla', 'Aston Martin', 'Bang & Olufsen']).",
+      "items": { "type": "string" },
+      "minItems": 1,
+      "maxItems": 6
+    },
+    "colors": {
+      "type": "object",
+      "description": "Color tokens. Premium-showcase uses semantic naming (bg / surface-N / text-primary / accent) rather than the Layer 2 surface-1/2/3 numeric ladder.",
+      "required": ["bg", "surface-1", "text-primary", "accent"],
+      "properties": {
+        "bg": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "bg-elevated": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "surface-1": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "surface-2": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "surface-3": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "border": { "type": "string" },
+        "border-strong": { "type": "string" },
+        "text-primary": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "text-secondary": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "text-tertiary": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "text-dim": { "type": "string" },
+        "accent": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "accent-hover": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+        "accent-soft": { "type": "string" },
+        "semantic": {
+          "type": "object",
+          "properties": {
+            "danger": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "success": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" },
+            "warning": { "type": "string", "pattern": "^#[0-9A-Fa-f]{6}$" }
+          },
+          "additionalProperties": false
+        }
+      },
+      "additionalProperties": false
+    },
+    "fonts": {
+      "type": "object",
+      "description": "Three-axis font system. premium-showcase defaults to display=Serif (editorial) + body=Sans (readable) + mono=Mono (specs).",
+      "required": ["display", "body", "mono"],
+      "properties": {
+        "display": { "type": "string", "description": "Editorial Serif stack (Tiempos / GT Sectra / SF Pro Display)" },
+        "body": { "type": "string", "description": "Readability Sans stack (Söhne / SF Pro Text / Inter)" },
+        "mono": { "type": "string", "description": "Mono numerics (GT America Mono / SF Mono / ui-monospace)" }
+      },
+      "additionalProperties": false
+    },
+    "fontSize": {
+      "type": "object",
+      "description": "Type scale. hero / section-title / spec / body / eyebrow.",
+      "required": ["hero", "body"],
+      "properties": {
+        "eyebrow": { "type": "string" },
+        "body": { "type": "string" },
+        "body-lg": { "type": "string" },
+        "lead": { "type": "string" },
+        "section-title": { "type": "string" },
+        "hero": { "type": "string" },
+        "spec": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "letterSpacing": {
+      "type": "object",
+      "description": "Letter-spacing scale. premium-showcase uses tight / tighter (-0.035em / -0.045em) for editorial large titles.",
+      "properties": {
+        "eyebrow": { "type": "string" },
+        "tight": { "type": "string" },
+        "tighter": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "lineHeight": {
+      "type": "object",
+      "description": "Line-height scale. tight / snug for headings, body for prose, relaxed for ultrawide paragraphs.",
+      "additionalProperties": false
+    },
+    "spacing": {
+      "type": "object",
+      "description": "Spacing scale. section-y is intentionally wide (clamp 96-200px) for premium whitespace.",
+      "required": ["section-y"],
+      "properties": {
+        "section-y": { "type": "string" },
+        "section-x": { "type": "string" },
+        "feature-gap": { "type": "string" },
+        "gutter": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "borderRadius": {
+      "type": "object",
+      "description": "Radius scale. Pill (980px) used for Apple-style primary buttons.",
+      "properties": {
+        "sm": { "type": "string" },
+        "md": { "type": "string" },
+        "lg": { "type": "string" },
+        "xl": { "type": "string" },
+        "pill": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "shadows": {
+      "type": "object",
+      "description": "Shadow tokens. Glass / glow / spatial-elevated are category-specific.",
+      "additionalProperties": false
+    },
+    "blur": {
+      "type": "object",
+      "description": "Backdrop-blur for glass / spatial UI. Apple Vision Pro uses 20-32px glass blur.",
+      "additionalProperties": false
+    },
+    "easing": {
+      "type": "object",
+      "description": "Easing curves. expo-out (cubic-bezier 0.16, 1, 0.3, 1) is the premium-showcase standard for slow editorial easing.",
+      "required": ["expo-out"],
+      "properties": {
+        "expo-out": { "type": "string" },
+        "apple": { "type": "string" },
+        "ios-spring": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "duration": {
+      "type": "object",
+      "description": "Animation duration scale. cinema is 1100-1200ms (premium-showcase exclusive).",
+      "properties": {
+        "instant": { "type": "string" },
+        "fast": { "type": "string" },
+        "normal": { "type": "string" },
+        "slow": { "type": "string" },
+        "cinema": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "keyframes": {
+      "type": "object",
+      "description": "Required keyframes: ps-fade-up (cinema 1.1-1.2s), ps-fade-in (0.8s), ps-scroll-hint (infinite).",
+      "required": ["ps-fade-up", "ps-fade-in", "ps-scroll-hint"],
+      "additionalProperties": false
+    },
+    "maxWidth": {
+      "type": "object",
+      "description": "Container widths. content (980px) is editorial reading width; wide (1240px) is feature-row; bleed (1440px) is hero.",
+      "properties": {
+        "content": { "type": "string" },
+        "wide": { "type": "string" },
+        "bleed": { "type": "string" }
+      },
+      "additionalProperties": false
+    },
+    "zIndex": {
+      "type": "object",
+      "description": "Stacking order. nav (50), lightbox (80), modal (90).",
+      "additionalProperties": false
+    }
+  }
+}
