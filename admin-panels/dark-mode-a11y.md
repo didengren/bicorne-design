@@ -21,14 +21,20 @@
 
 ---
 
-## 1. Admin Panel 暗色默认 ⚠️ 可选
+## 1. Admin Panel 亮色默认 ⚠️ 可选（v3.1 · 2026-06-10 翻面）
 
-中后台暗色不强制（Linear 暗 / Notion 亮），由用户偏好 + 长时间使用决定：
-- **Linear 暗色** —— `bg #08090A` / `surface #1B1C1F` / `accent #5E6AD2` 紫蓝
+中后台亮色不强制（Notion 亮 / Linear 暗），由用户偏好 + 长时间使用决定：
 - **Notion 亮色** —— `bg #FFFFFF` / `surface #F7F6F3` / `accent #2383E2` 蓝
-- **token-bridge 双套** —— `linear-dark` + `linear-light` 同时维护
+- **Linear 暗色** —— `bg #08090A` / `surface #1B1C1F` / `accent #5E6AD2` 紫蓝
+- **token-bridge 双套** —— `linear-light` + `linear-dark` 同时维护
 
-> **推荐默认暗色** —— 中后台用户日均使用 4-8h，暗色护眼。但必须提供"跟随系统 / 亮 / 暗"3 选 1 toggle。
+> **推荐默认亮色** —— 中后台 4 条硬性理由（v3.0 linear-light 翻面零回归后落地）：
+> 1. **状态色辨识**：红/绿/黄/蓝在亮色背景下对比度稳定，admin 表单 validation / 表格 status badge 准确度更高
+> 2. **下游载体一致**：截图、PDF 导出、Excel 粘贴、工单系统均为白底，亮色默认无需"翻面"才可直接复用
+> 3. **数据表阅读速度**：13-14px 数字在亮色下眼动时间更短（v2.12 字体真实化后 Inter Variable `tnum` 表现更稳定）
+> 4. **B2B 行业惯例**：Stripe Dashboard / Notion / Airtable / Cal / Resend / Intercom / Zapier 全部默认亮色 → 用户期望对齐
+>
+> 但**必须**提供"跟随系统 / 亮 / 暗"3 选 1 toggle（暗色用户日均 4-8h 仍是真实需求，§9 给出暗色模式专项实现细节）。
 
 ### 1.1 Linear Light 实际色值（v3.0 落地 · 2026-06-10）
 
