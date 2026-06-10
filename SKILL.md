@@ -1,6 +1,9 @@
 ---
 name: bicorne-design
-description: Use when creating design systems, generating design tokens, or doing UI design. Triggers: admin dashboards, marketing landing pages, mobile interfaces, data dashboards, design reviews, style exploration, UI optimization, AI product UIs (chat / IDE / playground), native app interfaces (iOS / Android), premium showcase sites (Tesla / Apple Vision Pro / Hermès), e-commerce flows (PDP / cart / checkout), documentation sites, auth flows (sign-in / sign-up / 2FA), e2e verification of real reference implementations. Does not trigger: pure backend logic, database design, API development, ops configuration
+description: |
+  Use when creating design systems, generating design tokens, or doing UI design.
+  Triggers: admin dashboards, marketing landing pages, mobile interfaces, data dashboards, design reviews, style exploration, UI optimization, AI product UIs (chat / IDE / playground), native app interfaces (iOS / Android), premium showcase sites (Tesla / Apple Vision Pro / Hermès), e-commerce flows (PDP / cart / checkout), documentation sites, auth flows (sign-in / sign-up / 2FA), e2e verification of real reference implementations.
+  Does not trigger: pure backend logic, database design, API development, ops configuration.
 license: MIT
 compatibility: any-framework
 metadata:
